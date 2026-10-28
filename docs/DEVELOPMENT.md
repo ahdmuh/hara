@@ -1,5 +1,12 @@
 # Development
 
+## Commits
+
+Prefix commit messages with a type and an optional scope: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`.
+
+- `feat: add calibration screen`
+- `fix(dev): correct grip sensor offset`
+
 ## Pull Requests
 
 ### Story ID
