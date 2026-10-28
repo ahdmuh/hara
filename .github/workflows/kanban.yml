@@ -1,4 +1,4 @@
-name: Notion Sync
+name: Kanban
 
 on:
   pull_request:
@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: node .github/scripts/notion_sync.mjs
+      - run: node .github/scripts/kanban.mjs
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATABASE_ID: dc52b4d9b48a4f95ae570e6af9e0a113
