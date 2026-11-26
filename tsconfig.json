@@ -14,5 +14,5 @@
         "skipLibCheck": true,
         "noEmit": true
     },
-    "include": [".github/scripts", "eslint.config.ts"]
+    "include": [".github/scripts", "convex", "eslint.config.ts"]
 }
