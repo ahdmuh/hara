@@ -31,7 +31,7 @@ const noComments: Rule.RuleModule = {
 };
 
 export default defineConfig(
-    globalIgnores(["**/.build/"]),
+    globalIgnores(["**/.build/", "convex/_generated/"]),
     tseslint.configs.strict,
     stylistic.configs.customize({ indent: 4, quotes: "double", semi: true, braceStyle: "allman" }),
     {
