@@ -61,7 +61,7 @@ export default defineConfig(
         },
     },
     {
-        files: ["apps/*/src/renderer/**"],
+        files: ["apps/console/src/renderer/**", "apps/web/src/**"],
         extends: [reactHooks.configs.flat.recommended],
         languageOptions: { globals: { ...globals.browser } },
     },
