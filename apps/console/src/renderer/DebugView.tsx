@@ -26,11 +26,17 @@ export default function DebugView({ source }: IDebugViewProps)
     useEffect(() =>
     {
         const meter = new RateMeter();
-        return source.subscribe((next) =>
+        const unsubscribe = source.subscribe((next) =>
         {
             setFrame(next);
-            setRate(meter.record(next.timestamp));
+            setRate(meter.record(performance.now()));
         });
+        const timer = setInterval(() => setRate(meter.rate(performance.now())), 250);
+        return () =>
+        {
+            unsubscribe();
+            clearInterval(timer);
+        };
     }, [source]);
 
     return (

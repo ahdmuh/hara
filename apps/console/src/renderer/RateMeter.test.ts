@@ -29,3 +29,10 @@ test("drops to one after a long gap", () =>
     feed(meter, 100, 1);
     expect(meter.record(10000)).toBe(1);
 });
+
+test("falls to zero once the stream stops", () =>
+{
+    const meter = new RateMeter();
+    feed(meter, 100, 1);
+    expect(meter.rate(5000)).toBe(0);
+});
