@@ -8,6 +8,8 @@ bun run check
 bun run dev
 ```
 
+`bun run dev` uses keyboard input (keys 1 to 5). Run `VITE_INPUT=device bun run dev` to read the device.
+
 ## Commits
 
 Prefix commit messages with a type and an optional scope: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`.

@@ -12,7 +12,8 @@
         "@hara/input": "workspace:*",
         "excalibur": "1.0.1",
         "react": "19.3.1",
-        "react-dom": "19.3.1"
+        "react-dom": "19.3.1",
+        "serialport": "13.0.0"
     },
     "devDependencies": {
         "@types/node": "26.6.11",

@@ -1,19 +1,35 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { bridge } from "./Bridge";
 import DebugView from "./DebugView";
+import type { IDeviceStatus } from "../main/DeviceConnection";
+import { createDeviceSource } from "./DeviceSource";
 import { createKeyboardSource } from "./KeyboardSource";
 import { startTestScene } from "./TestScene";
+
+const INPUT = import.meta.env.VITE_INPUT ?? (import.meta.env.DEV ? "keyboard" : "device");
+
+function describe(status: IDeviceStatus | null): string
+{
+    if (!status?.connected)
+    {
+        return "Looking for Device";
+    }
+    return `Device Connected, Firmware ${status.firmware}`;
+}
 
 export default function App()
 {
     const canvas = useRef<HTMLCanvasElement>(null);
     const [version, setVersion] = useState("");
     const [debugging, setDebugging] = useState(false);
-    const source = useMemo(() => createKeyboardSource(window), []);
+    const [device, setDevice] = useState<IDeviceStatus | null>(null);
+    const source = useMemo(() => INPUT === "keyboard" ? createKeyboardSource(window) : createDeviceSource(bridge), []);
 
     useEffect(() =>
     {
         void bridge.version().then(setVersion);
+        void bridge.deviceStatus().then(setDevice);
+        return bridge.onDeviceStatus(setDevice);
     }, []);
 
     useEffect(() =>
@@ -42,9 +58,8 @@ export default function App()
     return (
         <main style={{ height: "100vh", margin: 0, display: "flex", flexDirection: "column", background: "#000", color: "#fff" }}>
             <header style={{ padding: 16, fontFamily: "system-ui" }}>
-                HARA
-                {" "}
-                {version}
+                {`HARA ${version} · ${describe(device)}`}
+                {INPUT === "keyboard" && " · Keyboard Input"}
             </header>
             <canvas ref={canvas} style={{ flex: 1 }} />
             {debugging && <DebugView source={source} />}
