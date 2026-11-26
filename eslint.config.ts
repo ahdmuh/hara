@@ -48,6 +48,7 @@ export default defineConfig(
                 "error",
                 { selector: "default", format: ["camelCase"], custom: LOWERCASE_ID },
                 { selector: "import", format: null },
+                { selector: "parameter", format: ["camelCase"], leadingUnderscore: "allow", custom: LOWERCASE_ID },
                 { selector: "variable", modifiers: ["const"], format: ["camelCase", "UPPER_CASE", "PascalCase"], custom: LOWERCASE_ID },
                 { selector: "function", format: ["camelCase", "PascalCase"], custom: LOWERCASE_ID },
                 { selector: "typeLike", format: ["PascalCase"], custom: LOWERCASE_ID },

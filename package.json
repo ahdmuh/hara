@@ -14,7 +14,7 @@
         "fix": "bun --bun eslint . --fix",
         "lint": "bun --bun eslint .",
         "test": "bun test . ./.github",
-        "typecheck": "tsc && bun run --filter './apps/*' typecheck"
+        "typecheck": "tsc && bun run --filter './apps/*' --filter './packages/*' typecheck"
     },
     "devDependencies": {
         "@stylistic/eslint-plugin": "6.0.1",
