@@ -7,23 +7,6 @@ bun install
 bun run check
 ```
 
-`bun run fix` fixes lint and formatting problems.
-
-## Layout
-
-```text
-apps/console/   Electron desktop app
-apps/web/       Landing page and clinician portal
-packages/       Shared code
-convex/         Backend
-firmware/       Device firmware
-assets/         Source assets, symlinked into components
-```
-
-## Code Style
-
-ESLint enforces the code style. `ID` stays uppercase after the first word, as in `patientID`.
-
 ## Commits
 
 Prefix commit messages with a type and an optional scope: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`.
