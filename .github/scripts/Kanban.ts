@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 
-interface IPullRequest
+export interface IPullRequest
 {
     title: string;
     body: string | null;
@@ -10,7 +10,7 @@ interface IPullRequest
     head: { ref: string };
 }
 
-interface IPullRequestEvent
+export interface IPullRequestEvent
 {
     action: string;
     pull_request: IPullRequest;
@@ -40,7 +40,7 @@ function readEvent(): IPullRequestEvent
     return JSON.parse(readFileSync(eventPath, "utf8")) as IPullRequestEvent;
 }
 
-function findStoryIDs(pullRequest: IPullRequest): number[]
+export function findStoryIDs(pullRequest: IPullRequest): number[]
 {
     const text = [pullRequest.title, pullRequest.head.ref, pullRequest.body].filter(Boolean).join(" ");
     const storyIDs = [...text.matchAll(STORY_PATTERN)].map(match => Number(match[1]));
@@ -54,6 +54,13 @@ function targetStatus(event: IPullRequestEvent): string | null
         return event.pull_request.merged ? "Accepted" : null;
     }
     return event.pull_request.draft ? "In Progress" : "In Review";
+}
+
+export function nextStatus(event: IPullRequestEvent, current: string | undefined): string | null
+{
+    const target = targetStatus(event);
+    const currentRank = current ? STATUS_ORDER.indexOf(current) : -1;
+    return target !== null && STATUS_ORDER.indexOf(target) > currentRank ? target : null;
 }
 
 async function notion<TResponse>(path: string, method: string, body: object): Promise<TResponse>
@@ -75,7 +82,7 @@ async function notion<TResponse>(path: string, method: string, body: object): Pr
     return json;
 }
 
-async function syncStory(storyID: number, pullRequest: IPullRequest, target: string | null): Promise<void>
+async function syncStory(storyID: number, event: IPullRequestEvent): Promise<void>
 {
     const query = { filter: { property: "Story ID", unique_id: { equals: storyID } } };
     const { results } = await notion<{ results: IStoryPage[] }>(`databases/${databaseID}/query`, "POST", query);
@@ -87,16 +94,15 @@ async function syncStory(storyID: number, pullRequest: IPullRequest, target: str
     }
 
     const current = page.properties.Status?.status?.name;
-    const currentRank = current ? STATUS_ORDER.indexOf(current) : -1;
-    const moves = target !== null && STATUS_ORDER.indexOf(target) > currentRank;
-    const properties: Record<string, object> = { PR: { url: pullRequest.html_url } };
-    if (moves)
+    const next = nextStatus(event, current);
+    const properties: Record<string, object> = { PR: { url: event.pull_request.html_url } };
+    if (next)
     {
-        properties.Status = { status: { name: target } };
+        properties.Status = { status: { name: next } };
     }
 
     await notion(`pages/${page.id}`, "PATCH", { properties });
-    console.log(`HARA-${storyID}: PR linked${moves ? `, ${current} -> ${target}` : ""}.`);
+    console.log(`HARA-${storyID}: PR linked${next ? `, ${current} -> ${next}` : ""}.`);
 }
 
 async function main(): Promise<number>
@@ -115,13 +121,12 @@ async function main(): Promise<number>
         return 0;
     }
 
-    const target = targetStatus(event);
     let failed = false;
     for (const storyID of storyIDs)
     {
         try
         {
-            await syncStory(storyID, event.pull_request, target);
+            await syncStory(storyID, event);
         }
         catch (error)
         {
@@ -132,4 +137,7 @@ async function main(): Promise<number>
     return failed ? 1 : 0;
 }
 
-process.exit(await main());
+if (import.meta.main)
+{
+    process.exit(await main());
+}
