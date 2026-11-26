@@ -7,7 +7,12 @@ export class RateMeter
     record(timestamp: number): number
     {
         this.timestamps.push(timestamp);
-        while ((this.timestamps[0] ?? Infinity) <= timestamp - WINDOW_MILLISECONDS)
+        return this.rate(timestamp);
+    }
+
+    rate(now: number): number
+    {
+        while ((this.timestamps[0] ?? Infinity) <= now - WINDOW_MILLISECONDS)
         {
             this.timestamps.shift();
         }

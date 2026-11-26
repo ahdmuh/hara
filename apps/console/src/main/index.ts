@@ -1,6 +1,20 @@
 import { join } from "node:path";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { CHANNELS } from "../shared/IBridge";
+import { DeviceConnection } from "./DeviceConnection";
+import { SerialPortProvider } from "./SerialPortProvider";
+
+const device = new DeviceConnection(new SerialPortProvider(), {
+    scanMilliseconds: 1000,
+    handshakeMilliseconds: 2000,
+    silenceMilliseconds: 1000,
+    devicePath: process.env.HARA_DEVICE_PATH ?? null,
+});
+
+function broadcast(channel: string, payload: unknown): void
+{
+    BrowserWindow.getAllWindows().forEach(window => window.webContents.send(channel, payload));
+}
 
 function createWindow(): void
 {
@@ -31,10 +45,14 @@ function createWindow(): void
 }
 
 ipcMain.handle(CHANNELS.version, () => app.getVersion());
+ipcMain.handle(CHANNELS.deviceStatus, () => device.currentStatus);
+device.onStatus(status => broadcast(CHANNELS.deviceStatus, status));
+device.onMessage(message => broadcast(CHANNELS.deviceMessage, message));
 
 void app.whenReady().then(() =>
 {
     createWindow();
+    device.start();
     app.on("activate", () =>
     {
         if (BrowserWindow.getAllWindows().length === 0)
@@ -51,3 +69,5 @@ app.on("window-all-closed", () =>
         app.quit();
     }
 });
+
+app.on("before-quit", () => device.stop());
