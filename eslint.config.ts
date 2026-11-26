@@ -2,6 +2,7 @@ import stylistic from "@stylistic/eslint-plugin";
 import type { Rule } from "eslint";
 import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
+import reactHooks from "eslint-plugin-react-hooks";
 import tseslint from "typescript-eslint";
 
 const LOWERCASE_ID = { regex: "Id($|[A-Z0-9_])", match: false };
@@ -57,5 +58,10 @@ export default defineConfig(
                 { selector: "objectLiteralProperty", filter: { regex: "^messageId$", match: true }, format: null },
             ],
         },
+    },
+    {
+        files: ["apps/*/src/renderer/**"],
+        extends: [reactHooks.configs.flat.recommended],
+        languageOptions: { globals: { ...globals.browser } },
     },
 );
