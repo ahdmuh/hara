@@ -27,11 +27,4 @@ The intent is to provide:
 
 ## Development
 
-Install [Bun](https://bun.sh), then:
-
-```sh
-bun install
-bun run check
-```
-
-See [DEVELOPMENT.md](docs/DEVELOPMENT.md) for the layout, code style, commits and pull requests.
+Install [Bun](https://bun.sh), run `bun install`, then see [DEVELOPMENT.md](docs/DEVELOPMENT.md).

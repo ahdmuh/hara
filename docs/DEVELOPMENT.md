@@ -2,47 +2,27 @@
 
 ## Setup
 
-Install [Bun](https://bun.sh) 1.4 or newer, then from the repository root:
-
 ```sh
 bun install
 bun run check
 ```
 
-| Command | What it does |
-| --- | --- |
-| `bun run check` | Lint, format check and typecheck the whole repository |
-| `bun run fix` | Fix every lint and formatting problem that can be fixed automatically |
+`bun run fix` fixes lint and formatting problems.
 
 ## Layout
 
-Bun workspaces hold every TypeScript component. Each component lands with the story that builds it.
-
 ```text
-hara/
-├── apps/
-│   ├── console/   Electron desktop app patients play on
-│   └── web/       Landing page and clinician portal
-├── packages/      Code shared by more than one component
-├── convex/        Convex backend
-├── firmware/      PlatformIO firmware for the device
-├── assets/        Source artwork, grouped by category
-└── docs/
+apps/console/   Electron desktop app
+apps/web/       Landing page and clinician portal
+packages/       Shared code
+convex/         Backend
+firmware/       Device firmware
+assets/         Source assets, symlinked into components
 ```
-
-Source assets live only in `assets/`. Components symlink what they need instead of copying it.
 
 ## Code Style
 
-ESLint enforces formatting and naming, so `bun run fix` settles most style questions.
-
-- No comments. Names and structure should explain the code
-- Braces go on their own line, with 4 spaces for indentation
-- `PascalCase` for file names, types and components, and `lowerCamelCase` for variables and functions
-- `CAPITAL_CASE` for constants, `I` prefix for interfaces and `T` prefix for type parameters
-- `ID` is always uppercase: `patientID`, `findStoryIDs`
-- Directories are one lowercase word, or `kebab-case` when one word is not enough
-- Documentation file names are uppercase: `docs/DEVELOPMENT.md`
+ESLint enforces the code style. `ID` stays uppercase after the first word, as in `patientID`.
 
 ## Commits
 
