@@ -9,6 +9,7 @@
         "typecheck": "tsc"
     },
     "dependencies": {
+        "@hara/input": "workspace:*",
         "excalibur": "1.0.1",
         "react": "19.3.1",
         "react-dom": "19.3.1"
