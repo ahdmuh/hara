@@ -27,4 +27,4 @@ The intent is to provide:
 
 ## Development
 
-Install [Bun](https://bun.sh), run `bun install`, then see [DEVELOPMENT.md](docs/DEVELOPMENT.md).
+See [DEVELOPMENT.md](docs/DEVELOPMENT.md).
