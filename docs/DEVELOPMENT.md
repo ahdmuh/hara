@@ -5,6 +5,7 @@
 ```sh
 bun install
 bun run check
+bun run dev
 ```
 
 ## Commits
