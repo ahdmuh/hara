@@ -12,10 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: node .github/scripts/kanban.mjs
+      - uses: oven-sh/setup-bun@v2
+      - run: bun .github/scripts/Kanban.ts
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATABASE_ID: dc52b4d9b48a4f95ae570e6af9e0a113

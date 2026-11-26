@@ -1,5 +1,12 @@
 # Development
 
+## Setup
+
+```sh
+bun install
+bun run check
+```
+
 ## Commits
 
 Prefix commit messages with a type and an optional scope: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`, `chore:`.
