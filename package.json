@@ -16,6 +16,9 @@
         "test": "bun test . ./.github",
         "typecheck": "tsc && bun run --filter './apps/*' --filter './packages/*' typecheck"
     },
+    "dependencies": {
+        "convex": "1.51.0"
+    },
     "devDependencies": {
         "@stylistic/eslint-plugin": "6.0.1",
         "@types/bun": "1.4.5",

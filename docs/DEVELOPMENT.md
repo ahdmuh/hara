@@ -8,6 +8,8 @@ bun run check
 bun run dev
 ```
 
+Run `bunx convex dev` once to sign in to Convex and write `.env.local`.
+
 `bun run dev` uses keyboard input (keys 1 to 5). Run `VITE_INPUT=device bun run dev` to read the device.
 
 ## Commits
