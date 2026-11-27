@@ -2,10 +2,10 @@
 {
     display: inline-flex;
     font-family: var(--display);
-    font-weight: 900;
-    font-variation-settings: "ROND" 0;
-    letter-spacing: 0.02em;
-    line-height: 0.8;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    margin-right: -0.06em;
 }
 
 .letter

@@ -24,9 +24,9 @@ export default function Wordmark({ className, animate = false, delay = 0 }: IWor
                     key={index}
                     aria-hidden="true"
                     className={styles.letter}
-                    initial={{ opacity: 0, fontWeight: 100, y: "0.08em" }}
-                    animate={{ opacity: 1, fontWeight: 900, y: "0em" }}
-                    transition={{ duration: 1.4, delay: delay + index * 0.12, ease: EASE }}
+                    initial={{ opacity: 0, y: "0.35em", filter: "blur(12px)" }}
+                    animate={{ opacity: 1, y: "0em", filter: "blur(0px)" }}
+                    transition={{ duration: 1.2, delay: delay + index * 0.1, ease: EASE }}
                 >
                     {letter}
                 </motion.span>

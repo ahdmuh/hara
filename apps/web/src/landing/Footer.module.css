@@ -16,10 +16,10 @@
 
 .mark
 {
-    font-size: clamp(64px, 28vw, 504px);
+    font-size: clamp(44px, 17.5vw, 252px);
     line-height: 0.8;
     color: var(--white);
-    text-shadow: 0 0 80px var(--indigo-glow);
+    text-shadow: 0 0 80px var(--blue-glow);
 }
 
 .row
@@ -56,5 +56,11 @@
 
 .links > a:first-child:hover
 {
+    color: var(--white);
+}
+
+.ucalgary
+{
+    margin-left: 0.35em;
     color: var(--white);
 }

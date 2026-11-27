@@ -1,7 +1,8 @@
-import { ArrowRight } from "../ui/Icons";
 import { portalHref } from "../Site";
 import { LinkButton } from "../ui/Button";
+import { Login } from "../ui/Icons";
 import Reveal from "../ui/Reveal";
+import UCalgary from "../ui/UCalgary";
 import Wordmark from "../ui/Wordmark";
 import styles from "./Footer.module.css";
 import { CONTACT_EMAIL } from "./TakePart";
@@ -15,10 +16,13 @@ export default function Footer()
                     <Wordmark />
                 </Reveal>
                 <div className={styles.row}>
-                    <p>A University of Calgary, Schulich School of Engineering capstone project.</p>
+                    <p>
+                        A capstone project from the Schulich School of Engineering at the
+                        <UCalgary className={styles.ucalgary} />
+                    </p>
                     <div className={styles.links}>
                         <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
-                        <LinkButton to={portalHref("/login")} variant="light" size="small" iconAfter={<ArrowRight />}>Clinician Login</LinkButton>
+                        <LinkButton to={portalHref("/login")} variant="light" size="small" icon={<Login />}>Portal</LinkButton>
                     </div>
                 </div>
             </div>

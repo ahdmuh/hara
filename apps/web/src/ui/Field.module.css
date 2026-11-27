@@ -31,7 +31,7 @@
 
 .control:focus-within
 {
-    box-shadow: 0 0 0 2px var(--indigo) inset, 0 0 0 5px rgb(90 75 255 / 14%);
+    box-shadow: 0 0 0 2px var(--blue) inset, 0 0 0 5px rgb(0 149 219 / 14%);
 }
 
 .invalid label

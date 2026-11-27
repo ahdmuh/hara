@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
-import { ArrowRight, Close, Menu } from "../ui/Icons";
+import { Close, Login, Menu } from "../ui/Icons";
 import { useEffect, useState } from "react";
 import { portalHref } from "../Site";
 import { LinkButton } from "../ui/Button";
@@ -58,8 +58,8 @@ export default function Header()
                     ))}
                 </nav>
                 <div className={styles.actions}>
-                    <LinkButton to={portalHref("/login")} variant="dark" size="small" iconAfter={<ArrowRight />} className={styles.login}>
-                        Clinician Login
+                    <LinkButton to={portalHref("/login")} variant="dark" size="small" icon={<Login />} className={styles.login}>
+                        Portal
                     </LinkButton>
                     <button
                         type="button"
@@ -106,8 +106,8 @@ export default function Header()
                                 </motion.li>
                             ))}
                             <motion.li variants={ITEM}>
-                                <LinkButton to={portalHref("/login")} variant="dark" iconAfter={<ArrowRight />} className={styles.sheetLogin}>
-                                    Clinician Login
+                                <LinkButton to={portalHref("/login")} variant="dark" icon={<Login />} className={styles.sheetLogin}>
+                                    Portal
                                 </LinkButton>
                             </motion.li>
                         </motion.ul>

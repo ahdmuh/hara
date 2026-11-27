@@ -77,12 +77,12 @@
 
 .wordmark
 {
-    font-size: clamp(96px, 22vw, 300px);
+    font-size: clamp(56px, 12.5vw, 188px);
     font-weight: inherit;
     letter-spacing: 0;
-    line-height: 0.8;
+    line-height: 1;
     color: var(--white);
-    text-shadow: 0 0 40px rgb(255 255 255 / 25%), 0 0 120px var(--indigo-glow);
+    text-shadow: 0 0 48px rgb(0 149 219 / 45%)
 }
 
 .name
@@ -132,8 +132,8 @@
     height: 3px;
     translate: -50% 0;
     border-radius: 3px 3px 0 0;
-    background: var(--indigo);
-    box-shadow: 0 0 18px 4px var(--indigo-glow), 0 0 4px var(--indigo);
+    background: var(--blue);
+    box-shadow: 0 0 18px 4px var(--blue-glow), 0 0 4px var(--blue);
     animation: breathe 4.5s var(--ease) infinite;
 }
 
@@ -155,7 +155,7 @@
 {
     .wordmark
     {
-        font-size: 29vw;
+        font-size: 15vw;
     }
 
     .video

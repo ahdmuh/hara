@@ -24,7 +24,7 @@
     font-weight: 900;
     line-height: 1;
     color: var(--white);
-    text-shadow: 0 0 20px var(--indigo-glow);
+    text-shadow: 0 0 20px var(--blue-glow);
     user-select: all;
     transition: color 0.3s var(--ease), opacity 0.3s var(--ease);
 }

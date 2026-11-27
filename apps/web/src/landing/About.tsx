@@ -3,19 +3,19 @@ import { useEffect, useRef } from "react";
 import { EASE } from "../ui/Motion";
 import Reveal, { RevealItem } from "../ui/Reveal";
 import styles from "./About.module.css";
-import Fingers from "./Fingers";
+import Apparatus from "./Apparatus";
 
-const PRINCIPLES = [
+const STEPS = [
     {
-        title: "Nothing Electronic on the Hand",
-        body: "Motors and sensors sit in the tabletop base. Magnetic fingertip cuffs let go under abnormal stress or position.",
+        title: "Calibrate",
+        body: "A short calibration measures the range and strength of each finger and sets the safe limits every game stays within.",
     },
     {
-        title: "Calibrated to You",
-        body: "Calibration sets safe force and range limits for each finger, and every game scales to your capacity.",
+        title: "Play",
+        body: "Games turn repetitive exercises into play, and their difficulty scales to your capacity as you recover.",
     },
     {
-        title: "Progress Your Clinician Can See",
+        title: "Track",
         body: "Each session is saved and synced to your account, where your clinician follows your trends and milestones.",
     },
 ];
@@ -32,7 +32,7 @@ function Percent()
     const ref = useRef<HTMLSpanElement>(null);
     const inView = useInView(ref, { once: true, margin: "0px 0px -20% 0px" });
     const value = useMotionValue(0);
-    const text = useTransform(value, current => `${Math.round(current)}%`);
+    const text = useTransform(value, current => Math.round(current).toString());
 
     useEffect(() =>
     {
@@ -44,7 +44,12 @@ function Percent()
         return () => controls.stop();
     }, [inView, value]);
 
-    return <motion.span ref={ref} className={styles.percent}>{text}</motion.span>;
+    return (
+        <span ref={ref} className={styles.percent}>
+            <motion.span>{text}</motion.span>
+            <small>%</small>
+        </span>
+    );
 }
 
 export default function About()
@@ -71,13 +76,13 @@ export default function About()
                     </span>
                 </p>
             </Reveal>
-            <Fingers />
-            <Reveal as="ul" className={styles.principles} group>
-                {PRINCIPLES.map((principle, index) => (
-                    <RevealItem as="li" key={principle.title} className={styles.principle}>
-                        <span className={styles.index}>{`0${index + 1}`}</span>
-                        <h3>{principle.title}</h3>
-                        <p>{principle.body}</p>
+            <Apparatus />
+            <Reveal as="ol" className={styles.steps} group>
+                {STEPS.map((step, index) => (
+                    <RevealItem as="li" key={step.title} className={styles.step}>
+                        <span className={styles.number}>{`0${index + 1}`}</span>
+                        <h3>{step.title}</h3>
+                        <p>{step.body}</p>
                     </RevealItem>
                 ))}
             </Reveal>

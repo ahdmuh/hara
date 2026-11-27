@@ -26,7 +26,7 @@
     font-family: var(--display);
     font-size: 0.6em;
     font-weight: 900;
-    color: var(--indigo);
+    color: var(--blue);
 }
 
 .search
@@ -46,7 +46,7 @@
 
 .search:focus-within
 {
-    box-shadow: 0 0 0 2px var(--indigo) inset, 0 0 0 5px rgb(90 75 255 / 14%);
+    box-shadow: 0 0 0 2px var(--blue) inset, 0 0 0 5px rgb(0 149 219 / 14%);
 }
 
 .search > svg
@@ -238,7 +238,7 @@
 
 .row:focus-visible td:first-child
 {
-    box-shadow: 3px 0 0 var(--indigo) inset;
+    box-shadow: 3px 0 0 var(--blue) inset;
 }
 
 .row td
@@ -291,7 +291,7 @@ th.numeric .sort
 
 .row:hover .avatar
 {
-    background: var(--indigo);
+    background: var(--blue);
 }
 
 .identity

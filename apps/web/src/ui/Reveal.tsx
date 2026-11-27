@@ -6,7 +6,7 @@ interface IRevealProps
 {
     children: ReactNode;
     className?: string;
-    as?: "div" | "section" | "ul" | "li" | "header";
+    as?: "div" | "section" | "ul" | "ol" | "li" | "header";
     group?: boolean;
     id?: string;
 }
