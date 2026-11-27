@@ -15,6 +15,7 @@ import type * as Clinician from "../Clinician.js";
 import type * as Mail from "../Mail.js";
 import type * as Patients from "../Patients.js";
 import type * as Seed from "../Seed.js";
+import type * as Sync from "../Sync.js";
 import type * as auth from "../auth.js";
 
 import type {
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   Mail: typeof Mail;
   Patients: typeof Patients;
   Seed: typeof Seed;
+  Sync: typeof Sync;
   auth: typeof auth;
 }>;
 
