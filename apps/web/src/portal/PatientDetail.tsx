@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from "convex/react";
 import type { FunctionReturnType } from "convex/server";
 import { AnimatePresence, motion } from "motion/react";
-import { useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { api } from "../../../../convex/_generated/api";
 import type { Id } from "../../../../convex/_generated/dataModel";
-import { Link } from "../Router";
+import { Link, navigate } from "../Router";
 import Avatar from "../ui/Avatar";
 import Button from "../ui/Button";
 import Dialog from "../ui/Dialog";
@@ -26,6 +26,7 @@ const HISTORY_STEP = 10;
 function Targets({ patient, open, onClose }: { patient: IPatient; open: boolean; onClose: () => void })
 {
     const toast = useToast();
+
     const save = useMutation(api.Clinician.setTargets);
     const [targets, setTargets] = useState(patient.targets);
     const [busy, setBusy] = useState(false);
@@ -84,6 +85,18 @@ export default function PatientDetail({ id }: { id: string })
     const [hidden, setHidden] = useState<number[]>([]);
     const [shown, setShown] = useState(HISTORY_STEP);
     const [targetsOpen, setTargetsOpen] = useState(false);
+    const toast = useToast();
+    const redirected = useRef(false);
+
+    useEffect(() =>
+    {
+        if (patient === null && !redirected.current)
+        {
+            redirected.current = true;
+            toast.error("Patient Not Found", "They aren't in your patient list.");
+            navigate("/patients", { replace: true });
+        }
+    }, [patient, toast]);
 
     function toggleFinger(index: number): void
     {
@@ -97,15 +110,7 @@ export default function PatientDetail({ id }: { id: string })
 
     if (patient === null)
     {
-        return (
-            <div className={styles.missing}>
-                <h1>Patient Not Found</h1>
-                <Link to="/patients" className={styles.back}>
-                    <ArrowLeft />
-                    All Patients
-                </Link>
-            </div>
-        );
+        return null;
     }
 
     const meta = GAME_INFO[game];
