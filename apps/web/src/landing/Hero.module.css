@@ -82,7 +82,8 @@
     letter-spacing: 0;
     line-height: 1;
     color: var(--white);
-    text-shadow: var(--wordmark-glow);
+    -webkit-text-stroke: var(--wordmark-stroke);
+    paint-order: stroke fill;
 }
 
 .name
