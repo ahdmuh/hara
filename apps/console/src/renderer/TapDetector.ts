@@ -6,7 +6,9 @@ export interface ITapThresholds
     release: number;
 }
 
-export const GENEROUS_THRESHOLDS: ITapThresholds = { press: 0.5, release: 0.25 };
+export const GENEROUS_THRESHOLDS: ITapThresholds = { press: 0.25, release: 0.1 };
+
+export const CALIBRATED_THRESHOLDS: ITapThresholds = { press: 0.5, release: 0.25 };
 
 export class TapDetector
 {

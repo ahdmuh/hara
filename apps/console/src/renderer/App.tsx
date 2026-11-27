@@ -4,10 +4,12 @@ import { rememberName, storedAccount, useLinkClinician, useProfile, useRegister,
 import { bridge } from "./Bridge";
 import DebugView from "./DebugView";
 import type { IDeviceStatus } from "../main/DeviceConnection";
-import { createDeviceSource } from "./DeviceSource";
+import { createDeviceRawSource, createDeviceSource, createProvisionalRawSource, PROVISIONAL } from "./DeviceSource";
 import type { IGame } from "./Games";
 import { InputContext } from "./InputContext";
 import { startIntents } from "./Intents";
+import { CALIBRATED_THRESHOLDS, GENEROUS_THRESHOLDS } from "./TapDetector";
+import type { HandCalibration } from "@hara/input";
 import { createKeyboardSource } from "./KeyboardSource";
 import { music, storedVolume, VOLUME_STEPS } from "./Music";
 import { sounds } from "./Sounds";
@@ -23,7 +25,7 @@ import SignUp from "./screens/SignUp";
 import Start from "./screens/Start";
 import Backdrop from "./ui/Backdrop";
 import { SCREEN, type ITravel } from "./ui/Motion";
-import Toasts from "./ui/Toast";
+import Toasts, { notify } from "./ui/Toast";
 
 const INPUT = import.meta.env.VITE_INPUT ?? (import.meta.env.DEV ? "keyboard" : "device");
 
@@ -91,6 +93,7 @@ export default function App()
             return next;
         });
     }, []);
+    const [account, setAccount] = useState(() => storedAccount());
     const [patient, setPatient] = useState<string | null>(() => storedAccount()?.name ?? null);
     const register = useRegister();
     const signIn = useSignIn();
@@ -105,7 +108,10 @@ export default function App()
     const [ready, setReady] = useState(false);
     const [debugging, setDebugging] = useState(false);
     const [device, setDevice] = useState<IDeviceStatus>({ connected: false, firmware: null });
-    const source = useMemo(() => INPUT === "keyboard" ? createKeyboardSource(window) : createDeviceSource(bridge), []);
+    const [calibration, setCalibration] = useState<HandCalibration | null>(null);
+    const keyboard = useMemo(() => createKeyboardSource(window), []);
+    const source = useMemo(() => INPUT === "keyboard" ? keyboard : createDeviceSource(bridge, calibration ?? PROVISIONAL), [keyboard, calibration]);
+    const raw = useMemo(() => INPUT === "keyboard" ? createProvisionalRawSource(keyboard) : createDeviceRawSource(bridge), [keyboard]);
 
     useEffect(() =>
     {
@@ -114,7 +120,31 @@ export default function App()
         return bridge.onDeviceStatus(setDevice);
     }, []);
 
-    useEffect(() => startIntents(window, source), [source]);
+    useEffect(() => startIntents(window, source, calibration ? CALIBRATED_THRESHOLDS : GENEROUS_THRESHOLDS), [source, calibration]);
+
+    const owner = account?.username ?? null;
+
+    useEffect(() =>
+    {
+        if (!owner)
+        {
+            return;
+        }
+        let active = true;
+        void bridge.latestCalibration(owner).then((record) =>
+        {
+            if (active && record)
+            {
+                setCalibration(record.fingers);
+                setCalibrated(true);
+                setCalibratedAt(new Date(record.takenAt));
+            }
+        });
+        return () =>
+        {
+            active = false;
+        };
+    }, [owner]);
 
     useEffect(() =>
     {
@@ -216,6 +246,7 @@ export default function App()
                             {
                                 return result;
                             }
+                            setAccount(result);
                             setPatient(result.name);
                             setView({ name: "calibration" });
                             return null;
@@ -233,6 +264,7 @@ export default function App()
                             {
                                 return result;
                             }
+                            setAccount(result);
                             setPatient(result.name);
                             setLinked(details.code !== "");
                             setView({ name: "calibration" });
@@ -243,10 +275,20 @@ export default function App()
             case "calibration":
                 return (
                     <Calibration
-                        onDone={() =>
+                        raw={raw}
+                        onDone={(result) =>
                         {
+                            if (result && owner)
+                            {
+                                void bridge.saveCalibration(owner, result);
+                                setCalibration(result);
+                                setCalibratedAt(new Date());
+                            }
+                            else if (!calibration)
+                            {
+                                notify("Calibration Was Skipped, So Default Limits Apply", "info");
+                            }
                             setCalibrated(true);
-                            setCalibratedAt(new Date());
                             goHome();
                         }}
                     />
@@ -280,6 +322,8 @@ export default function App()
                         onSignOut={() =>
                         {
                             void signOut();
+                            setAccount(null);
+                            setCalibration(null);
                             setPatient(null);
                             setCalibrated(false);
                             setLinked(false);

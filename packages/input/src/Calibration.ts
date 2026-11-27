@@ -7,7 +7,10 @@ export interface IFingerCalibration
     fist: number;
     forceZero: number;
     forceMaximum: number;
+    tapRate?: number;
 }
+
+export const PROVISIONAL_CALIBRATION: IFingerCalibration = { open: 0, relaxed: 512, fist: 1023, forceZero: 0, forceMaximum: 1023 };
 
 export type HandCalibration = Record<Finger, IFingerCalibration>;
 

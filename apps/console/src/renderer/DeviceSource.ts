@@ -1,10 +1,16 @@
-import { FINGERS, normalizeHand, type HandCalibration, type IInputSource } from "@hara/input";
+import { denormalizeFinger, FINGERS, normalizeHand, PROVISIONAL_CALIBRATION, type Finger, type HandCalibration, type IInputSource, type IRawFinger } from "@hara/input";
 import type { IBridge } from "../shared/IBridge";
 
-const PROVISIONAL_CALIBRATION = Object.fromEntries(FINGERS.map(finger =>
-    [finger, { open: 0, relaxed: 512, fist: 1023, forceZero: 0, forceMaximum: 1023 }])) as HandCalibration;
+export type RawListener = (raw: Record<Finger, IRawFinger>) => void;
 
-export function createDeviceSource(bridge: IBridge, calibration = PROVISIONAL_CALIBRATION): IInputSource
+export interface IRawSource
+{
+    subscribe(listener: RawListener): () => void;
+}
+
+export const PROVISIONAL = Object.fromEntries(FINGERS.map(finger => [finger, PROVISIONAL_CALIBRATION])) as HandCalibration;
+
+export function createDeviceSource(bridge: IBridge, calibration: HandCalibration = PROVISIONAL): IInputSource
 {
     return {
         subscribe(listener)
@@ -16,6 +22,33 @@ export function createDeviceSource(bridge: IBridge, calibration = PROVISIONAL_CA
                     listener(normalizeHand(message.timestamp, message.fingers, calibration));
                 }
             });
+        },
+    };
+}
+
+export function createDeviceRawSource(bridge: IBridge): IRawSource
+{
+    return {
+        subscribe(listener)
+        {
+            return bridge.onDeviceMessage((message) =>
+            {
+                if (message.type === "data")
+                {
+                    listener(message.fingers);
+                }
+            });
+        },
+    };
+}
+
+export function createProvisionalRawSource(source: IInputSource): IRawSource
+{
+    return {
+        subscribe(listener)
+        {
+            return source.subscribe(frame => listener(Object.fromEntries(FINGERS.map(finger =>
+                [finger, denormalizeFinger(frame.fingers[finger], PROVISIONAL_CALIBRATION)])) as Record<Finger, IRawFinger>));
         },
     };
 }

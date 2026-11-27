@@ -44,6 +44,13 @@ export interface IMilestone
     achievedAt: number;
 }
 
+export interface IUnsynced
+{
+    sessions: ISession[];
+    calibrations: ICalibrationRecord[];
+    milestones: IMilestone[];
+}
+
 interface ISessionRow
 {
     id: string;
@@ -78,6 +85,19 @@ const MIGRATIONS = [
         achieved_at INTEGER NOT NULL,
         synced_at INTEGER
     );`,
+    `ALTER TABLE sessions ADD COLUMN owner TEXT NOT NULL DEFAULT '';
+    ALTER TABLE calibrations ADD COLUMN owner TEXT NOT NULL DEFAULT '';
+    DROP TABLE milestones;
+    CREATE TABLE milestones (
+        id TEXT PRIMARY KEY,
+        owner TEXT NOT NULL,
+        kind TEXT NOT NULL,
+        achieved_at INTEGER NOT NULL,
+        synced_at INTEGER,
+        UNIQUE (owner, kind)
+    );
+    CREATE INDEX sessions_owner ON sessions (owner, started_at);
+    CREATE INDEX calibrations_owner ON calibrations (owner, taken_at);`,
 ];
 
 function toSession(row: ISessionRow): ISession
@@ -112,11 +132,11 @@ export class SessionStore
         });
     }
 
-    startSession(game: Game): string
+    startSession(owner: string, game: Game): string
     {
         const id = this.newID();
         const time = this.now();
-        this.database.prepare("INSERT INTO sessions (id, game, started_at, updated_at) VALUES (?, ?, ?, ?)").run(id, game, time, time);
+        this.database.prepare("INSERT INTO sessions (id, owner, game, started_at, updated_at) VALUES (?, ?, ?, ?, ?)").run(id, owner, game, time, time);
         return id;
     }
 
@@ -142,51 +162,51 @@ export class SessionStore
         return open.length;
     }
 
-    saveCalibration(fingers: HandCalibration): string
+    saveCalibration(owner: string, fingers: HandCalibration): string
     {
         const id = this.newID();
-        this.database.prepare("INSERT INTO calibrations (id, taken_at, fingers) VALUES (?, ?, ?)").run(id, this.now(), JSON.stringify(fingers));
+        this.database.prepare("INSERT INTO calibrations (id, owner, taken_at, fingers) VALUES (?, ?, ?, ?)").run(id, owner, this.now(), JSON.stringify(fingers));
         return id;
     }
 
-    latestCalibration(): ICalibrationRecord | null
+    latestCalibration(owner: string): ICalibrationRecord | null
     {
-        const row = this.database.prepare("SELECT id, taken_at, fingers FROM calibrations ORDER BY taken_at DESC LIMIT 1").get() as
+        const row = this.database.prepare("SELECT id, taken_at, fingers FROM calibrations WHERE owner = ? ORDER BY taken_at DESC LIMIT 1").get(owner) as
             | { id: string; taken_at: number; fingers: string }
             | undefined;
         return row ? { id: row.id, takenAt: row.taken_at, fingers: JSON.parse(row.fingers) as HandCalibration } : null;
     }
 
-    recordMilestone(kind: MilestoneKind): boolean
+    recordMilestone(owner: string, kind: MilestoneKind): boolean
     {
-        const existing = this.database.prepare("SELECT id FROM milestones WHERE kind = ?").get(kind);
+        const existing = this.database.prepare("SELECT id FROM milestones WHERE owner = ? AND kind = ?").get(owner, kind);
         if (existing)
         {
             return false;
         }
-        this.database.prepare("INSERT INTO milestones (id, kind, achieved_at) VALUES (?, ?, ?)").run(this.newID(), kind, this.now());
+        this.database.prepare("INSERT INTO milestones (id, owner, kind, achieved_at) VALUES (?, ?, ?, ?)").run(this.newID(), owner, kind, this.now());
         return true;
     }
 
-    sessions(): ISession[]
+    sessions(owner: string): ISession[]
     {
         const rows = this.database
-            .prepare("SELECT id, game, started_at, ended_at, score, fingers FROM sessions ORDER BY started_at DESC")
-            .all() as ISessionRow[];
+            .prepare("SELECT id, game, started_at, ended_at, score, fingers FROM sessions WHERE owner = ? ORDER BY started_at DESC")
+            .all(owner) as ISessionRow[];
         return rows.map(toSession);
     }
 
-    unsynced(): { sessions: ISession[]; calibrations: ICalibrationRecord[]; milestones: IMilestone[] }
+    unsynced(owner: string): IUnsynced
     {
         const sessions = this.database
-            .prepare("SELECT id, game, started_at, ended_at, score, fingers FROM sessions WHERE synced_at IS NULL AND ended_at IS NOT NULL")
-            .all() as ISessionRow[];
-        const calibrations = this.database.prepare("SELECT id, taken_at, fingers FROM calibrations WHERE synced_at IS NULL").all() as {
+            .prepare("SELECT id, game, started_at, ended_at, score, fingers FROM sessions WHERE owner = ? AND synced_at IS NULL AND ended_at IS NOT NULL")
+            .all(owner) as ISessionRow[];
+        const calibrations = this.database.prepare("SELECT id, taken_at, fingers FROM calibrations WHERE owner = ? AND synced_at IS NULL").all(owner) as {
             id: string;
             taken_at: number;
             fingers: string;
         }[];
-        const milestones = this.database.prepare("SELECT id, kind, achieved_at FROM milestones WHERE synced_at IS NULL").all() as {
+        const milestones = this.database.prepare("SELECT id, kind, achieved_at FROM milestones WHERE owner = ? AND synced_at IS NULL").all(owner) as {
             id: string;
             kind: MilestoneKind;
             achieved_at: number;
