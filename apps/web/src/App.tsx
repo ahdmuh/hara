@@ -2,7 +2,8 @@ import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { lazy, Suspense, useEffect } from "react";
 import Landing from "./landing/Landing";
 import { navigate, usePath } from "./Router";
-import { isPortalHost } from "./Site";
+import { correctPath } from "./Routes";
+import { portalHref } from "./Site";
 import { PAGE } from "./ui/Motion";
 import { ToastProvider } from "./ui/Toast";
 
@@ -30,16 +31,23 @@ function screenFor(path: string): Screen
 export default function App()
 {
     const path = usePath();
-    const portalRoot = isPortalHost() && path === "/";
+    const correction = correctPath(path, window.location.hostname);
+    const portalRoot = correction.kind !== "stay";
+    const target = correction.kind === "stay" ? "" : `${correction.kind}:${correction.path}`;
     const screen = screenFor(path);
 
     useEffect(() =>
     {
-        if (portalRoot)
+        const [kind, destination] = target.split(":");
+        if (kind === "portal" && destination)
         {
-            navigate("/login", { replace: true });
+            window.location.replace(portalHref(destination));
         }
-    }, [portalRoot]);
+        else if (kind === "replace" && destination)
+        {
+            navigate(destination, { replace: true });
+        }
+    }, [target]);
 
     return (
         <MotionConfig reducedMotion="user">
