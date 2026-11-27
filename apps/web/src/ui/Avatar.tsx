@@ -2,12 +2,12 @@ import styles from "./Avatar.module.css";
 
 const COLORS = ["#0a84ff", "#1f9d55", "#e07a1f", "#c2410c", "#7c3aed", "#0f766e", "#be185d", "#4b5563", "#2563eb", "#a16207"];
 
-export function initialsOf(name: string): string
+function initialsOf(name: string): string
 {
     return name.replace(/^Dr\.?\s+/, "").split(/\s+/).map(part => part[0] ?? "").join("").slice(0, 2).toUpperCase();
 }
 
-export function colorFor(initials: string): string
+function colorFor(initials: string): string
 {
     const hash = [...initials].reduce((total, character) => (total * 31 + character.charCodeAt(0)) >>> 0, 7);
     return COLORS[hash % COLORS.length] ?? COLORS[0] ?? "#0a84ff";

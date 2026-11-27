@@ -1,5 +1,5 @@
-export const SITE_HOST = "projecthara.ca";
-export const PORTAL_HOST = `portal.${SITE_HOST}`;
+const SITE_HOST = "projecthara.ca";
+const PORTAL_HOST = `portal.${SITE_HOST}`;
 
 export function isPortalHost(): boolean
 {
