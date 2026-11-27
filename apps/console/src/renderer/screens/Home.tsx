@@ -8,7 +8,7 @@ import Cartridge from "../ui/Cartridge";
 import { formatDate, formatTime, useNow } from "../ui/Clock";
 import Hints from "../ui/Hints";
 import Rolling from "../ui/Rolling";
-import { SettingsCog, Trophy } from "../ui/Icons";
+import { Lightbulb, SettingsCog, Trophy } from "../ui/Icons";
 import { DOCK as DOCK_MOTION, EASE, SPRING } from "../ui/Motion";
 import Status from "../ui/Status";
 import Tour, { type ITourStep } from "../ui/Tour";
@@ -19,16 +19,18 @@ type Zone = "games" | "dock";
 
 const DOCK = [
     { id: "settings", label: "Settings", icon: SettingsCog },
+    { id: "tips", label: "Tips", icon: Lightbulb },
     { id: "progress", label: "Progress", icon: Trophy },
 ] as const;
 
-export type DockID = typeof DOCK[number]["id"];
+export type DockID = "settings" | "progress";
 
 const TOUR: ITourStep[] = [
     { target: "games", title: "Your Games", body: "Move between the cartridges and select one to play." },
-    { target: "settings", title: "Settings", body: "Recalibrate, link your clinician, adjust the volume or sign out." },
-    { target: "progress", title: "Progress", body: "Follow each measure over time and collect milestones." },
-    { target: "device", title: "Your Device", body: "Shows whether your device is connected and ready." },
+    { target: "settings", title: "Settings", body: "Recalibrate, link your clinician, adjust the volume or sign out.", padding: 8, round: true },
+    { target: "progress", title: "Progress", body: "Follow each measure over time and collect milestones.", padding: 8, round: true },
+    { target: "device", title: "Your Device", body: "Shows whether your device is connected and ready.", padding: 6, round: true },
+    { target: "tips", title: "Tips", body: "Open these tips again any time.", padding: 8, round: true },
 ];
 
 const TOUR_KEY = "hara.tour";
@@ -64,6 +66,18 @@ export default function Home({ name, connected, initial, onPlay, onOpen }: IHome
         const timer = window.setTimeout(() => setTouring(true), 1400);
         return () => window.clearTimeout(timer);
     }, []);
+
+    function activate(id: typeof DOCK[number]["id"]): void
+    {
+        if (id === "tips")
+        {
+            setTouring(true);
+        }
+        else
+        {
+            onOpen(id);
+        }
+    }
 
     function finishTour(): void
     {
@@ -116,7 +130,7 @@ export default function Home({ name, connected, initial, onPlay, onOpen }: IHome
                     insert();
                     return false;
                 }
-                onOpen(DOCK[dock]?.id ?? "settings");
+                activate(DOCK[dock]?.id ?? "settings");
                 return true;
             case "back":
                 setZone("games");
@@ -199,7 +213,7 @@ export default function Home({ name, connected, initial, onPlay, onOpen }: IHome
                             className={`${styles.round} ${styles[entry.id]} ${active ? styles.active : ""}`}
                             animate={{ scale: active ? 1.08 : 1 }}
                             transition={SPRING}
-                            onClick={() => onOpen(entry.id)}
+                            onClick={() => activate(entry.id)}
                         >
                             <Icon />
                             <span>{entry.label}</span>
