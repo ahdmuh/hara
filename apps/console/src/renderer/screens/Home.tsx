@@ -230,7 +230,7 @@ export default function Home({ name, connected, initial, onPlay, onOpen }: IHome
                             { finger: "index", key: "←", label: "Previous" },
                             { finger: "ring", key: "→", label: "Next" },
                             { finger: "middle", key: "Enter", label: zone === "games" ? "Play" : "Open" },
-                            { finger: "pinky", key: "↓", label: zone === "games" ? "Menu" : "Games" },
+                            zone === "games" ? { finger: "pinky", key: "↓", label: "Menu" } : { finger: "pinky", key: "↑", label: "Games" },
                         ]}
                     />
                 </div>
