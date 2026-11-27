@@ -25,7 +25,7 @@
     overflow: visible;
     white-space: nowrap;
     font-family: var(--sans);
-    font-size: max(0.075em, 0.45rem);
+    font-size: max(0.075em, 0.34rem);
     font-weight: 700;
     letter-spacing: 0.02em;
     line-height: 1;

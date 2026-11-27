@@ -101,17 +101,6 @@
     color: var(--graphite);
 }
 
-.future
-{
-    position: absolute;
-    left: 45%;
-    translate: -50% 0;
-    top: 2.9rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--steel);
-}
-
 .reached
 {
     position: absolute;
@@ -142,6 +131,24 @@
     height: 2.4rem;
     border-radius: 2px;
     background: var(--graphite);
+}
+
+[data-metric="range"] .pennant
+{
+    background: #fed7aa;
+    box-shadow: 0 0 0 1.5px #fb923c inset, var(--shadow-soft);
+}
+
+[data-metric="strength"] .pennant
+{
+    background: #fecaca;
+    box-shadow: 0 0 0 1.5px #f87171 inset, var(--shadow-soft);
+}
+
+[data-metric="speed"] .pennant
+{
+    background: #bae6fd;
+    box-shadow: 0 0 0 1.5px #38bdf8 inset, var(--shadow-soft);
 }
 
 .pennant
@@ -205,8 +212,10 @@
 
 .shelf
 {
+    --bleed: calc((100vw - min(64rem, 100vw - 5.2rem)) / 2);
     position: relative;
     min-width: 0;
+    margin: 0 calc(var(--bleed) * -1);
 }
 
 .shelf::after
@@ -216,9 +225,16 @@
     top: 0;
     right: 0;
     bottom: 0;
-    width: 6rem;
-    background: linear-gradient(90deg, transparent, var(--paper) 85%);
+    width: 7rem;
+    background: linear-gradient(90deg, transparent, var(--paper) 80%);
+    opacity: 0;
     pointer-events: none;
+    transition: opacity 0.4s var(--ease);
+}
+
+.fading::after
+{
+    opacity: 1;
 }
 
 .badges
@@ -227,9 +243,10 @@
     grid-auto-flow: column;
     grid-auto-columns: 8.4rem;
     gap: 0.8rem;
-    padding: 0.4rem 6rem 0.6rem 0.2rem;
+    padding: 0.4rem var(--bleed) 0.6rem;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    scroll-padding: 0 var(--bleed);
     scrollbar-width: none;
 }
 
@@ -310,24 +327,24 @@
     position: absolute;
     z-index: 1;
     top: 50%;
-    right: 0.4rem;
+    right: 1.6rem;
     display: grid;
     place-items: center;
     width: 2.8rem;
     height: 2.8rem;
-    translate: 0 -50%;
+    margin-top: -1.4rem;
     border: 0;
     border-radius: 50%;
     background: var(--white);
     box-shadow: var(--shadow-lift), 0 0 0 1px var(--line) inset;
     color: var(--blue);
-    animation: nudge 1.8s ease-in-out infinite;
 }
 
 .more svg
 {
     width: 1.4rem;
     height: 1.4rem;
+    animation: nudge 1.8s ease-in-out infinite;
 }
 
 @keyframes nudge

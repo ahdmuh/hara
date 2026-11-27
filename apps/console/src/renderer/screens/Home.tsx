@@ -7,6 +7,7 @@ import { firstName } from "../Names";
 import Cartridge from "../ui/Cartridge";
 import { formatDate, formatTime, useNow } from "../ui/Clock";
 import Hints from "../ui/Hints";
+import Rolling from "../ui/Rolling";
 import { SettingsCog, Trophy } from "../ui/Icons";
 import { DOCK as DOCK_MOTION, EASE, SPRING } from "../ui/Motion";
 import Status from "../ui/Status";
@@ -176,7 +177,7 @@ export default function Home({ name, connected, initial, onPlay, onOpen }: IHome
                     );
                 })}
                 <div className={styles.clock}>
-                    <span className={styles.time}>{formatTime(now)}</span>
+                    <Rolling text={formatTime(now)} className={styles.time} />
                     <span className={styles.date}>{formatDate(now)}</span>
                 </div>
                 <div className={styles.hints}>

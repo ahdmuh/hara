@@ -1,6 +1,6 @@
 import { MILESTONE_TITLES, MilestoneBadge, type MilestoneKind } from "@hara/badges";
-import { motion } from "motion/react";
-import { useRef } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 import { GAMES } from "../Games";
 import { useIntent } from "../Intents";
 import Hints from "../ui/Hints";
@@ -33,6 +33,28 @@ function formatDay(date: Date): string
 export default function Progress({ calibratedAt, achieved, onBack }: IProgressProps)
 {
     const row = useRef<HTMLUListElement>(null);
+    const [more, setMore] = useState(true);
+
+    function measure(): void
+    {
+        const list = row.current;
+        if (list)
+        {
+            setMore(list.scrollLeft + list.clientWidth < list.scrollWidth - 4);
+        }
+    }
+
+    useEffect(() =>
+    {
+        const list = row.current;
+        if (!list)
+        {
+            return;
+        }
+        const observer = new ResizeObserver(() => measure());
+        observer.observe(list);
+        return () => observer.disconnect();
+    }, []);
 
     function scroll(step: number): boolean
     {
@@ -100,12 +122,12 @@ export default function Progress({ calibratedAt, achieved, onBack }: IProgressPr
                                     animate={{ scaleX: 0 }}
                                     transition={{ type: "spring", stiffness: 120, damping: 20 }}
                                 />
-                                <span className={styles.future}>Your First Session Will Appear Here</span>
                                 <motion.span
                                     className={styles.flag}
                                     initial={{ left: "100%", opacity: 0 }}
                                     animate={{ left: `${FLAG_AT * 100}%`, opacity: 1 }}
-                                    transition={{ type: "spring", stiffness: 110, damping: 18, delay: 0.35 + 0.1 * index }}
+                                    transition={{ duration: 1, delay: 0.35 + 0.1 * index, ease: [0.16, 1, 0.3, 1] }}
+                                    data-metric={game.id}
                                 >
                                     <span className={styles.pole} />
                                     <span className={styles.pennant}>
@@ -119,8 +141,8 @@ export default function Progress({ calibratedAt, achieved, onBack }: IProgressPr
                 </ol>
                 <section className={styles.milestones} aria-label="Milestones">
                     <h2>Milestones</h2>
-                    <div className={styles.shelf}>
-                        <ul ref={row} className={styles.badges}>
+                    <div className={`${styles.shelf} ${more ? styles.fading : ""}`}>
+                        <ul ref={row} className={styles.badges} onScroll={measure}>
                             {SHOWN.map((kind, index) =>
                             {
                                 const earned = achieved.includes(kind);
@@ -154,9 +176,22 @@ export default function Progress({ calibratedAt, achieved, onBack }: IProgressPr
                                 </motion.li>
                             ))}
                         </ul>
-                        <button type="button" className={styles.more} aria-label="More Milestones" onClick={() => scroll(1)}>
-                            <ChevronRight />
-                        </button>
+                        <AnimatePresence>
+                            {more && (
+                                <motion.button
+                                    type="button"
+                                    className={styles.more}
+                                    aria-label="More Milestones"
+                                    initial={{ opacity: 0, scale: 0.6 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.6 }}
+                                    transition={{ duration: 0.3, ease: EASE }}
+                                    onClick={() => scroll(1)}
+                                >
+                                    <ChevronRight />
+                                </motion.button>
+                            )}
+                        </AnimatePresence>
                     </div>
                 </section>
             </div>
