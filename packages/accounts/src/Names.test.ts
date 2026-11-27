@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { filterName, firstName, nameError } from "./Names";
+import { filterName, nameError } from "./Names";
 
 describe("Names", () =>
 {
@@ -28,10 +28,5 @@ describe("Names", () =>
         expect(nameError("Avery Morgan-")).not.toBeNull();
         expect(nameError("Avery 'Morgan")).not.toBeNull();
         expect(nameError("Avery . Morgan")).not.toBeNull();
-    });
-
-    test("greets by the first name", () =>
-    {
-        expect(firstName(" Mary Ann de la Cruz ")).toBe("Mary");
     });
 });

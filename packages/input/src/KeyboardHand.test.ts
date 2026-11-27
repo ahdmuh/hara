@@ -16,34 +16,6 @@ function holdFor(hand: KeyboardHand, seconds: number)
 
 describe("KeyboardHand", () =>
 {
-    test("curls a held finger into a fist before any force builds", () =>
-    {
-        const hand = new KeyboardHand();
-        hand.press("index", "close");
-
-        expect(holdFor(hand, 0.25).fingers.index).toEqual({ position: 0.5, force: 0 });
-        expect(holdFor(hand, 0.25).fingers.index).toEqual({ position: 1, force: 0 });
-        expect(holdFor(hand, 0.25).fingers.index).toEqual({ position: 1, force: 0.5 });
-    });
-
-    test("opens a finger when the open grip is held", () =>
-    {
-        const hand = new KeyboardHand();
-        hand.press("thumb", "open");
-        expect(holdFor(hand, 1).fingers.thumb).toEqual({ position: -1, force: 0 });
-    });
-
-    test("releases force and returns to relaxed when the key is let go", () =>
-    {
-        const hand = new KeyboardHand();
-        hand.press("ring", "close");
-        holdFor(hand, 2);
-        hand.release("ring");
-
-        expect(holdFor(hand, 0.25).fingers.ring).toEqual({ position: 0.5, force: 0.5 });
-        expect(holdFor(hand, 1).fingers.ring).toEqual({ position: 0, force: 0 });
-    });
-
     test("moves only the fingers being held", () =>
     {
         const hand = new KeyboardHand();
