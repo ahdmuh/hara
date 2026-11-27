@@ -1,16 +1,17 @@
 .ucalgary
 {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45em;
+    display: inline;
     white-space: nowrap;
+    color: inherit;
 }
 
 .shield
 {
-    flex: none;
-    width: 0.92em;
-    height: 1.15em;
+    display: inline-block;
+    width: 0.86em;
+    height: 1.08em;
+    margin-right: 0.28em;
+    vertical-align: -0.17em;
     background: currentColor;
     mask-size: contain;
     mask-repeat: no-repeat;
@@ -18,4 +19,24 @@
     -webkit-mask-size: contain;
     -webkit-mask-repeat: no-repeat;
     -webkit-mask-position: center;
+    transition: transform 0.45s var(--ease);
+}
+
+.name
+{
+    background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+    padding-bottom: 2px;
+    transition: background-size 0.45s var(--ease);
+}
+
+.ucalgary:hover .shield,
+.ucalgary:focus-visible .shield
+{
+    transform: translateY(-2px) rotate(-6deg) scale(1.08);
+}
+
+.ucalgary:hover .name,
+.ucalgary:focus-visible .name
+{
+    background-size: 100% 1px;
 }

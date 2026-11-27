@@ -1,8 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import Avatar from "../ui/Avatar";
 import Button from "../ui/Button";
-import { ChevronDown, Logout } from "../ui/Icons";
+import { ChevronDown, Logout, User } from "../ui/Icons";
 import { EASE, SPRING } from "../ui/Motion";
 import { useSignOut, type IAccount } from "./Auth";
 import styles from "./UserMenu.module.css";
@@ -60,7 +59,7 @@ export default function UserMenu({ account, children }: IUserMenuProps)
                 aria-label={`Account Menu for ${account.name}`}
                 onClick={() => setOpen(value => !value)}
             >
-                <Avatar name={account.name} size={34} />
+                <span className={styles.avatar} aria-hidden="true"><User /></span>
                 <motion.span className={styles.chevron} animate={{ rotate: open ? 180 : 0 }} transition={SPRING}>
                     <ChevronDown />
                 </motion.span>
@@ -75,7 +74,7 @@ export default function UserMenu({ account, children }: IUserMenuProps)
                         exit={{ opacity: 0, y: -6, scale: 0.98, transition: { duration: 0.16, ease: EASE } }}
                     >
                         <div className={styles.who}>
-                            <Avatar name={account.name} size={40} />
+                            <span className={`${styles.avatar} ${styles.large}`} aria-hidden="true"><User /></span>
                             <span>
                                 <strong>{account.name}</strong>
                                 <small>{account.email}</small>

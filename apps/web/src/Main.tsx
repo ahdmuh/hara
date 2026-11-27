@@ -1,4 +1,4 @@
-import "@fontsource/michroma/index.css";
+import "@fontsource-variable/unbounded/index.css";
 import "@fontsource-variable/figtree/index.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";

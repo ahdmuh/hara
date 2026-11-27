@@ -82,7 +82,7 @@
     letter-spacing: 0;
     line-height: 1;
     color: var(--white);
-    text-shadow: 0 0 48px rgb(0 149 219 / 45%)
+    text-shadow: 0 0 28px rgb(255 255 255 / 14%);
 }
 
 .name

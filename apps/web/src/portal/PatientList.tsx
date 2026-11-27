@@ -139,7 +139,7 @@ export default function PatientList({ onLink }: { onLink: () => void })
             <div className={styles.head}>
                 <h1>
                     Patients
-                    <span className={styles.count}>{data === undefined ? "" : rows.length}</span>
+                    {rows.length > 0 && <span className={styles.count}>{rows.length}</span>}
                 </h1>
                 <label className={styles.search}>
                     <Search />
@@ -171,106 +171,110 @@ export default function PatientList({ onLink }: { onLink: () => void })
                     </AnimatePresence>
                 </label>
             </div>
-            <div className={styles.toolbar}>
-                <div className={styles.filters} role="tablist" aria-label="Filter Patients">
-                    {FILTERS.map(entry => (
-                        <button
-                            key={entry.id}
-                            type="button"
-                            role="tab"
-                            aria-selected={filter === entry.id}
-                            className={`${styles.filter} ${filter === entry.id ? styles.selected : ""}`}
-                            onClick={() =>
-                            {
-                                setFilter(entry.id);
-                                setPage(0);
-                            }}
-                        >
-                            {filter === entry.id && <motion.span layoutId="patientFilter" className={styles.pill} transition={SPRING} />}
-                            <span>{entry.label}</span>
-                        </button>
-                    ))}
-                </div>
-                {pager("top")}
-            </div>
-            <div className={styles.card}>
-                <table className={styles.table}>
-                    <colgroup>
-                        <col className={styles.colPatient} />
-                        <col className={styles.colMetric} />
-                        <col className={styles.colMetric} />
-                        <col className={styles.colMetric} />
-                        <col className={styles.colMilestone} />
-                        <col className={styles.colSessions} />
-                        <col className={styles.colLast} />
-                    </colgroup>
-                    <thead>
-                        <tr>
-                            {header("name", "Patient")}
-                            {GAMES.map(game => header(game.id, game.name))}
-                            <th>Latest Milestone</th>
-                            {header("sessions", "Sessions", styles.numeric)}
-                            {header("lastSession", "Last Session")}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {slice.map(row => (
-                            <motion.tr
-                                key={row.patient.id}
-                                className={styles.row}
-                                layout="position"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={ROW_TRANSITION}
-                                onClick={() => navigate(`/patients/${row.patient.id}`)}
-                                onKeyDown={(event) =>
+            {rows.length > 0 && (
+                <div className={styles.toolbar}>
+                    <div className={styles.filters} role="tablist" aria-label="Filter Patients">
+                        {FILTERS.map(entry => (
+                            <button
+                                key={entry.id}
+                                type="button"
+                                role="tab"
+                                aria-selected={filter === entry.id}
+                                className={`${styles.filter} ${filter === entry.id ? styles.selected : ""}`}
+                                onClick={() =>
                                 {
-                                    if (event.key === "Enter")
-                                    {
-                                        navigate(`/patients/${row.patient.id}`);
-                                    }
+                                    setFilter(entry.id);
+                                    setPage(0);
                                 }}
-                                tabIndex={0}
-                                aria-label={`Open ${row.patient.name}`}
                             >
-                                <td>
-                                    <span className={styles.patient}>
-                                        <Avatar name={row.patient.name} size={38} />
-                                        <span className={styles.identity}>
-                                            <strong>{row.patient.name}</strong>
-                                            <span>{row.patient.age === null ? "Age Unknown" : `Age ${row.patient.age}`}</span>
-                                        </span>
-                                    </span>
-                                </td>
-                                {GAMES.map(game => (
-                                    <td key={game.id} data-label={game.name}>
-                                        <span className={styles.metric}>
-                                            <Sparkline values={row.patient.trends[game.id]} width={72} height={24} />
-                                            <span className={styles.value}>
-                                                {row.current[game.id].toFixed(game.digits)}
-                                                <small>{game.unit}</small>
+                                {filter === entry.id && <motion.span layoutId="patientFilter" className={styles.pill} transition={SPRING} />}
+                                <span>{entry.label}</span>
+                            </button>
+                        ))}
+                    </div>
+                    {pager("top")}
+                </div>
+            )}
+            <div className={styles.card}>
+                {rows.length > 0 && (
+                    <table className={styles.table}>
+                        <colgroup>
+                            <col className={styles.colPatient} />
+                            <col className={styles.colMetric} />
+                            <col className={styles.colMetric} />
+                            <col className={styles.colMetric} />
+                            <col className={styles.colMilestone} />
+                            <col className={styles.colSessions} />
+                            <col className={styles.colLast} />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                {header("name", "Patient")}
+                                {GAMES.map(game => header(game.id, game.name))}
+                                <th>Latest Milestone</th>
+                                {header("sessions", "Sessions", styles.numeric)}
+                                {header("lastSession", "Last Session")}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {slice.map(row => (
+                                <motion.tr
+                                    key={row.patient.id}
+                                    className={styles.row}
+                                    layout="position"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={ROW_TRANSITION}
+                                    onClick={() => navigate(`/patients/${row.patient.id}`)}
+                                    onKeyDown={(event) =>
+                                    {
+                                        if (event.key === "Enter")
+                                        {
+                                            navigate(`/patients/${row.patient.id}`);
+                                        }
+                                    }}
+                                    tabIndex={0}
+                                    aria-label={`Open ${row.patient.name}`}
+                                >
+                                    <td>
+                                        <span className={styles.patient}>
+                                            <Avatar name={row.patient.name} size={38} />
+                                            <span className={styles.identity}>
+                                                <strong>{row.patient.name}</strong>
+                                                <span>{row.patient.age === null ? "Age Unknown" : `Age ${row.patient.age}`}</span>
                                             </span>
                                         </span>
                                     </td>
-                                ))}
-                                <td data-label="Latest Milestone" className={styles.milestone}>
-                                    {row.patient.milestone
-                                        ? (
-                                                <span className={styles.badge}>
-                                                    <MilestoneBadge kind={row.patient.milestone.kind} size={26} />
-                                                    {MILESTONE_TITLES[row.patient.milestone.kind]}
+                                    {GAMES.map(game => (
+                                        <td key={game.id} data-label={game.name}>
+                                            <span className={styles.metric}>
+                                                <Sparkline values={row.patient.trends[game.id]} width={72} height={24} />
+                                                <span className={styles.value}>
+                                                    {row.current[game.id].toFixed(game.digits)}
+                                                    <small>{game.unit}</small>
                                                 </span>
-                                            )
-                                        : "None"}
-                                </td>
-                                <td data-label="Sessions" className={styles.numeric}>{row.patient.sessionCount}</td>
-                                <td data-label="Last Session">
-                                    <span className={daysSince(row.patient.lastSession) >= 7 ? styles.idle : ""}>{relative(row.patient.lastSession)}</span>
-                                </td>
-                            </motion.tr>
-                        ))}
-                    </tbody>
-                </table>
+                                            </span>
+                                        </td>
+                                    ))}
+                                    <td data-label="Latest Milestone" className={styles.milestone}>
+                                        {row.patient.milestone
+                                            ? (
+                                                    <span className={styles.badge}>
+                                                        <MilestoneBadge kind={row.patient.milestone.kind} size={26} />
+                                                        {MILESTONE_TITLES[row.patient.milestone.kind]}
+                                                    </span>
+                                                )
+                                            : "None"}
+                                    </td>
+                                    <td data-label="Sessions" className={styles.numeric}>{row.patient.sessionCount}</td>
+                                    <td data-label="Last Session">
+                                        <span className={daysSince(row.patient.lastSession) >= 7 ? styles.idle : ""}>{relative(row.patient.lastSession)}</span>
+                                    </td>
+                                </motion.tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
                 {data !== undefined && rows.length === 0 && (
                     <motion.div className={styles.empty} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                         <strong>No Patients Yet</strong>
@@ -285,7 +289,7 @@ export default function PatientList({ onLink }: { onLink: () => void })
                 )}
                 {data === undefined && <div className={styles.loading} aria-label="Loading Patients" />}
             </div>
-            {pager("bottom")}
+            {rows.length > 0 && pager("bottom")}
         </div>
     );
 }

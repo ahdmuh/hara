@@ -19,7 +19,7 @@
     font-size: clamp(44px, 17.5vw, 252px);
     line-height: 0.8;
     color: var(--white);
-    text-shadow: 0 0 80px var(--blue-glow);
+    text-shadow: 0 0 28px rgb(255 255 255 / 14%);
 }
 
 .row

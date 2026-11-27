@@ -19,7 +19,7 @@
     --danger-soft: #fdeded;
     --line: rgb(22 22 26 / 9%);
     --line-strong: rgb(22 22 26 / 16%);
-    --display: "Michroma", var(--sans);
+    --display: "Unbounded Variable", var(--sans);
     --sans: "Figtree Variable", system-ui, sans-serif;
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
     --radius-small: 12px;

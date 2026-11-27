@@ -2,6 +2,7 @@ export const SITE_URL = "https://projecthara.ca";
 export const PORTAL_URL = "https://portal.projecthara.ca";
 export const SENDER = "HARA <contact@projecthara.ca>";
 export const CONTACT_EMAIL = "contact@projecthara.ca";
+export const SCHULICH_URL = "https://schulich.ucalgary.ca/";
 
 const FONT = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif";
 const INK = "#16161a";
@@ -65,9 +66,10 @@ function footer(): string
 {
     return `<tr><td style="padding:0 12px 12px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-radius:24px;background:#050506;">
-<tr><td style="padding:32px 32px 8px;font:400 34px/1 ${FONT};letter-spacing:10px;color:#ffffff;">HARA</td></tr>
+<tr><td style="padding:32px 32px 8px;"><img src="${SITE_URL}/email/hara-white.png" width="172" height="48" alt="HARA" style="display:block;border:0;outline:none;"></td></tr>
 <tr><td style="padding:16px 32px 32px;font:400 13px/1.6 ${FONT};color:#9a9aa3;">
-A capstone project from the Schulich School of Engineering at the University of Calgary.<br>
+A capstone project from the Schulich School of Engineering at the
+<a href="${SCHULICH_URL}" style="color:#ffffff;text-decoration:none;white-space:nowrap;"><img src="${SITE_URL}/email/ucalgary-shield-white.png" width="13" height="16" alt="" style="border:0;outline:none;vertical-align:-3px;margin-right:4px;">University of Calgary</a>.<br>
 <a href="${SITE_URL}" style="color:#ffffff;text-decoration:none;">projecthara.ca</a>
 &nbsp;&middot;&nbsp;
 <a href="mailto:${CONTACT_EMAIL}" style="color:#ffffff;text-decoration:none;">${CONTACT_EMAIL}</a>
@@ -97,7 +99,7 @@ export function render(content: IContent): IEmail
 <body style="margin:0;padding:0;background:${PAPER};">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${PAPER};"><tr><td align="center" style="padding:32px 12px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border-radius:28px;">
-<tr><td style="padding:40px 40px 8px;font:400 18px/1 ${FONT};letter-spacing:6px;color:${INK};">HARA</td></tr>
+<tr><td style="padding:40px 40px 8px;"><img src="${SITE_URL}/email/hara-ink.png" width="96" height="27" alt="HARA" style="display:block;border:0;outline:none;"></td></tr>
 <tr><td style="padding:24px 40px 0;font:700 28px/1.2 ${FONT};letter-spacing:-0.5px;color:${INK};">${escape(content.title)}</td></tr>
 <tr><td style="padding:24px 40px 36px;">${body}</td></tr>
 ${footer()}
