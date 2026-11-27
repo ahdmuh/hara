@@ -35,7 +35,14 @@ export default function Header()
     const [scrolled, setScrolled] = useState(false);
     const [open, setOpen] = useState(false);
 
-    useMotionValueEvent(scrollY, "change", value => setScrolled(value > 24));
+    const [branded, setBranded] = useState(false);
+
+    useMotionValueEvent(scrollY, "change", (value) =>
+    {
+        setScrolled(value > 24);
+        const title = document.getElementById("hero-title");
+        setBranded(title ? title.getBoundingClientRect().bottom < 72 : value > 240);
+    });
 
     useEffect(() =>
     {
@@ -62,9 +69,19 @@ export default function Header()
             transition={{ duration: 0.8, delay: 0.2, ease: EASE }}
         >
             <div className={styles.bar}>
-                <a className={styles.brand} href="#top" aria-label="HARA, Back to Top">
+                <motion.a
+                    className={styles.brand}
+                    href="#top"
+                    aria-label="HARA, Back to Top"
+                    aria-hidden={!branded}
+                    tabIndex={branded ? 0 : -1}
+                    initial={false}
+                    animate={branded ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : { opacity: 0, y: 14, scale: 0.86, filter: "blur(6px)" }}
+                    transition={{ duration: 0.5, ease: EASE }}
+                    style={{ pointerEvents: branded ? "auto" : "none" }}
+                >
                     <Wordmark />
-                </a>
+                </motion.a>
                 <nav className={styles.links} aria-label="Sections">
                     {LINKS.map(link => (
                         <a key={link.href} href={link.href} className={styles.link} onClick={event => goTo(event, link.href)}>{link.label}</a>

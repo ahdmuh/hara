@@ -30,6 +30,9 @@
 .brand
 {
     justify-self: start;
+    transform-origin: left center;
+    -webkit-text-stroke: 1.4px rgb(10 132 255 / 85%);
+    paint-order: stroke fill;
     font-size: 17px;
     color: var(--white);
     transition: color 0.4s var(--ease);

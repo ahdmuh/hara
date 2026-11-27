@@ -26,6 +26,8 @@
 .brand
 {
     font-size: 17px;
+    -webkit-text-stroke: 1.4px rgb(10 132 255 / 85%);
+    paint-order: stroke fill;
 }
 
 .main
