@@ -42,11 +42,6 @@
     transition: opacity 0.5s var(--ease);
 }
 
-.focused .part:not(.on)
-{
-    opacity: 0.38;
-}
-
 .housing
 {
     fill: url(#haraHousing);
