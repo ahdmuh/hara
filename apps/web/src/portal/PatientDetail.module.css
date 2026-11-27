@@ -18,22 +18,11 @@
     transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
 }
 
-.back:hover
-{
-    background: var(--white);
-    color: var(--ink);
-}
-
 .back svg
 {
     width: 18px;
     height: 18px;
     transition: transform 0.25s var(--ease);
-}
-
-.back:hover svg
-{
-    transform: translateX(-3px);
 }
 
 .head
@@ -219,11 +208,6 @@
     font-weight: 650;
     box-shadow: 0 0 0 1px var(--line) inset;
     transition: opacity 0.2s var(--ease), background-color 0.2s var(--ease);
-}
-
-.chip:hover
-{
-    background: var(--mist);
 }
 
 .chip i
@@ -527,5 +511,24 @@
     .stats
     {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (hover: hover) and (pointer: fine)
+{
+    .back:hover
+    {
+        background: var(--white);
+        color: var(--ink);
+    }
+
+    .back:hover svg
+    {
+        transform: translateX(-3px);
+    }
+
+    .chip:hover
+    {
+        background: var(--mist);
     }
 }

@@ -8,13 +8,15 @@ import { EASE } from "../ui/Motion";
 import Wordmark from "../ui/Wordmark";
 import styles from "./Hero.module.css";
 
+const PARALLAX = typeof window !== "undefined" && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
 export default function Hero()
 {
     const ref = useRef<HTMLElement>(null);
     const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-    const handY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
-    const wordY = useTransform(scrollYProgress, [0, 1], ["0%", "-40%"]);
-    const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+    const handY = useTransform(scrollYProgress, [0, 1], PARALLAX ? ["0%", "18%"] : ["0%", "0%"]);
+    const wordY = useTransform(scrollYProgress, [0, 1], PARALLAX ? ["0%", "-40%"] : ["0%", "0%"]);
+    const fade = useTransform(scrollYProgress, [0, 0.7], PARALLAX ? [1, 0] : [1, 1]);
 
     return (
         <section ref={ref} className={styles.hero} id="top">

@@ -7,14 +7,14 @@
     width: min(var(--content), calc(100% - 2 * var(--gutter)));
     translate: -50% 0;
     border-radius: 24px;
-    transition: background-color 0.4s var(--ease), box-shadow 0.4s var(--ease), backdrop-filter 0.4s var(--ease), top 0.4s var(--ease), width 0.4s var(--ease), border-radius 0.4s var(--ease);
+    transition: background-color 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
 
 .raised
 {
-    background: rgb(242 242 239 / 78%);
-    backdrop-filter: saturate(1.4) blur(18px);
-    -webkit-backdrop-filter: saturate(1.4) blur(18px);
+    background: rgb(248 248 246 / 84%);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     box-shadow: 0 0 0 1px var(--line) inset, 0 12px 32px -20px rgb(22 22 26 / 35%);
 }
 
@@ -31,8 +31,6 @@
 {
     justify-self: start;
     transform-origin: left center;
-    -webkit-text-stroke: 1.4px rgb(10 132 255 / 85%);
-    paint-order: stroke fill;
     font-size: 17px;
     color: var(--white);
     transition: color 0.4s var(--ease);
@@ -70,22 +68,9 @@
     transition: color 0.25s var(--ease), background-color 0.25s var(--ease);
 }
 
-.link:hover
-{
-    color: var(--white);
-    background: rgb(255 255 255 / 10%);
-}
-
 .raised .link
 {
     color: var(--graphite);
-}
-
-.raised .link:hover
-{
-    color: var(--ink);
-    background: var(--white);
-    box-shadow: 0 1px 3px rgb(22 22 26 / 8%);
 }
 
 .actions
@@ -159,12 +144,28 @@
 
 @media (max-width: 860px)
 {
-    .raised
+    .header
     {
         top: 0;
         width: 100%;
+        padding-top: env(safe-area-inset-top);
         border-radius: 0 0 22px 22px;
+    }
+
+    .raised
+    {
         box-shadow: 0 1px 0 var(--line), 0 12px 32px -20px rgb(22 22 26 / 35%);
+    }
+
+    .bar
+    {
+        padding: 0 18px 0 24px;
+        transition: transform 0.4s var(--ease);
+    }
+
+    .header:not(.raised) .bar
+    {
+        transform: translateY(12px);
     }
 
     .bar
@@ -180,5 +181,21 @@
     .toggle
     {
         display: grid;
+    }
+}
+
+@media (hover: hover) and (pointer: fine)
+{
+    .link:hover
+    {
+        color: var(--white);
+        background: rgb(255 255 255 / 10%);
+    }
+
+    .raised .link:hover
+    {
+        color: var(--ink);
+        background: var(--white);
+        box-shadow: 0 1px 3px rgb(22 22 26 / 8%);
     }
 }

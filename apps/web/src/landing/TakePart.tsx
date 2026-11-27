@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import { LinkButton } from "../ui/Button";
 import { Mail } from "../ui/Icons";
 import { EASE } from "../ui/Motion";
-import Reveal, { RevealItem } from "../ui/Reveal";
+import Reveal from "../ui/Reveal";
 import UCalgary from "../ui/UCalgary";
 import styles from "./TakePart.module.css";
 
@@ -21,23 +21,23 @@ export default function TakePart()
 {
     return (
         <section className={styles.section} id="take-part">
-            <div className={styles.pamphlet}>
-                <Reveal className={styles.intro} group>
-                    <RevealItem as="header">
+            <Reveal className={styles.pamphlet}>
+                <div className={styles.intro}>
+                    <header>
                         <h2>Take Part in Our Study</h2>
-                    </RevealItem>
-                    <RevealItem>
+                    </header>
+                    <div>
                         <p>
                             We are looking for people with hand dysfunction, ideally stroke survivors,
                             to help validate our design by playing our games.
                         </p>
-                    </RevealItem>
-                    <RevealItem className={styles.cta}>
+                    </div>
+                    <div className={styles.cta}>
                         <LinkButton to={`mailto:${CONTACT_EMAIL}`} size="large" icon={<Mail />}>Contact Us</LinkButton>
                         <a className={styles.email} href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
-                    </RevealItem>
-                </Reveal>
-                <Reveal className={styles.session}>
+                    </div>
+                </div>
+                <div className={styles.session}>
                     <div className={styles.total}>
                         <span className={styles.minutes}>60</span>
                         <span>Minute Session</span>
@@ -66,16 +66,16 @@ export default function TakePart()
                             </li>
                         ))}
                     </ol>
-                </Reveal>
-                <Reveal as="ul" className={styles.facts} group>
-                    <RevealItem as="li">18 years or older</RevealItem>
-                    <RevealItem as="li">Stroke survivors preferred</RevealItem>
-                    <RevealItem as="li">
+                </div>
+                <ul className={styles.facts}>
+                    <li>18 years or older</li>
+                    <li>Stroke survivors preferred</li>
+                    <li>
                         {"Sessions held at the "}
                         <UCalgary className={styles.ucalgary} />
-                    </RevealItem>
-                </Reveal>
-            </div>
+                    </li>
+                </ul>
+            </Reveal>
         </section>
     );
 }

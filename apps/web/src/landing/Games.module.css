@@ -39,14 +39,6 @@
     -webkit-user-select: none;
 }
 
-.start:hover
-{
-    transform: translateY(0.05em);
-    box-shadow: 0 0.02em 0 var(--ink);
-    background: var(--ink);
-    color: var(--white);
-}
-
 .head p
 {
     max-width: 420px;
@@ -79,12 +71,6 @@
     background: var(--white);
     box-shadow: var(--shadow-soft);
     transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease);
-}
-
-.card:hover
-{
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lift);
 }
 
 .screen
@@ -122,11 +108,6 @@
     height: auto;
     overflow: visible;
     transition: transform 0.8s var(--ease);
-}
-
-.card:hover .art
-{
-    transform: scale(1.04);
 }
 
 .arc
@@ -270,5 +251,27 @@
     .screen
     {
         aspect-ratio: 16 / 10;
+    }
+}
+
+@media (hover: hover) and (pointer: fine)
+{
+    .start:hover
+    {
+        transform: translateY(0.05em);
+        box-shadow: 0 0.02em 0 var(--ink);
+        background: var(--ink);
+        color: var(--white);
+    }
+
+    .card:hover
+    {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lift);
+    }
+
+    .card:hover .art
+    {
+        transform: scale(1.04);
     }
 }

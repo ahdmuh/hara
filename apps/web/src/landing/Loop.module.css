@@ -24,13 +24,7 @@
     transition: color 0.5s var(--ease);
 }
 
-.word:hover
-{
-    color: var(--steel);
-}
-
-.current,
-.current:hover
+.current
 {
     color: var(--ink);
 }
@@ -85,5 +79,18 @@
     .stage
     {
         min-height: 5em;
+    }
+}
+
+@media (hover: hover) and (pointer: fine)
+{
+    .word:hover
+    {
+        color: var(--steel);
+    }
+
+    .current:hover
+    {
+        color: var(--ink);
     }
 }

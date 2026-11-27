@@ -52,12 +52,6 @@
     transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
 }
 
-.email:hover
-{
-    color: var(--blue);
-    border-color: var(--blue);
-}
-
 .session
 {
     display: grid;
@@ -266,5 +260,14 @@
         display: flex;
         gap: 8px;
         align-items: baseline;
+    }
+}
+
+@media (hover: hover) and (pointer: fine)
+{
+    .email:hover
+    {
+        color: var(--blue);
+        border-color: var(--blue);
     }
 }
