@@ -1,5 +1,5 @@
 import { useId, type ReactNode } from "react";
-import type { MilestoneKind } from "./Games";
+import type { MilestoneKind } from "./Milestones";
 
 interface IStyle
 {
@@ -62,6 +62,31 @@ const STYLES: Record<MilestoneKind, IStyle> = {
             <g fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M14 21 L20 15.5 L26 21" />
                 <path d="M14 26.5 L20 21 L26 26.5" />
+            </g>
+        ),
+    },
+    strength: {
+        from: "#fca5a5",
+        to: "#b91c1c",
+        ink: "#ffffff",
+        shape: "hexagon",
+        glyph: (
+            <g fill="currentColor">
+                <rect x="12" y="18.5" width="16" height="3" rx="1.5" />
+                <rect x="10" y="14.5" width="4" height="11" rx="1.5" />
+                <rect x="26" y="14.5" width="4" height="11" rx="1.5" />
+            </g>
+        ),
+    },
+    speed: {
+        from: "#7dd3fc",
+        to: "#0369a1",
+        ink: "#ffffff",
+        shape: "circle",
+        glyph: (
+            <g fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M13 14 L19 20 L13 26" />
+                <path d="M21 14 L27 20 L21 26" />
             </g>
         ),
     },

@@ -129,3 +129,16 @@
     background: rgb(255 255 255 / 12%);
     box-shadow: 0 0 0 1px rgb(255 255 255 / 20%) inset;
 }
+
+.actions .signOut
+{
+    color: var(--danger);
+    box-shadow: 0 0 0 1px rgb(229 72 77 / 35%) inset;
+}
+
+:global(.mouse) .actions .signOut:hover:not(:disabled)
+{
+    background: var(--danger-soft);
+    color: var(--danger-deep);
+    box-shadow: 0 0 0 1px rgb(229 72 77 / 55%) inset;
+}

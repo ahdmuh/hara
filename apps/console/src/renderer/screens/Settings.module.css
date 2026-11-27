@@ -1,0 +1,106 @@
+.stage
+{
+    display: grid;
+    align-content: center;
+    gap: 2rem;
+    width: min(44rem, 100%);
+    margin: 0 auto;
+}
+
+.rows
+{
+    display: grid;
+    gap: 0.8rem;
+}
+
+.row
+{
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.2rem;
+    width: 100%;
+    min-height: 4.6rem;
+    padding: 0 1.6rem 0 1rem;
+    border: 0;
+    border-radius: 1.4rem;
+    background: var(--white);
+    box-shadow: var(--shadow-soft), 0 0 0 1px var(--line) inset;
+    text-align: left;
+}
+
+.icon
+{
+    display: grid;
+    place-items: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    border-radius: 0.9rem;
+    background: var(--paper);
+    color: var(--graphite);
+    transition: background-color 0.35s var(--ease), color 0.35s var(--ease);
+}
+
+.icon svg
+{
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.current .icon
+{
+    background: var(--blue-soft);
+    color: var(--blue);
+}
+
+.label
+{
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.good
+{
+    font-weight: 650;
+    color: var(--blue);
+}
+
+.muted
+{
+    font-weight: 650;
+    color: var(--steel);
+}
+
+.volume
+{
+    display: flex;
+    gap: 0.25rem;
+}
+
+.volume span
+{
+    width: 0.55rem;
+    height: 1.4rem;
+    border-radius: 0.3rem;
+    background: var(--mist);
+    transition: background-color 0.3s var(--ease);
+}
+
+.volume .level
+{
+    background: var(--blue);
+}
+
+.danger
+{
+    color: #d64545;
+    box-shadow: var(--shadow-soft), 0 0 0 1px rgb(214 69 69 / 35%) inset;
+}
+
+.danger .icon,
+.danger.current .icon
+{
+    background: #fdeded;
+    color: #d64545;
+}

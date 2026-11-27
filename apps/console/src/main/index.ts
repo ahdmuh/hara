@@ -34,8 +34,14 @@ function createWindow(): void
     const mainWindow = new BrowserWindow({
         width: 1280,
         height: 800,
+        minWidth: 960,
+        minHeight: 600,
         show: false,
-        backgroundColor: "#000000",
+        title: "HARA",
+        backgroundColor: "#fcfbf8",
+        titleBarStyle: "hidden",
+        trafficLightPosition: { x: 18, y: 18 },
+        titleBarOverlay: process.platform === "darwin" ? false : { color: "#00000000", symbolColor: "#3b3b43", height: 40 },
         webPreferences: {
             preload: join(__dirname, "../preload/index.js"),
             contextIsolation: true,

@@ -1,0 +1,128 @@
+:root
+{
+    --paper: #fcfbf8;
+    --white: #ffffff;
+    --mist: #e6e6e9;
+    --fog: #cfcfd5;
+    --steel: #85858f;
+    --graphite: #3b3b43;
+    --ink: #16161a;
+    --void: #050506;
+    --blue: #0a84ff;
+    --blue-deep: #0066d6;
+    --blue-soft: #e8f2ff;
+    --blue-glow: rgb(10 132 255 / 32%);
+    --line: rgb(22 22 26 / 9%);
+    --line-strong: rgb(22 22 26 / 16%);
+    --display: "Righteous", var(--sans);
+    --figure: "Doto Variable", var(--sans);
+    --sans: "Figtree Variable", system-ui, sans-serif;
+    --wordmark-stroke: 0.035em rgb(10 132 255 / 85%);
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --shadow-soft: 0 1px 0 rgb(255 255 255 / 90%) inset, 0 1px 2px rgb(22 22 26 / 6%), 0 8px 24px -12px rgb(22 22 26 / 14%);
+    --shadow-lift: 0 1px 0 rgb(255 255 255 / 90%) inset, 0 2px 4px rgb(22 22 26 / 6%), 0 24px 48px -20px rgb(22 22 26 / 28%);
+    color-scheme: only light;
+}
+
+*,
+*::before,
+*::after
+{
+    box-sizing: border-box;
+}
+
+html
+{
+    font-size: clamp(11px, 0.5vmin + 0.7vmax, 44px);
+}
+
+html,
+body,
+#root
+{
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+body
+{
+    background: radial-gradient(120% 90% at 50% 30%, var(--white) 0%, var(--paper) 55%, #f0efec 100%);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.5;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p
+{
+    margin: 0;
+}
+
+h1,
+h2,
+h3
+{
+    font-weight: 750;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    text-wrap: balance;
+}
+
+button,
+input
+{
+    font: inherit;
+    color: inherit;
+}
+
+button
+{
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:active:not(:disabled)
+{
+    scale: 0.96;
+}
+
+ul,
+ol
+{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+svg
+{
+    display: block;
+}
+
+.titleBar
+{
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2.4rem;
+    -webkit-app-region: drag;
+}
+
+:focus-visible
+{
+    outline: none;
+}
+
+::selection
+{
+    background: var(--blue);
+    color: var(--white);
+}

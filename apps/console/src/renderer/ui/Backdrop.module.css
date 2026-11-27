@@ -1,0 +1,91 @@
+.backdrop
+{
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.stripes
+{
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(180deg, rgb(22 22 26 / 2.6%) 0 1px, transparent 1px 6px);
+    mask-image: linear-gradient(180deg, #000 0%, rgb(0 0 0 / 60%) 70%, transparent 100%);
+}
+
+.waves
+{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 9rem;
+}
+
+.wave
+{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 200%;
+    height: 100%;
+    overflow: visible;
+    will-change: transform;
+}
+
+.wave path
+{
+    fill: none;
+    stroke: var(--blue);
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+}
+
+.far
+{
+    bottom: 2.4rem;
+    opacity: 0.12;
+    animation: drift 26s linear infinite;
+}
+
+.far path
+{
+    stroke-width: 1.5;
+}
+
+.mid
+{
+    bottom: 1.2rem;
+    opacity: 0.22;
+    animation: drift 18s linear infinite reverse;
+}
+
+.mid path
+{
+    stroke-width: 2;
+}
+
+.near
+{
+    opacity: 0.45;
+    animation: drift 12s linear infinite;
+}
+
+.near path
+{
+    stroke-width: 2.5;
+}
+
+@keyframes drift
+{
+    from
+    {
+        transform: translateX(0);
+    }
+
+    to
+    {
+        transform: translateX(-50%);
+    }
+}

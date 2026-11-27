@@ -1,0 +1,76 @@
+.screen
+{
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 3rem 2.6rem 1.8rem;
+}
+
+.top
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 2.6rem;
+}
+
+.brand
+{
+    font-size: 1.5rem;
+}
+
+.heading
+{
+    display: grid;
+    gap: 0.4rem;
+}
+
+.heading h1
+{
+    font-size: 2.6rem;
+}
+
+.heading p
+{
+    font-size: 1.15rem;
+    color: var(--steel);
+}
+
+.foot
+{
+    display: grid;
+    place-items: center;
+    padding-top: 1.2rem;
+}
+
+.button
+{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3.4rem;
+    padding: 0 2rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--white);
+    box-shadow: var(--shadow-soft), 0 0 0 1px var(--line) inset;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+    transition: box-shadow 0.35s var(--ease), background-color 0.35s var(--ease), color 0.35s var(--ease), transform 0.35s var(--ease);
+}
+
+.button svg
+{
+    width: 1.3rem;
+    height: 1.3rem;
+}
+
+.active
+{
+    transform: scale(1.04);
+    box-shadow: var(--shadow-lift), 0 0 0 0.2rem var(--blue);
+}

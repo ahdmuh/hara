@@ -10,7 +10,7 @@ import Button from "../ui/Button";
 import { EASE, SPRING } from "../ui/Motion";
 import { daysSince, relative } from "./Format";
 import { GAMES, MILESTONE_TITLES, type Game } from "./Games";
-import MilestoneBadge from "./MilestoneBadge";
+import { MilestoneBadge } from "@hara/badges";
 import styles from "./PatientList.module.css";
 import Sparkline from "./Sparkline";
 

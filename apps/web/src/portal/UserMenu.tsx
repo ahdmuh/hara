@@ -84,6 +84,7 @@ export default function UserMenu({ account, children }: IUserMenuProps)
                             {children?.(close)}
                             <Button
                                 variant="light"
+                                className={styles.signOut}
                                 icon={<Logout />}
                                 role="menuitem"
                                 onClick={() => void signOut()}
