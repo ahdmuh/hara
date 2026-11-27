@@ -45,7 +45,7 @@
 
 html
 {
-    background: #f4f3f0;
+    background: var(--paper);
     -webkit-tap-highlight-color: transparent;
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
@@ -61,7 +61,7 @@ body::before
     right: 0;
     bottom: -30vh;
     left: 0;
-    background: radial-gradient(120% 60% at 50% 42%, var(--white) 0%, var(--paper) 55%, #f4f3f0 100%);
+    background: radial-gradient(110% 55% at 50% 45%, var(--white) 0%, var(--paper) 70%);
     pointer-events: none;
 }
 
