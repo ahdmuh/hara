@@ -1,3 +1,4 @@
+import calm from "./assets/audio/calming-yoga.mp3";
 import jazz from "./assets/audio/rainy-night-jazz.mp3";
 
 const MAXIMUM_LEVEL = 0.1;
@@ -30,9 +31,17 @@ interface IDeck
 
 export type Theme = "onboarding" | "home";
 
-const THEMES: Record<Theme, string> = {
-    onboarding: jazz,
-    home: jazz,
+interface ITrack
+{
+    source: string;
+    gain: number;
+    head: number;
+    tail: number;
+}
+
+const THEMES: Record<Theme, ITrack> = {
+    onboarding: { source: calm, gain: 4.2, head: 0.7, tail: 1.6 },
+    home: { source: jazz, gain: 1, head: 0, tail: 0 },
 };
 
 class LoopPlayer
@@ -46,7 +55,7 @@ class LoopPlayer
     private playing = false;
     private fadeSeconds = INTRO_SECONDS;
 
-    constructor(private readonly source: string)
+    constructor(private readonly track: ITrack)
     {
     }
 
@@ -110,7 +119,7 @@ class LoopPlayer
         }
         this.decks = [0, 1].map(() =>
         {
-            const element = new Audio(this.source);
+            const element = new Audio(this.track.source);
             element.preload = "auto";
             element.volume = 0;
             return { element, fade: 0 };
@@ -138,9 +147,10 @@ class LoopPlayer
             return;
         }
         const duration = active.element.duration;
-        if (this.playing && Number.isFinite(duration) && active.element.currentTime >= duration - CROSSFADE_SECONDS && other.fade === 0)
+        const fadeAt = duration - this.track.tail - CROSSFADE_SECONDS;
+        if (this.playing && Number.isFinite(duration) && active.element.currentTime >= fadeAt && other.fade === 0)
         {
-            other.element.currentTime = 0;
+            other.element.currentTime = this.track.head;
             other.fade = 0.0001;
             void other.element.play().catch(() => undefined);
         }
@@ -157,7 +167,7 @@ class LoopPlayer
         }
         this.decks.forEach((deck) =>
         {
-            deck.element.volume = Math.min(1, this.level * deck.fade);
+            deck.element.volume = Math.min(1, this.level * this.track.gain * deck.fade);
         });
         if (!this.playing && this.level === 0)
         {
