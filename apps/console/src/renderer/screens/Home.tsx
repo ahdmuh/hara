@@ -125,6 +125,7 @@ export default function Home({ name, connected, initial, onPlay, onOpen }: IHome
                 </div>
                 <motion.div
                     className={styles.row}
+                    initial={false}
                     animate={{ x: `${(1 - game) * STEP_REM}rem` }}
                     transition={SPRING}
                 >

@@ -22,7 +22,7 @@ export const SCREEN: Variants = {
             case "dive":
                 return { opacity: 0, x: "0%", scale: 1, filter: "blur(0px)" };
             case "surface":
-                return { opacity: 0, x: "0%", scale: 0.98, filter: "blur(0px)" };
+                return { opacity: 0, x: "0%", scale: 0.96, filter: "blur(0px)" };
             default:
                 return { opacity: 0, x: `${x * 8}%`, scale: 0.97, filter: "blur(0px)" };
         }
@@ -32,7 +32,7 @@ export const SCREEN: Variants = {
         x: "0%",
         scale: 1,
         filter: "blur(0px)",
-        transition: { duration: mode === "zoom" ? 1.25 : mode === "slide" ? 0.6 : 0.8, ease: mode === "slide" ? EASE : SOFT },
+        transition: { duration: mode === "zoom" ? 1.25 : mode === "slide" ? 0.6 : mode === "surface" ? 1 : 0.8, ease: mode === "slide" ? EASE : SOFT },
     }),
     gone: ({ x, mode }: ITravel) =>
     {
@@ -43,7 +43,7 @@ export const SCREEN: Variants = {
             case "dive":
                 return { opacity: 0, scale: 1.12, transition: { duration: 0.5, ease: [0.4, 0, 0.6, 1] } };
             case "surface":
-                return { opacity: 0, scale: 1.02, filter: "blur(8px)", transition: { duration: 0.3, ease: [0.4, 0, 1, 1] } };
+                return { opacity: 0, scale: 1.03, filter: "blur(10px)", transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] } };
             default:
                 return { opacity: 0, x: `${x * -8}%`, scale: 0.97, transition: { duration: 0.32, ease: EASE } };
         }
