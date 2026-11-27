@@ -168,12 +168,13 @@
     .bar
     {
         padding: 0 18px 0 24px;
-        transition: transform 0.4s var(--ease);
+        transition: transform 0.4s var(--ease), padding 0.4s var(--ease);
     }
 
     .header:not(.raised) .bar
     {
-        transform: translateY(12px);
+        padding-right: 28px;
+        transform: translateY(18px);
     }
 
     .bar
