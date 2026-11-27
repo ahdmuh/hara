@@ -28,7 +28,13 @@ function openSessions(): void
 
 function broadcast(channel: string, payload: unknown): void
 {
-    BrowserWindow.getAllWindows().forEach(window => window.webContents.send(channel, payload));
+    BrowserWindow.getAllWindows().forEach((window) =>
+    {
+        if (!window.isDestroyed() && !window.webContents.isLoading())
+        {
+            window.webContents.send(channel, payload);
+        }
+    });
 }
 
 function createWindow(): void

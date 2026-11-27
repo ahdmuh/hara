@@ -1,0 +1,20 @@
+appId: ca.projecthara.console
+productName: HARA
+electronVersion: 45.5.0
+artifactName: HARA-${version}-${os}-${arch}.${ext}
+directories:
+  app: .build/app
+  output: .build/release
+icon: ../../assets/icons/hara-app-1024.png
+publish: null
+mac:
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+  category: public.app-category.healthcare-fitness
+  identity: null
+win:
+  target: nsis
+nsis:
+  oneClick: true
+  perMachine: false
