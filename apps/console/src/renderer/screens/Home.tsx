@@ -3,7 +3,7 @@ import { useState } from "react";
 import { GAMES, type IGame } from "../Games";
 import { useIntent } from "../Intents";
 import { sounds } from "../Sounds";
-import { firstName } from "../Names";
+import { firstName } from "@hara/accounts";
 import Cartridge from "../ui/Cartridge";
 import { formatDate, formatTime, useNow } from "../ui/Clock";
 import Hints from "../ui/Hints";

@@ -1,3 +1,4 @@
+import { generateLinkCode, normalizeLinkCode } from "@hara/accounts";
 import { ConvexError, v } from "convex/values";
 import type { Doc, Id } from "./_generated/dataModel";
 import { mutation, query, type QueryCtx } from "./_generated/server";
@@ -148,12 +149,6 @@ export const pins = query({
     },
 });
 
-function randomCode(): string
-{
-    const values = crypto.getRandomValues(new Uint32Array(1));
-    return ((values[0] ?? 0) % 1_000_000).toString().padStart(6, "0");
-}
-
 export const createPin = mutation({
     args: { label: v.string() },
     handler: async (ctx, args) =>
@@ -167,9 +162,9 @@ export const createPin = mutation({
         }
         for (let attempt = 0; attempt < 20; attempt++)
         {
-            const code = randomCode();
+            const code = generateLinkCode();
             const taken = await ctx.db.query("linkPins").withIndex("by_code_status", query => query.eq("code", code).eq("status", "pending")).first();
-            if (!taken && !/^(\d)\1{5}$/.test(code))
+            if (!taken)
             {
                 const expiresAt = Date.now() + PIN_DAYS * DAY;
                 await ctx.db.insert("linkPins", { clinicianID: clinician._id, code, label, expiresAt, status: "pending" });
@@ -182,9 +177,10 @@ export const createPin = mutation({
 
 export const revokePin = mutation({
     args: { code: v.string() },
-    handler: async (ctx, { code }) =>
+    handler: async (ctx, args) =>
     {
         const clinician = await requireRole(ctx, "clinician");
+        const code = normalizeLinkCode(args.code) ?? args.code;
         const pin = await ctx.db.query("linkPins").withIndex("by_code_status", query => query.eq("code", code).eq("status", "pending")).first();
         if (!pin || pin.clinicianID !== clinician._id)
         {

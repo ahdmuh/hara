@@ -1,3 +1,5 @@
+import { formatLinkCode } from "@hara/accounts";
+
 export const VALID_DAYS = 30;
 
 export interface ILinkPin
@@ -7,10 +9,7 @@ export interface ILinkPin
     expiresAt: number;
 }
 
-export function formatPin(code: string): string
-{
-    return `${code.slice(0, 3)} ${code.slice(3)}`;
-}
+export const formatPin = formatLinkCode;
 
 export function inviteMessage(pin: ILinkPin, clinician: string, expires: string): string
 {
@@ -18,10 +17,10 @@ export function inviteMessage(pin: ILinkPin, clinician: string, expires: string)
     return [
         greeting,
         "",
-        `To connect your HARA app to ${clinician}, open the app, choose Sign Up, and enter this PIN when asked:`,
+        `To connect your HARA app to ${clinician}, open the app, choose Sign Up, and enter this link code when asked:`,
         "",
         formatPin(pin.code),
         "",
-        `The PIN works once and is valid until ${expires}.`,
+        `The code works once and is valid until ${expires}.`,
     ].join("\n");
 }

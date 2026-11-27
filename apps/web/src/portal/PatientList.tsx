@@ -278,7 +278,7 @@ export default function PatientList({ onLink }: { onLink: () => void })
                 {data !== undefined && rows.length === 0 && (
                     <motion.div className={styles.empty} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                         <strong>No Patients Yet</strong>
-                        <p>Create a PIN for a patient. Once they sign up with it, they appear here.</p>
+                        <p>Create a link code for a patient. Once they sign up with it, they appear here.</p>
                         <Button icon={<Key />} onClick={onLink}>Link Patient</Button>
                     </motion.div>
                 )}
