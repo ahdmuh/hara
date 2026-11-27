@@ -66,7 +66,7 @@ export default function Games()
         <section className={styles.games} id="games">
             <Reveal className={styles.head} group>
                 <RevealItem as="header">
-                    <h2>Built Around the Movement It Trains</h2>
+                    <h2>Press Start on Recovery</h2>
                 </RevealItem>
                 <RevealItem>
                     <p>Three games, each focused on one measure of hand function and tuned to your calibration.</p>
