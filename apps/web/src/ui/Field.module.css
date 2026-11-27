@@ -88,7 +88,7 @@
     transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
 }
 
-:global(.mouse) .control:hover
+:global(.mouse) .control:hover:not(:focus-within)
 {
     box-shadow: 0 0 0 1px rgb(22 22 26 / 28%) inset, 0 1px 2px rgb(22 22 26 / 4%);
 }
