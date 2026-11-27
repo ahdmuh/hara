@@ -43,7 +43,7 @@ const METRICS = [
     {
         id: "range",
         title: "Range of Motion",
-        body: "How far each finger opens and closes. Games ask for movement across your calibrated range, and what they ask for grows as your range does.",
+        body: "How far each finger opens and closes. Movement targets span your calibrated range and stretch further as your range grows.",
         art: RangeArt,
     },
     {
