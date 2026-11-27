@@ -10,7 +10,7 @@ interface IStyle
     glyph: ReactNode;
 }
 
-const NUMBER = { fontFamily: "var(--figure)", fontWeight: 800, fontSize: 11, textAnchor: "middle" } as const;
+const NUMBER = { fontFamily: "var(--figure)", fontWeight: 700, fontSize: 11, textAnchor: "middle" } as const;
 
 const STYLES: Record<MilestoneKind, IStyle> = {
     linked: {

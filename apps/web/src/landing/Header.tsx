@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
 import { Close, Login, Menu } from "../ui/Icons";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { portalHref } from "../Site";
 import { LinkButton } from "../ui/Button";
 import { EASE } from "../ui/Motion";
@@ -9,12 +9,25 @@ import styles from "./Header.module.css";
 
 const ITEM = { hidden: { opacity: 0, y: -8 }, shown: { opacity: 1, y: 0, transition: { duration: 0.35, ease: EASE } } };
 
+const SHEET_CLOSE_MILLISECONDS = 320;
+
 const LINKS = [
     { href: "#about", label: "About" },
     { href: "#games", label: "Games" },
     { href: "#take-part", label: "Take Part" },
     { href: "#team", label: "Team" },
 ];
+
+function goTo(event: MouseEvent<HTMLAnchorElement>, href: string, delay = 0): void
+{
+    const target = document.getElementById(href.slice(1));
+    if (!target)
+    {
+        return;
+    }
+    event.preventDefault();
+    window.setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), delay);
+}
 
 export default function Header()
 {
@@ -54,7 +67,7 @@ export default function Header()
                 </a>
                 <nav className={styles.links} aria-label="Sections">
                     {LINKS.map(link => (
-                        <a key={link.href} href={link.href} className={styles.link}>{link.label}</a>
+                        <a key={link.href} href={link.href} className={styles.link} onClick={event => goTo(event, link.href)}>{link.label}</a>
                     ))}
                 </nav>
                 <div className={styles.actions}>
@@ -102,7 +115,16 @@ export default function Header()
                                     key={link.href}
                                     variants={ITEM}
                                 >
-                                    <a href={link.href} onClick={() => setOpen(false)}>{link.label}</a>
+                                    <a
+                                        href={link.href}
+                                        onClick={(event) =>
+                                        {
+                                            setOpen(false);
+                                            goTo(event, link.href, SHEET_CLOSE_MILLISECONDS);
+                                        }}
+                                    >
+                                        {link.label}
+                                    </a>
                                 </motion.li>
                             ))}
                         </motion.ul>
