@@ -9,7 +9,7 @@ const INK = "#16161a";
 const GRAPHITE = "#3b3b43";
 const STEEL = "#85858f";
 const PAPER = "#f2f2ef";
-const BLUE = "#2fa8e6";
+const BLUE = "#0a84ff";
 
 export interface IEmail
 {

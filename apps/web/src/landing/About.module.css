@@ -21,7 +21,7 @@
     font-family: var(--display);
     user-select: none;
     -webkit-user-select: none;
-    font-weight: 800;
+    font-weight: 400;
     font-size: clamp(88px, 13vw, 184px);
     line-height: 0.9;
     letter-spacing: -0.02em;
@@ -104,7 +104,7 @@
     font-family: var(--display);
     user-select: none;
     -webkit-user-select: none;
-    font-weight: 800;
+    font-weight: 400;
     font-size: 15px;
     color: var(--blue);
 }

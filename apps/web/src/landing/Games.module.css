@@ -133,8 +133,8 @@
 
 .band
 {
-    fill: rgb(47 168 230 / 14%);
-    stroke: rgb(47 168 230 / 70%);
+    fill: rgb(10 132 255 / 14%);
+    stroke: rgb(10 132 255 / 70%);
     stroke-width: 1;
     stroke-dasharray: 3 2;
 }
@@ -195,7 +195,7 @@
     font-family: var(--display);
     user-select: none;
     -webkit-user-select: none;
-    font-weight: 800;
+    font-weight: 400;
     font-size: clamp(28px, 3vw, 42px);
     line-height: 1;
     white-space: nowrap;
