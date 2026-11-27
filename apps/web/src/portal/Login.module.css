@@ -13,7 +13,9 @@
     display: grid;
     place-items: center;
     overflow: hidden;
+    isolation: isolate;
     border-radius: var(--radius-large);
+    clip-path: inset(0 round var(--radius-large));
     background: radial-gradient(120% 80% at 50% 100%, #111116 0%, var(--void) 60%);
     box-shadow: 0 0 0 1px rgb(255 255 255 / 6%) inset;
 }
