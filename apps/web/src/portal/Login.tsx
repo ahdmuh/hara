@@ -6,41 +6,42 @@ import { navigate } from "../Router";
 import { siteHref } from "../Site";
 import Button, { LinkButton } from "../ui/Button";
 import Field from "../ui/Field";
-import { ArrowLeft, ArrowRight, Lock, User } from "../ui/Icons";
+import { ArrowLeft, ArrowRight, Check, Lock, Mail } from "../ui/Icons";
 import { EASE, RISE, STAGGER } from "../ui/Motion";
 import { useToast } from "../ui/Toast";
 import Wordmark from "../ui/Wordmark";
-import { completeSetup, signIn, useClinician, type SignInResult } from "./Auth";
+import { completeSetup, homeFor, signIn, useAccount, type SignInResult } from "./Auth";
 import styles from "./Login.module.css";
+import { PASSWORD_RULES } from "./Password";
 
-type Step = "signIn" | "setup";
+type FieldName = "email" | "password" | "newPassword" | "confirmation";
 
 export default function Login()
 {
     const toast = useToast();
-    const clinician = useClinician();
-    const [step, setStep] = useState<Step>("signIn");
+    const account = useAccount();
+    const [setupEmail, setSetupEmail] = useState<string | null>(null);
     const [busy, setBusy] = useState(false);
     const [attempt, setAttempt] = useState(0);
-    const [invalid, setInvalid] = useState<string[]>([]);
-    const [values, setValues] = useState({ username: "", password: "", newUsername: "", newPassword: "", confirmation: "" });
+    const [invalid, setInvalid] = useState<FieldName[]>([]);
+    const [values, setValues] = useState<Record<FieldName, string>>({ email: "", password: "", newPassword: "", confirmation: "" });
 
     useEffect(() =>
     {
-        if (clinician)
+        if (account)
         {
             toast.clear();
-            navigate("/patients", { replace: true });
+            navigate(homeFor(account), { replace: true });
         }
-    }, [clinician, toast]);
+    }, [account, toast]);
 
-    function update(key: keyof typeof values, value: string): void
+    function update(key: FieldName, value: string): void
     {
         setValues(current => ({ ...current, [key]: value }));
         setInvalid(current => current.filter(entry => entry !== key));
     }
 
-    function fail(result: Extract<SignInResult, { status: "error" }>, fields: string[]): void
+    function fail(result: Extract<SignInResult, { status: "error" }>, fields: FieldName[]): void
     {
         toast.error(result.title, result.message);
         setInvalid(fields);
@@ -55,35 +56,37 @@ export default function Login()
             return;
         }
         setBusy(true);
-        if (step === "signIn")
+        if (setupEmail === null)
         {
-            const result = await signIn(values.username, values.password);
+            const result = await signIn(values.email, values.password);
             setBusy(false);
             if (result.status === "setup")
             {
-                setStep("setup");
+                setSetupEmail(result.email);
+                setValues(current => ({ ...current, password: "" }));
                 setInvalid([]);
             }
             else if (result.status === "error")
             {
-                fail(result, ["username", "password"]);
+                setValues(current => ({ ...current, password: "" }));
+                fail(result, ["email", "password"]);
             }
             return;
         }
-        const result = await completeSetup(values.newUsername, values.newPassword, values.confirmation);
+        const result = await completeSetup(setupEmail, values.newPassword, values.confirmation);
         setBusy(false);
         if (result.status === "error")
         {
-            const fields = result.title.startsWith("Username") ? ["newUsername"] : result.title.startsWith("Passwords") ? ["confirmation"] : ["newPassword"];
-            fail(result, fields);
+            fail(result, result.title === "Passwords Do Not Match" ? ["confirmation"] : ["newPassword"]);
         }
         else
         {
-            toast.success("Account Ready", "Your username and password are set.");
+            setValues({ email: "", password: "", newPassword: "", confirmation: "" });
+            toast.success("Password Set", "Your account is ready.");
         }
     }
 
-    const isInvalid = (key: string) => invalid.includes(key);
+    const isInvalid = (key: FieldName) => invalid.includes(key);
 
     return (
         <div className={styles.page}>
@@ -101,7 +104,7 @@ export default function Login()
                 <div className={styles.card}>
                     <AnimatePresence mode="wait" initial={false}>
                         <motion.form
-                            key={step}
+                            key={setupEmail === null ? "signIn" : "setup"}
                             className={styles.form}
                             onSubmit={submit}
                             noValidate
@@ -110,20 +113,23 @@ export default function Login()
                             animate="shown"
                             exit="gone"
                         >
-                            {step === "signIn"
+                            {setupEmail === null
                                 ? (
                                         <>
                                             <motion.h1 variants={RISE}>Sign In</motion.h1>
                                             <motion.div variants={RISE}>
                                                 <Field
-                                                    label="Username"
-                                                    name="username"
+                                                    label="Email"
+                                                    name="email"
+                                                    type="email"
+                                                    inputMode="email"
                                                     autoComplete="username"
-                                                    icon={<User />}
-                                                    invalid={isInvalid("username")}
+                                                    spellCheck={false}
+                                                    icon={<Mail />}
+                                                    invalid={isInvalid("email")}
                                                     shake={attempt}
-                                                    value={values.username}
-                                                    onChange={event => update("username", event.target.value)}
+                                                    value={values.email}
+                                                    onChange={event => update("email", event.target.value)}
                                                     autoFocus
                                                 />
                                             </motion.div>
@@ -144,25 +150,15 @@ export default function Login()
                                     )
                                 : (
                                         <>
-                                            <motion.h1 variants={RISE}>Set Up Your Account</motion.h1>
+                                            <motion.h1 variants={RISE}>Set Your Password</motion.h1>
                                             <motion.p variants={RISE} className={styles.note}>
-                                                Choose a username and a new password to replace your temporary one.
+                                                Replace your temporary password before continuing.
                                             </motion.p>
-                                            <motion.div variants={RISE}>
-                                                <Field
-                                                    label="Username"
-                                                    autoComplete="username"
-                                                    icon={<User />}
-                                                    invalid={isInvalid("newUsername")}
-                                                    shake={attempt}
-                                                    value={values.newUsername}
-                                                    onChange={event => update("newUsername", event.target.value)}
-                                                    autoFocus
-                                                />
-                                            </motion.div>
+                                            <input type="email" name="email" autoComplete="username" value={setupEmail} readOnly hidden />
                                             <motion.div variants={RISE}>
                                                 <Field
                                                     label="New Password"
+                                                    name="newPassword"
                                                     type="password"
                                                     autoComplete="new-password"
                                                     icon={<Lock />}
@@ -170,11 +166,26 @@ export default function Login()
                                                     shake={attempt}
                                                     value={values.newPassword}
                                                     onChange={event => update("newPassword", event.target.value)}
+                                                    autoFocus
                                                 />
                                             </motion.div>
+                                            <motion.ul variants={RISE} className={styles.rules} aria-label="Password Requirements">
+                                                {PASSWORD_RULES.map((rule) =>
+                                                {
+                                                    const met = values.newPassword.length > 0 && rule.passes(values.newPassword, setupEmail);
+                                                    return (
+                                                        <li key={rule.id} className={met ? styles.met : ""}>
+                                                            <span className={styles.tick} aria-hidden="true"><Check /></span>
+                                                            <span>{rule.label}</span>
+                                                            <span className="srOnly">{met ? "Met" : "Not Met"}</span>
+                                                        </li>
+                                                    );
+                                                })}
+                                            </motion.ul>
                                             <motion.div variants={RISE}>
                                                 <Field
                                                     label="Confirm Password"
+                                                    name="confirmation"
                                                     type="password"
                                                     autoComplete="new-password"
                                                     icon={<Lock />}
@@ -188,7 +199,7 @@ export default function Login()
                                     )}
                             <motion.div variants={RISE}>
                                 <Button type="submit" size="large" busy={busy} iconAfter={<ArrowRight />} className={styles.submit}>
-                                    {step === "signIn" ? "Sign In" : "Save and Continue"}
+                                    {setupEmail === null ? "Sign In" : "Set Password"}
                                 </Button>
                             </motion.div>
                         </motion.form>

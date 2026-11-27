@@ -31,7 +31,7 @@
 
 .control:focus-within
 {
-    box-shadow: 0 0 0 2px var(--blue) inset, 0 0 0 5px rgb(0 149 219 / 14%);
+    box-shadow: 0 0 0 1px var(--blue) inset, 0 0 0 4px rgb(0 149 219 / 9%);
 }
 
 .invalid label
@@ -43,7 +43,7 @@
 .invalid .control:hover
 {
     background: #fffafa;
-    box-shadow: 0 0 0 2px var(--danger) inset, 0 0 0 5px rgb(229 72 77 / 12%);
+    box-shadow: 0 0 0 1px var(--danger) inset, 0 0 0 4px rgb(229 72 77 / 9%);
 }
 
 .icon

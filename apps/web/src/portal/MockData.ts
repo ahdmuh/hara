@@ -140,7 +140,7 @@ function buildPatient(index: number): IPatient
     const linkedDaysAgo = 14 + Math.floor(next() * 150);
     const linkedAt = NOW - linkedDaysAgo * DAY;
     const idleDays = next() < 0.18 ? 8 + Math.floor(next() * 30) : Math.floor(next() * 5);
-    const recovery = 0.4 + next() * 0.9;
+    const recovery = next() < 0.2 ? -(0.15 + next() * 0.3) : 0.4 + next() * 0.9;
     const start = { range: 30 + next() * 25, strength: 3 + next() * 4, speed: 1 + next() * 1.2 };
     const fingerBias = FINGER_NAMES.map(() => 0.75 + next() * 0.5);
     const sessions: ISession[] = [];

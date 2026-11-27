@@ -3,7 +3,8 @@ import { useDeferredValue, useMemo, useState } from "react";
 import { navigate } from "../Router";
 import { ChevronLeft, ChevronRight, ChevronDown, Close, Search } from "../ui/Icons";
 import { EASE, SPRING } from "../ui/Motion";
-import { daysSince, initials, relative } from "./Format";
+import Avatar from "../ui/Avatar";
+import { daysSince, relative } from "./Format";
 import { GAMES, patients, trend, type Game, type IPatient } from "./MockData";
 import styles from "./PatientList.module.css";
 import Sparkline from "./Sparkline";
@@ -20,9 +21,12 @@ const FILTERS: { id: Filter; label: string }[] = [
     { id: "inactive", label: "Inactive 7+ Days" },
 ];
 
+const COLLATOR = new Intl.Collator("en-CA", { sensitivity: "base" });
+
 interface IRow
 {
     patient: IPatient;
+    search: string;
     lastSession: number | undefined;
     trends: Record<Game, number[]>;
     current: Record<Game, number>;
@@ -33,6 +37,7 @@ function toRow(patient: IPatient): IRow
     const trends = { range: trend(patient, "range"), strength: trend(patient, "strength"), speed: trend(patient, "speed") };
     return {
         patient,
+        search: `${patient.name} ${patient.id}`.toLowerCase(),
         lastSession: patient.sessions[0]?.date,
         trends,
         current: { range: trends.range.at(-1) ?? 0, strength: trends.strength.at(-1) ?? 0, speed: trends.speed.at(-1) ?? 0 },
@@ -44,7 +49,7 @@ function compare(first: IRow, second: IRow, key: SortKey): number
     switch (key)
     {
         case "name":
-            return first.patient.name.localeCompare(second.patient.name);
+            return COLLATOR.compare(first.patient.name, second.patient.name);
         case "lastSession":
             return (first.lastSession ?? 0) - (second.lastSession ?? 0);
         case "sessions":
@@ -67,7 +72,7 @@ export default function PatientList()
     {
         const needle = deferredQuery.trim().toLowerCase();
         return rows
-            .filter(row => !needle || row.patient.name.toLowerCase().includes(needle) || row.patient.id.toLowerCase().includes(needle))
+            .filter(row => !needle || row.search.includes(needle))
             .filter((row) =>
             {
                 const idle = daysSince(row.lastSession);
@@ -84,6 +89,24 @@ export default function PatientList()
     {
         setSort(previous => ({ key, descending: previous.key === key ? !previous.descending : key !== "name" }));
         setPage(0);
+    }
+
+    function pager(position: "top" | "bottom")
+    {
+        return (
+            <div className={`${styles.pager} ${styles[position]}`}>
+                <span>{visible.length ? `${current * PAGE_SIZE + 1}–${Math.min(visible.length, (current + 1) * PAGE_SIZE)} of ${visible.length}` : "0 of 0"}</span>
+                <div className={styles.pages}>
+                    <button type="button" aria-label="Previous Page" disabled={current === 0} onClick={() => setPage(current - 1)}>
+                        <ChevronLeft />
+                    </button>
+                    <span>{`${current + 1} / ${pages}`}</span>
+                    <button type="button" aria-label="Next Page" disabled={current >= pages - 1} onClick={() => setPage(current + 1)}>
+                        <ChevronRight />
+                    </button>
+                </div>
+            </div>
+        );
     }
 
     function header(key: SortKey, label: string, className = "")
@@ -142,27 +165,39 @@ export default function PatientList()
                     </AnimatePresence>
                 </label>
             </div>
-            <div className={styles.filters} role="tablist" aria-label="Filter Patients">
-                {FILTERS.map(entry => (
-                    <button
-                        key={entry.id}
-                        type="button"
-                        role="tab"
-                        aria-selected={filter === entry.id}
-                        className={`${styles.filter} ${filter === entry.id ? styles.selected : ""}`}
-                        onClick={() =>
-                        {
-                            setFilter(entry.id);
-                            setPage(0);
-                        }}
-                    >
-                        {filter === entry.id && <motion.span layoutId="patientFilter" className={styles.pill} transition={SPRING} />}
-                        <span>{entry.label}</span>
-                    </button>
-                ))}
+            <div className={styles.toolbar}>
+                <div className={styles.filters} role="tablist" aria-label="Filter Patients">
+                    {FILTERS.map(entry => (
+                        <button
+                            key={entry.id}
+                            type="button"
+                            role="tab"
+                            aria-selected={filter === entry.id}
+                            className={`${styles.filter} ${filter === entry.id ? styles.selected : ""}`}
+                            onClick={() =>
+                            {
+                                setFilter(entry.id);
+                                setPage(0);
+                            }}
+                        >
+                            {filter === entry.id && <motion.span layoutId="patientFilter" className={styles.pill} transition={SPRING} />}
+                            <span>{entry.label}</span>
+                        </button>
+                    ))}
+                </div>
+                {pager("top")}
             </div>
             <div className={styles.card}>
                 <table className={styles.table}>
+                    <colgroup>
+                        <col className={styles.colPatient} />
+                        <col className={styles.colLast} />
+                        <col className={styles.colSessions} />
+                        <col className={styles.colMetric} />
+                        <col className={styles.colMetric} />
+                        <col className={styles.colMetric} />
+                        <col className={styles.colMilestone} />
+                    </colgroup>
                     <thead>
                         <tr>
                             {header("name", "Patient")}
@@ -198,7 +233,7 @@ export default function PatientList()
                                 >
                                     <td>
                                         <span className={styles.patient}>
-                                            <span className={styles.avatar} aria-hidden="true">{initials(row.patient.name)}</span>
+                                            <Avatar name={row.patient.name} size={38} />
                                             <span className={styles.identity}>
                                                 <strong>{row.patient.name}</strong>
                                                 <span>{`${row.patient.age} · ${row.patient.id}`}</span>
@@ -232,18 +267,7 @@ export default function PatientList()
                     </motion.p>
                 )}
             </div>
-            <div className={styles.pager}>
-                <span>{visible.length ? `${current * PAGE_SIZE + 1}–${Math.min(visible.length, (current + 1) * PAGE_SIZE)} of ${visible.length}` : "0 of 0"}</span>
-                <div className={styles.pages}>
-                    <button type="button" aria-label="Previous Page" disabled={current === 0} onClick={() => setPage(current - 1)}>
-                        <ChevronLeft />
-                    </button>
-                    <span>{`${current + 1} / ${pages}`}</span>
-                    <button type="button" aria-label="Next Page" disabled={current >= pages - 1} onClick={() => setPage(current + 1)}>
-                        <ChevronRight />
-                    </button>
-                </div>
-            </div>
+            {pager("bottom")}
         </div>
     );
 }

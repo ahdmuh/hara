@@ -20,12 +20,13 @@ export default function Sparkline({ values, width = 96, height = 28 }: ISparklin
     const points = values.map((value, index) => [index * step, height - 3 - ((value - low) / span) * (height - 6)] as const);
     const line = points.map(([x, y], index) => `${index ? "L" : "M"}${x.toFixed(1)},${y.toFixed(1)}`).join("");
     const last = points.at(-1) ?? [0, 0];
+    const color = (values.at(-1) ?? 0) >= (values[0] ?? 0) ? "var(--rise)" : "var(--fall)";
     return (
         <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} aria-hidden="true" style={{ overflow: "visible" }}>
             <motion.path
                 d={line}
                 fill="none"
-                stroke="var(--blue)"
+                stroke={color}
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -33,7 +34,7 @@ export default function Sparkline({ values, width = 96, height = 28 }: ISparklin
                 animate={{ pathLength: 1 }}
                 transition={{ duration: 0.9, ease: EASE }}
             />
-            <circle cx={last[0]} cy={last[1]} r="3" fill="var(--blue)" />
+            <circle cx={last[0]} cy={last[1]} r="3" fill={color} />
         </svg>
     );
 }

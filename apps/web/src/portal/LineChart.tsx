@@ -131,11 +131,10 @@ export default function LineChart({ dates, series, maximum, unit, digits, target
                 {hover !== null && hoverDate !== undefined && (
                     <motion.div
                         className={styles.tooltip}
-                        style={{ left: `${(x(hover) / width) * 100}%` }}
-                        initial={{ opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 6 }}
-                        transition={{ duration: 0.15, ease: EASE }}
+                        initial={{ opacity: 0, y: 6, left: `${(x(hover) / width) * 100}%` }}
+                        animate={{ opacity: 1, y: 0, left: `${(x(hover) / width) * 100}%` }}
+                        exit={{ opacity: 0, y: 4, transition: { duration: 0.1 } }}
+                        transition={{ opacity: { duration: 0.14 }, y: { duration: 0.14 }, left: { type: "spring", stiffness: 520, damping: 42 } }}
                     >
                         <strong>{DATE_FORMAT.format(hoverDate)}</strong>
                         {series.map(entry => (
