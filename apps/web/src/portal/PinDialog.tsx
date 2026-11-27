@@ -1,89 +1,173 @@
-import { motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useState, type FormEvent } from "react";
 import Button from "../ui/Button";
 import Dialog from "../ui/Dialog";
-import { Copy, Key } from "../ui/Icons";
+import Field from "../ui/Field";
+import { Check, Close, Copy, Key, Mail, User } from "../ui/Icons";
 import { EASE } from "../ui/Motion";
 import { useToast } from "../ui/Toast";
+import { useAccount } from "./Auth";
+import { fullDate } from "./Format";
+import { createPin, formatPin, inviteMessage, revokePin, usePendingPins, VALID_DAYS, type ILinkPin } from "./Links";
 import styles from "./PinDialog.module.css";
 
-const LIFETIME_SECONDS = 15 * 60;
-
-interface IPin
-{
-    code: string;
-    expiresAt: number;
-}
-
-function generate(): IPin
-{
-    const values = crypto.getRandomValues(new Uint32Array(1));
-    const code = ((values[0] ?? 0) % 1_000_000).toString().padStart(6, "0");
-    return { code, expiresAt: Date.now() + LIFETIME_SECONDS * 1000 };
-}
-
-function useNow(active: boolean): number
-{
-    const [now, setNow] = useState(() => Date.now());
-    useEffect(() =>
-    {
-        if (!active)
-        {
-            return;
-        }
-        const timer = window.setInterval(() => setNow(Date.now()), 1000);
-        return () => window.clearInterval(timer);
-    }, [active]);
-    return now;
-}
+const CONFIRM_MILLISECONDS = 3000;
 
 export default function PinDialog({ open, onClose }: { open: boolean; onClose: () => void })
 {
     const toast = useToast();
-    const [pin, setPin] = useState<IPin | null>(null);
-    const now = useNow(open && pin !== null);
-    const remaining = pin ? Math.max(0, Math.ceil((pin.expiresAt - now) / 1000)) : 0;
-    const expired = pin !== null && remaining === 0;
+    const account = useAccount();
+    const pending = usePendingPins();
+    const [label, setLabel] = useState("");
+    const [created, setCreated] = useState<ILinkPin | null>(null);
+    const [confirming, setConfirming] = useState<string | null>(null);
 
-    async function copy(): Promise<void>
+    function close(): void
     {
-        if (!pin)
-        {
-            return;
-        }
+        setCreated(null);
+        setLabel("");
+        setConfirming(null);
+        onClose();
+    }
+
+    function create(event: FormEvent): void
+    {
+        event.preventDefault();
+        setCreated(createPin(label));
+        setLabel("");
+    }
+
+    async function copy(text: string, title: string): Promise<void>
+    {
         try
         {
-            await navigator.clipboard.writeText(pin.code);
-            toast.success("PIN Copied");
+            await navigator.clipboard.writeText(text);
+            toast.success(title);
         }
         catch
         {
-            toast.error("Could Not Copy", "Select the PIN and copy it manually.");
+            toast.error("Could Not Copy", "Select the text and copy it manually.");
         }
     }
 
+    function revoke(code: string): void
+    {
+        if (confirming !== code)
+        {
+            setConfirming(code);
+            window.setTimeout(() => setConfirming(current => (current === code ? null : current)), CONFIRM_MILLISECONDS);
+            return;
+        }
+        revokePin(code);
+        setConfirming(null);
+        if (created?.code === code)
+        {
+            setCreated(null);
+        }
+        toast.success("PIN Revoked", "It can no longer be used to link.");
+    }
+
+    const message = created ? inviteMessage(created, account?.name ?? "your clinician", fullDate(created.expiresAt)) : "";
+
     return (
-        <Dialog open={open} title="Link a New Patient" onClose={onClose}>
-            <p className={styles.note}>The patient enters this PIN when they sign up in the HARA app. It works once and expires after 15 minutes.</p>
-            <div className={`${styles.pin} ${expired ? styles.expired : ""}`} aria-live="polite">
-                {(pin?.code ?? "------").split("").map((digit, index) => (
-                    <motion.span
-                        key={`${pin?.code ?? "empty"}-${index}`}
-                        initial={{ opacity: 0, y: 10, scale: 0.8 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ duration: 0.4, delay: index * 0.05, ease: EASE }}
-                    >
-                        {digit}
-                    </motion.span>
-                ))}
-            </div>
-            <p className={styles.timer}>
-                {pin === null ? "No PIN Yet" : expired ? "Expired" : `Expires in ${Math.floor(remaining / 60)}:${(remaining % 60).toString().padStart(2, "0")}`}
+        <Dialog open={open} title="Link a New Patient" onClose={close}>
+            <p className={styles.note}>
+                {`Create a PIN for each new patient. They enter it once when signing up in the HARA app, which links their account to you. A PIN stays valid until it is used, revoked, or ${VALID_DAYS} days pass.`}
             </p>
-            <div className={styles.actions}>
-                <Button variant="ghost" icon={<Copy />} onClick={() => void copy()} disabled={pin === null || expired}>Copy</Button>
-                <Button icon={<Key />} onClick={() => setPin(generate())}>{pin === null ? "Generate PIN" : "New PIN"}</Button>
-            </div>
+            <AnimatePresence mode="wait" initial={false}>
+                {created
+                    ? (
+                            <motion.div
+                                key="created"
+                                className={styles.created}
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0, transition: { duration: 0.35, ease: EASE } }}
+                                exit={{ opacity: 0, y: -6, transition: { duration: 0.18 } }}
+                            >
+                                <div className={styles.pin} aria-live="polite">
+                                    <AnimatePresence mode="wait" initial={false}>
+                                        <motion.span
+                                            key={created.code}
+                                            initial={{ opacity: 0, filter: "blur(6px)" }}
+                                            animate={{ opacity: 1, filter: "blur(0px)", transition: { duration: 0.4, ease: EASE } }}
+                                            exit={{ opacity: 0, filter: "blur(6px)", transition: { duration: 0.2 } }}
+                                        >
+                                            {formatPin(created.code)}
+                                        </motion.span>
+                                    </AnimatePresence>
+                                </div>
+                                <p className={styles.valid}>
+                                    {`${created.label || "Unnamed patient"} · Valid until ${fullDate(created.expiresAt)}`}
+                                </p>
+                                <div className={styles.actions}>
+                                    <Button variant="ghost" icon={<Copy />} onClick={() => void copy(created.code, "PIN Copied")}>Copy PIN</Button>
+                                    <Button icon={<Mail />} onClick={() => void copy(message, "Message Copied")}>Copy Message</Button>
+                                </div>
+                                <button type="button" className={styles.another} onClick={() => setCreated(null)}>Create Another PIN</button>
+                            </motion.div>
+                        )
+                    : (
+                            <motion.form
+                                key="form"
+                                className={styles.form}
+                                onSubmit={create}
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0, transition: { duration: 0.35, ease: EASE } }}
+                                exit={{ opacity: 0, y: -6, transition: { duration: 0.18 } }}
+                            >
+                                <Field
+                                    label="Patient Name (Optional)"
+                                    icon={<User />}
+                                    autoComplete="off"
+                                    value={label}
+                                    onChange={event => setLabel(event.target.value)}
+                                    maxLength={60}
+                                />
+                                <Button type="submit" icon={<Key />}>Create PIN</Button>
+                            </motion.form>
+                        )}
+            </AnimatePresence>
+            <section className={styles.pending}>
+                <h3>Pending PINs</h3>
+                {pending.length === 0
+                    ? <p className={styles.none}>No PINs are waiting to be used.</p>
+                    : (
+                            <ul>
+                                <AnimatePresence initial={false}>
+                                    {pending.map(pin => (
+                                        <motion.li
+                                            key={pin.code}
+                                            layout
+                                            initial={{ opacity: 0, height: 0 }}
+                                            animate={{ opacity: 1, height: "auto" }}
+                                            exit={{ opacity: 0, height: 0 }}
+                                            transition={{ duration: 0.3, ease: EASE }}
+                                        >
+                                            <span className={styles.row}>
+                                                <span className={styles.code}>{formatPin(pin.code)}</span>
+                                                <span className={styles.meta}>
+                                                    <strong>{pin.label || "Unnamed patient"}</strong>
+                                                    <small>{`Until ${fullDate(pin.expiresAt)}`}</small>
+                                                </span>
+                                                <button type="button" className={styles.icon} aria-label={`Copy PIN ${pin.code}`} onClick={() => void copy(pin.code, "PIN Copied")}>
+                                                    <Copy />
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    className={`${styles.revoke} ${confirming === pin.code ? styles.confirm : ""}`}
+                                                    aria-label={confirming === pin.code ? `Confirm revoking PIN ${pin.code}` : `Revoke PIN ${pin.code}`}
+                                                    onClick={() => revoke(pin.code)}
+                                                >
+                                                    {confirming === pin.code ? <Check /> : <Close />}
+                                                    <span>{confirming === pin.code ? "Revoke" : ""}</span>
+                                                </button>
+                                            </span>
+                                        </motion.li>
+                                    ))}
+                                </AnimatePresence>
+                            </ul>
+                        )}
+            </section>
         </Dialog>
     );
 }
