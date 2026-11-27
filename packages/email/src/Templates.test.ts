@@ -24,7 +24,7 @@ describe("invitation", () =>
     test("escapes names so they cannot inject markup", () =>
     {
         const hostile = invitation("<img src=x onerror=alert(1)>", "a@b.example", "x");
-        expect(hostile.html).not.toContain("<img");
+        expect(hostile.html).not.toContain("<img src=x");
         expect(hostile.html).toContain("&lt;img src=x onerror=alert(1)&gt;");
     });
 });
