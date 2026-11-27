@@ -8,16 +8,18 @@
     --graphite: #3b3b43;
     --ink: #16161a;
     --void: #050506;
-    --indigo: #5a4bff;
-    --indigo-deep: #3d2fd6;
-    --indigo-soft: #ecebff;
-    --indigo-glow: rgb(90 75 255 / 45%);
+    --blue: #0095db;
+    --blue-deep: #0079b8;
+    --blue-soft: #e6f5fc;
+    --blue-glow: rgb(0 149 219 / 32%);
+    --rise: #1f9d55;
+    --fall: #d64545;
     --danger: #e5484d;
     --danger-deep: #b8262b;
     --danger-soft: #fdeded;
     --line: rgb(22 22 26 / 9%);
     --line-strong: rgb(22 22 26 / 16%);
-    --display: "Doto Variable", ui-monospace, monospace;
+    --display: "Michroma", var(--sans);
     --sans: "Figtree Variable", system-ui, sans-serif;
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
     --radius-small: 12px;
@@ -25,7 +27,6 @@
     --radius-large: 32px;
     --shadow-soft: 0 1px 0 rgb(255 255 255 / 90%) inset, 0 1px 2px rgb(22 22 26 / 6%), 0 8px 24px -12px rgb(22 22 26 / 14%);
     --shadow-lift: 0 1px 0 rgb(255 255 255 / 90%) inset, 0 2px 4px rgb(22 22 26 / 6%), 0 24px 48px -20px rgb(22 22 26 / 28%);
-    --ring: 0 0 0 2px var(--white), 0 0 0 4px var(--indigo), 0 0 24px 2px var(--indigo-glow);
     --gutter: clamp(16px, 4vw, 48px);
     --content: 1200px;
     color-scheme: light;
@@ -117,14 +118,19 @@ svg
 
 ::selection
 {
-    background: var(--indigo);
+    background: var(--blue);
     color: var(--white);
 }
 
 :focus-visible
 {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+}
+
+input:focus-visible
+{
     outline: none;
-    box-shadow: var(--ring);
 }
 
 [id]

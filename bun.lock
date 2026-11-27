@@ -41,8 +41,8 @@
       "name": "@hara/web",
       "version": "0.1.0",
       "dependencies": {
-        "@fontsource-variable/doto": "5.3.0",
         "@fontsource-variable/figtree": "5.3.0",
+        "@fontsource/michroma": "5.3.0",
         "motion": "14.14.0",
         "pixelarticons": "2.4.2",
         "react": "19.3.1",
@@ -177,9 +177,9 @@
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.7.3", "", { "dependencies": { "@eslint/core": "^1.2.1", "levn": "^0.4.1" } }, "sha512-IkO+/KEUvwbVpiURZg+P7zF74z5Jxe0UgJxVni+RtoHQ6IZieXaO02kmadomap/q+l6bc/jdPGGqTjhuZnuz1Q=="],
 
-    "@fontsource-variable/doto": ["@fontsource-variable/doto@5.3.0", "", {}, "sha512-mzvYblQT8AD0tOdBvni6+5E25LMKXKDVqbUutGafV78rIIq1w9s4G1IBpDcHJp+u2+dzsO3zCSm75mBQLguJjw=="],
-
     "@fontsource-variable/figtree": ["@fontsource-variable/figtree@5.3.0", "", {}, "sha512-VRVodD7OiG7apQwE8/2fMjaqpY/a0qRJqL5HtYj8CKIVps+9amaFcdfKmDIf7iqYQx6iPLlArVXAfKeIZmVcNQ=="],
+
+    "@fontsource/michroma": ["@fontsource/michroma@5.3.0", "", {}, "sha512-9sbGD7ek1hGvq0TmgNPFbuI3k7qwXVdZ+zCDsTHDGRIQqfYrpYWwEYcwH2fzOtvn8uiGqzAoJ72vuFE3v/hDdg=="],
 
     "@hara/console": ["@hara/console@workspace:apps/console"],
 

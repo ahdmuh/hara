@@ -30,7 +30,7 @@
 .brand
 {
     justify-self: start;
-    font-size: 26px;
+    font-size: 17px;
     color: var(--white);
     transition: color 0.4s var(--ease);
 }

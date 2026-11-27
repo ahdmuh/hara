@@ -52,12 +52,12 @@
     width: 72px;
     height: 72px;
     border-radius: 22px;
-    background: var(--indigo);
+    background: var(--blue);
     color: var(--white);
     font-family: var(--display);
     font-size: 32px;
     font-weight: 900;
-    box-shadow: 0 12px 28px -12px var(--indigo-glow);
+    box-shadow: 0 12px 28px -12px var(--blue-glow);
 }
 
 .title
@@ -334,8 +334,8 @@
     width: 36px;
     height: 36px;
     border-radius: 11px;
-    background: var(--indigo-soft);
-    color: var(--indigo);
+    background: var(--blue-soft);
+    color: var(--blue);
 }
 
 .trophy svg
@@ -397,7 +397,7 @@
 {
     width: 100%;
     height: 100%;
-    background: var(--indigo);
+    background: var(--blue);
     transform-origin: bottom;
 }
 
@@ -431,7 +431,7 @@
     font-family: var(--display);
     font-size: 20px;
     font-weight: 900;
-    color: var(--indigo);
+    color: var(--blue);
 }
 
 .slider input
@@ -440,7 +440,7 @@
     width: 100%;
     height: 8px;
     border-radius: 999px;
-    background: linear-gradient(90deg, var(--indigo) var(--fill), var(--mist) var(--fill));
+    background: linear-gradient(90deg, var(--blue) var(--fill), var(--mist) var(--fill));
     outline: none;
 }
 
@@ -451,7 +451,7 @@
     height: 24px;
     border-radius: 8px;
     background: var(--white);
-    box-shadow: 0 0 0 2px var(--indigo), 0 4px 12px -2px var(--indigo-glow);
+    box-shadow: 0 0 0 2px var(--blue), 0 4px 12px -2px var(--blue-glow);
     cursor: grab;
     transition: transform 0.2s var(--ease);
 }
@@ -469,12 +469,12 @@
     border: 0;
     border-radius: 8px;
     background: var(--white);
-    box-shadow: 0 0 0 2px var(--indigo), 0 4px 12px -2px var(--indigo-glow);
+    box-shadow: 0 0 0 2px var(--blue), 0 4px 12px -2px var(--blue-glow);
 }
 
 .slider input:focus-visible::-webkit-slider-thumb
 {
-    box-shadow: var(--ring);
+    box-shadow: 0 0 0 2px var(--blue), 0 0 0 6px rgb(0 149 219 / 18%);
 }
 
 .dialogActions

@@ -25,7 +25,7 @@ export default function Sparkline({ values, width = 96, height = 28 }: ISparklin
             <motion.path
                 d={line}
                 fill="none"
-                stroke="var(--indigo)"
+                stroke="var(--blue)"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -33,7 +33,7 @@ export default function Sparkline({ values, width = 96, height = 28 }: ISparklin
                 animate={{ pathLength: 1 }}
                 transition={{ duration: 0.9, ease: EASE }}
             />
-            <circle cx={last[0]} cy={last[1]} r="3" fill="var(--indigo)" />
+            <circle cx={last[0]} cy={last[1]} r="3" fill="var(--blue)" />
         </svg>
     );
 }

@@ -53,9 +53,9 @@
 
 .success .icon
 {
-    background: var(--indigo);
+    background: var(--blue);
     color: var(--white);
-    box-shadow: 0 6px 16px -6px var(--indigo-glow);
+    box-shadow: 0 6px 16px -6px var(--blue-glow);
 }
 
 .text
@@ -125,7 +125,7 @@
 
 .success .timer
 {
-    background: var(--indigo);
+    background: var(--blue);
 }
 
 @keyframes drain

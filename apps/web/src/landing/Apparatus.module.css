@@ -1,0 +1,301 @@
+.apparatus
+{
+    display: grid;
+    gap: clamp(32px, 5vw, 56px);
+}
+
+.head
+{
+    display: grid;
+    gap: 16px;
+}
+
+.head h2
+{
+    font-size: clamp(36px, 5vw, 64px);
+}
+
+.head p
+{
+    max-width: 520px;
+    font-size: 18px;
+    color: var(--graphite);
+}
+
+.body
+{
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: center;
+    gap: clamp(24px, 5vw, 72px);
+}
+
+.diagram
+{
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.part
+{
+    transition: opacity 0.5s var(--ease);
+}
+
+.focused .part:not(.on)
+{
+    opacity: 0.32;
+}
+
+.housing
+{
+    fill: var(--ink);
+}
+
+.motor
+{
+    fill: #2a2a31;
+    stroke: rgb(255 255 255 / 14%);
+    stroke-width: 1.5;
+    transition: fill 0.5s var(--ease), stroke 0.5s var(--ease);
+}
+
+.spindle
+{
+    fill: rgb(255 255 255 / 55%);
+}
+
+.on .motor
+{
+    fill: var(--blue);
+    stroke: rgb(255 255 255 / 40%);
+}
+
+.encoder
+{
+    fill: none;
+    stroke: rgb(255 255 255 / 22%);
+    stroke-width: 2;
+    stroke-dasharray: 3 4;
+    transition: stroke 0.5s var(--ease);
+}
+
+.loadCell
+{
+    fill: rgb(255 255 255 / 30%);
+    transition: fill 0.5s var(--ease);
+}
+
+.on .encoder
+{
+    stroke: var(--blue);
+    animation: spin 6s linear infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.on .loadCell
+{
+    fill: var(--blue);
+}
+
+.cable
+{
+    fill: none;
+    stroke: var(--fog);
+    stroke-width: 1.5;
+    stroke-dasharray: 4 5;
+    animation: flow 1.6s linear infinite;
+}
+
+.palm
+{
+    fill: var(--white);
+    stroke: var(--line-strong);
+    stroke-width: 1.5;
+}
+
+.rail
+{
+    fill: var(--white);
+    stroke: var(--ink);
+    stroke-width: 1.5;
+    transition: stroke 0.5s var(--ease), fill 0.5s var(--ease);
+}
+
+.groove
+{
+    stroke: var(--fog);
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.on .rail
+{
+    stroke: var(--blue);
+    fill: var(--blue-soft);
+}
+
+.cuff
+{
+    animation: glide 2.6s var(--ease) infinite alternate;
+    animation-delay: calc(var(--i) * -0.45s);
+}
+
+.cuff rect
+{
+    fill: var(--ink);
+    transition: fill 0.5s var(--ease);
+}
+
+.cuff circle
+{
+    fill: var(--blue);
+}
+
+.on .cuff rect
+{
+    fill: var(--blue);
+}
+
+.on .cuff circle
+{
+    fill: var(--white);
+}
+
+.stopRing
+{
+    fill: var(--white);
+    stroke: var(--ink);
+    stroke-width: 1.5;
+}
+
+.stop
+{
+    fill: var(--danger);
+}
+
+.on .stop
+{
+    animation: pulse 1.2s var(--ease) infinite;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.list
+{
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.item
+{
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 18px;
+    width: 100%;
+    padding: 18px 0;
+    border: 0;
+    border-top: 1px solid var(--line);
+    background: transparent;
+    text-align: left;
+    cursor: default;
+}
+
+.number
+{
+    padding-top: 3px;
+    font-family: var(--display);
+    font-size: 13px;
+    color: var(--fog);
+    transition: color 0.4s var(--ease);
+}
+
+.text
+{
+    display: grid;
+    gap: 4px;
+}
+
+.text strong
+{
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--graphite);
+    transition: color 0.4s var(--ease);
+}
+
+.text span
+{
+    color: var(--steel);
+    transition: color 0.4s var(--ease);
+}
+
+.current .number
+{
+    color: var(--blue);
+}
+
+.current .text strong
+{
+    color: var(--ink);
+}
+
+.current .text span
+{
+    color: var(--graphite);
+}
+
+@keyframes glide
+{
+    from
+    {
+        transform: translateY(var(--from));
+    }
+
+    to
+    {
+        transform: translateY(var(--to));
+    }
+}
+
+@keyframes flow
+{
+    to
+    {
+        stroke-dashoffset: -18;
+    }
+}
+
+@keyframes spin
+{
+    to
+    {
+        rotate: 360deg;
+    }
+}
+
+@keyframes pulse
+{
+    0%,
+    100%
+    {
+        scale: 1;
+    }
+
+    50%
+    {
+        scale: 1.15;
+    }
+}
+
+@media (max-width: 960px)
+{
+    .body
+    {
+        grid-template-columns: 1fr;
+    }
+}

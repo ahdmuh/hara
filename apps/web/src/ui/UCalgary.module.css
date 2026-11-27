@@ -1,0 +1,21 @@
+.ucalgary
+{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    white-space: nowrap;
+}
+
+.shield
+{
+    flex: none;
+    width: 0.92em;
+    height: 1.15em;
+    background: currentColor;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+}

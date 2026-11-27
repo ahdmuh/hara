@@ -2,28 +2,17 @@ import type { CSSProperties } from "react";
 import Reveal, { RevealItem } from "../ui/Reveal";
 import styles from "./Games.module.css";
 
-const RUNE = [[1, 5], [1, 4], [1, 3], [1, 2], [1, 1], [2, 2], [3, 3], [4, 2], [5, 1], [5, 2], [5, 3], [5, 4], [5, 5]];
-const NOTES = [[0, 0], [2, 0.5], [4, 1], [1, 1.5], [3, 2], [0, 2.5], [4, 3], [2, 3.5]];
-
-function RuneArt()
+function RangeArt()
 {
     return (
-        <svg className={styles.art} viewBox="0 0 70 70" aria-hidden="true">
-            {Array.from({ length: 49 }, (_, index) => (
-                <rect key={index} className={styles.grid} x={(index % 7) * 10 + 3} y={Math.floor(index / 7) * 10 + 3} width="4" height="4" rx="0.6" />
-            ))}
-            {RUNE.map(([column, row], step) => (
-                <rect
-                    key={step}
-                    className={styles.rune}
-                    style={{ "--step": step } as CSSProperties}
-                    x={(column ?? 0) * 10 + 2}
-                    y={(row ?? 0) * 10 + 2}
-                    width="6"
-                    height="6"
-                    rx="0.8"
-                />
-            ))}
+        <svg className={styles.art} viewBox="0 0 120 80" aria-hidden="true">
+            <path className={styles.arc} d="M14,70 A46,46 0 0 1 106,70" />
+            <path className={styles.sweep} d="M14,70 A46,46 0 0 1 106,70" pathLength="100" />
+            {Array.from({ length: 9 }, (_, index) =>
+            {
+                const angle = Math.PI - (index / 8) * Math.PI;
+                return <circle key={index} className={styles.tick} cx={60 + Math.cos(angle) * 56} cy={70 - Math.sin(angle) * 56} r="1.6" />;
+            })}
         </svg>
     );
 }
@@ -31,22 +20,10 @@ function RuneArt()
 function StrengthArt()
 {
     return (
-        <svg className={styles.art} viewBox="0 0 70 70" aria-hidden="true">
-            <rect className={styles.band} x="4" y="11" width="62" height="20" rx="3" />
-            {Array.from({ length: 6 }, (_, column) => (
-                Array.from({ length: 6 }, (_, row) => (
-                    <rect
-                        key={`${column}-${row}`}
-                        className={row < 4 ? styles.forceOn : row === 4 ? styles.forceMid : styles.forceTop}
-                        style={{ "--column": column } as CSSProperties}
-                        x={column * 10 + 8}
-                        y={60 - row * 9}
-                        width="4"
-                        height="4"
-                        rx="0.6"
-                    />
-                ))
-            ))}
+        <svg className={styles.art} viewBox="0 0 120 80" aria-hidden="true">
+            <rect className={styles.band} x="70" y="22" width="22" height="36" rx="4" />
+            <rect className={styles.bar} x="10" y="34" width="100" height="12" rx="6" />
+            <rect className={styles.fill} x="10" y="34" width="100" height="12" rx="6" />
         </svg>
     );
 }
@@ -54,44 +31,31 @@ function StrengthArt()
 function SpeedArt()
 {
     return (
-        <svg className={styles.art} viewBox="0 0 70 70" aria-hidden="true">
-            {Array.from({ length: 5 }, (_, track) => (
-                <rect key={track} className={styles.lane} x={track * 13 + 6} y="2" width="6" height="66" rx="3" />
-            ))}
-            <rect className={styles.hit} x="2" y="56" width="66" height="2" rx="1" />
-            {NOTES.map(([track, delay], index) => (
-                <rect
-                    key={index}
-                    className={styles.note}
-                    style={{ "--delay": delay } as CSSProperties}
-                    x={(track ?? 0) * 13 + 6}
-                    y="0"
-                    width="6"
-                    height="6"
-                    rx="1"
-                />
+        <svg className={styles.art} viewBox="0 0 120 80" aria-hidden="true">
+            {Array.from({ length: 5 }, (_, index) => (
+                <circle key={index} className={styles.beat} style={{ "--i": index } as CSSProperties} cx={20 + index * 20} cy="40" r="7" />
             ))}
         </svg>
     );
 }
 
-const GAMES = [
+const METRICS = [
     {
         id: "range",
         title: "Range of Motion",
-        body: "A turn-based dungeon crawler. Trace runes with your fingers to attack, shield and heal, with no time pressure.",
-        art: RuneArt,
+        body: "How far each finger opens and closes. Games ask for movement across your calibrated range, and what they ask for grows as your range does.",
+        art: RangeArt,
     },
     {
         id: "strength",
         title: "Strength",
-        body: "A fishing game where the fish pulls back. Clutch to charge your cast, then hold your force in a target band to reel in.",
+        body: "How much force each finger can hold. Resistance is set as a share of your calibrated capacity, so effort stays challenging but safe.",
         art: StrengthArt,
     },
     {
         id: "speed",
         title: "Speed",
-        body: "A rhythm game with one track per finger. Tap as each symbol reaches the end, and clear 80% to unlock the next level.",
+        body: "How quickly each finger moves and reacts. Timing gets tighter as your fingers get faster.",
         art: SpeedArt,
     },
 ];
@@ -105,18 +69,20 @@ export default function Games()
                     <h2>Built Around the Movement It Trains</h2>
                 </RevealItem>
                 <RevealItem>
-                    <p>Three games, each one training a different part of recovery, all tuned to your calibration.</p>
+                    <p>Three games, each focused on one measure of hand function and tuned to your calibration.</p>
                 </RevealItem>
             </Reveal>
             <Reveal as="ul" className={styles.list} group>
-                {GAMES.map(game => (
-                    <RevealItem as="li" key={game.id} className={styles.card}>
-                        <div className={styles.screen}>
-                            <game.art />
-                        </div>
-                        <div className={styles.text}>
-                            <h3>{game.title}</h3>
-                            <p>{game.body}</p>
+                {METRICS.map(metric => (
+                    <RevealItem as="li" key={metric.id} className={styles.slot}>
+                        <div className={styles.card}>
+                            <div className={styles.screen}>
+                                <metric.art />
+                            </div>
+                            <div className={styles.text}>
+                                <h3>{metric.title}</h3>
+                                <p>{metric.body}</p>
+                            </div>
                         </div>
                     </RevealItem>
                 ))}

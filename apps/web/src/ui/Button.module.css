@@ -64,15 +64,15 @@
 
 .primary
 {
-    background: var(--indigo);
+    background: var(--blue);
     color: var(--white);
-    box-shadow: 0 1px 0 rgb(255 255 255 / 25%) inset, 0 -2px 0 rgb(0 0 0 / 15%) inset, 0 10px 24px -10px var(--indigo-glow);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 25%) inset, 0 -2px 0 rgb(0 0 0 / 15%) inset, 0 10px 24px -10px var(--blue-glow);
 }
 
 .primary:hover:not(:disabled)
 {
-    background: var(--indigo-deep);
-    box-shadow: 0 1px 0 rgb(255 255 255 / 25%) inset, 0 -2px 0 rgb(0 0 0 / 15%) inset, 0 14px 32px -10px var(--indigo-glow);
+    background: var(--blue-deep);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 25%) inset, 0 -2px 0 rgb(0 0 0 / 15%) inset, 0 14px 32px -10px var(--blue-glow);
     transform: translateY(-1px);
 }
 

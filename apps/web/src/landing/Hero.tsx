@@ -61,7 +61,7 @@ export default function Hero()
                     transition={{ duration: 0.9, delay: 1.5, ease: EASE }}
                 >
                     <p className={styles.lead}>
-                        A fun, engaging alternative to hand rehabilitation for stroke survivors.
+                        A tabletop device that turns hand rehabilitation into games, built for stroke survivors.
                     </p>
                     <div className={styles.cta}>
                         <LinkButton to="#take-part" size="large">Take Part</LinkButton>
