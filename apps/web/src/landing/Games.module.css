@@ -1,0 +1,295 @@
+.games
+{
+    width: min(var(--content), calc(100% - 2 * var(--gutter)));
+    margin: 0 auto;
+    padding-top: clamp(96px, 14vw, 180px);
+}
+
+.head
+{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: end;
+    gap: 24px 64px;
+    margin-bottom: clamp(32px, 5vw, 56px);
+}
+
+.head h2
+{
+    max-width: 620px;
+    font-size: clamp(36px, 5vw, 64px);
+}
+
+.head p
+{
+    max-width: 420px;
+    justify-self: end;
+    font-size: 18px;
+    color: var(--graphite);
+}
+
+.list
+{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(12px, 2vw, 20px);
+}
+
+.card
+{
+    display: grid;
+    grid-template-rows: auto 1fr;
+    padding: 10px;
+    border-radius: 28px;
+    background: linear-gradient(180deg, #ffffff 0%, #f7f7f5 100%);
+    box-shadow: var(--shadow-soft);
+    transition: box-shadow 0.4s var(--ease), transform 0.4s var(--ease);
+}
+
+.card:hover
+{
+    transform: translateY(-6px);
+    box-shadow: var(--ring), var(--shadow-lift);
+}
+
+.screen
+{
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    border-radius: 20px;
+    background: radial-gradient(80% 80% at 50% 50%, #121218 0%, var(--void) 100%);
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 5%) inset, 0 0 40px rgb(0 0 0 / 80%) inset;
+    overflow: hidden;
+}
+
+.text
+{
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: 22px 16px 18px;
+}
+
+.text h3
+{
+    font-size: 26px;
+}
+
+.text p
+{
+    color: var(--graphite);
+}
+
+.art
+{
+    width: 58%;
+    height: auto;
+    overflow: visible;
+    transition: transform 0.6s var(--ease);
+}
+
+.card:hover .art
+{
+    transform: scale(1.06);
+}
+
+.grid,
+.lane
+{
+    fill: rgb(255 255 255 / 8%);
+}
+
+.rune
+{
+    fill: var(--indigo);
+    filter: drop-shadow(0 0 2px var(--indigo));
+    opacity: 0;
+    animation: trace 3.6s var(--ease) infinite;
+    animation-delay: calc(var(--step) * 0.11s);
+}
+
+@keyframes trace
+{
+    0%
+    {
+        opacity: 0;
+        fill: var(--white);
+    }
+
+    6%
+    {
+        opacity: 1;
+        fill: var(--white);
+    }
+
+    20%,
+    70%
+    {
+        opacity: 1;
+        fill: var(--indigo);
+    }
+
+    85%,
+    100%
+    {
+        opacity: 0;
+    }
+}
+
+.band
+{
+    fill: rgb(90 75 255 / 12%);
+    stroke: rgb(90 75 255 / 60%);
+    stroke-width: 0.6;
+    stroke-dasharray: 2 1.5;
+}
+
+.forceOn,
+.forceMid,
+.forceTop
+{
+    fill: var(--white);
+}
+
+.forceMid
+{
+    animation: hold 2.4s var(--ease) infinite;
+    animation-delay: calc(var(--column) * -0.37s);
+}
+
+.forceTop
+{
+    fill: var(--indigo);
+    filter: drop-shadow(0 0 2px var(--indigo));
+    animation: strain 2.4s var(--ease) infinite;
+    animation-delay: calc(var(--column) * -0.37s);
+}
+
+@keyframes hold
+{
+    0%,
+    100%
+    {
+        opacity: 1;
+    }
+
+    50%
+    {
+        opacity: 0.15;
+    }
+}
+
+@keyframes strain
+{
+    0%,
+    45%,
+    100%
+    {
+        opacity: 0.1;
+    }
+
+    15%,
+    30%
+    {
+        opacity: 1;
+    }
+}
+
+.hit
+{
+    fill: rgb(255 255 255 / 40%);
+}
+
+.note
+{
+    fill: var(--indigo);
+    filter: drop-shadow(0 0 2px var(--indigo));
+    animation: fall 4s linear infinite;
+    animation-delay: calc(var(--delay) * 1s);
+    opacity: 0;
+}
+
+@keyframes fall
+{
+    0%
+    {
+        transform: translateY(0);
+        opacity: 0;
+    }
+
+    8%
+    {
+        opacity: 1;
+    }
+
+    46%
+    {
+        transform: translateY(54px);
+        fill: var(--indigo);
+        opacity: 1;
+    }
+
+    50%
+    {
+        transform: translateY(54px) scale(1);
+        fill: var(--white);
+        opacity: 1;
+    }
+
+    58%,
+    100%
+    {
+        transform: translateY(54px);
+        fill: var(--white);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 960px)
+{
+    .head
+    {
+        grid-template-columns: 1fr;
+    }
+
+    .head p
+    {
+        justify-self: start;
+    }
+
+    .list
+    {
+        grid-template-columns: 1fr;
+    }
+
+    .card
+    {
+        grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+        grid-template-rows: none;
+        align-items: center;
+    }
+
+    .screen
+    {
+        aspect-ratio: 1;
+    }
+}
+
+@media (max-width: 560px)
+{
+    .card
+    {
+        grid-template-columns: 1fr;
+    }
+
+    .screen
+    {
+        aspect-ratio: 16 / 10;
+    }
+
+    .art
+    {
+        width: 40%;
+    }
+}

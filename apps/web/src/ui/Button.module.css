@@ -1,0 +1,153 @@
+.button
+{
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 999px;
+    font-weight: 650;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.25s var(--ease), color 0.25s var(--ease), box-shadow 0.3s var(--ease), transform 0.3s var(--ease), opacity 0.2s;
+}
+
+.button:disabled
+{
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.content
+{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: opacity 0.2s var(--ease), transform 0.3s var(--ease);
+}
+
+.content svg
+{
+    width: 20px;
+    height: 20px;
+    flex: none;
+    transition: transform 0.3s var(--ease);
+}
+
+.button:hover .content svg:last-child:not(:first-child)
+{
+    transform: translateX(3px);
+}
+
+.small
+{
+    height: 36px;
+    padding: 0 16px;
+    font-size: 14px;
+}
+
+.medium
+{
+    height: 46px;
+    padding: 0 22px;
+    font-size: 15px;
+}
+
+.large
+{
+    height: 56px;
+    padding: 0 28px;
+    font-size: 16px;
+}
+
+.primary
+{
+    background: var(--indigo);
+    color: var(--white);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 25%) inset, 0 -2px 0 rgb(0 0 0 / 15%) inset, 0 10px 24px -10px var(--indigo-glow);
+}
+
+.primary:hover:not(:disabled)
+{
+    background: var(--indigo-deep);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 25%) inset, 0 -2px 0 rgb(0 0 0 / 15%) inset, 0 14px 32px -10px var(--indigo-glow);
+    transform: translateY(-1px);
+}
+
+.dark
+{
+    background: var(--ink);
+    color: var(--white);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 12%) inset, 0 8px 20px -12px rgb(0 0 0 / 50%);
+}
+
+.dark:hover:not(:disabled)
+{
+    background: var(--graphite);
+    transform: translateY(-1px);
+}
+
+.ghost
+{
+    background: transparent;
+    color: var(--ink);
+    box-shadow: 0 0 0 1px var(--line-strong) inset;
+}
+
+.ghost:hover:not(:disabled)
+{
+    background: var(--white);
+    box-shadow: 0 0 0 1px var(--line-strong) inset, 0 8px 20px -14px rgb(22 22 26 / 30%);
+}
+
+.light
+{
+    background: rgb(255 255 255 / 8%);
+    color: var(--white);
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 16%) inset;
+    backdrop-filter: blur(12px);
+}
+
+.light:hover:not(:disabled)
+{
+    background: rgb(255 255 255 / 14%);
+}
+
+.spinner
+{
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: opacity 0.2s var(--ease), transform 0.3s var(--ease);
+    animation: spin 0.7s linear infinite;
+    pointer-events: none;
+}
+
+.busy .content
+{
+    opacity: 0;
+    transform: scale(0.96);
+}
+
+.busy .spinner
+{
+    opacity: 1;
+    transform: scale(1);
+}
+
+@keyframes spin
+{
+    to
+    {
+        rotate: 360deg;
+    }
+}
