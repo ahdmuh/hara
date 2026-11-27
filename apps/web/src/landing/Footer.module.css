@@ -16,7 +16,7 @@
 
 .mark
 {
-    font-size: clamp(64px, 26vw, 380px);
+    font-size: clamp(48px, 13vw, 176px);
     line-height: 0.8;
     color: var(--white);
     text-shadow: 0 0 28px rgb(255 255 255 / 14%);
@@ -49,14 +49,17 @@
 
 .links > a:first-child
 {
+    padding-bottom: 1px;
     font-weight: 600;
-    color: rgb(255 255 255 / 80%);
-    transition: color 0.2s var(--ease);
+    color: rgb(255 255 255 / 85%);
+    border-bottom: 1px solid rgb(255 255 255 / 30%);
+    transition: color 0.3s var(--ease), border-color 0.3s var(--ease);
 }
 
 .links > a:first-child:hover
 {
     color: var(--white);
+    border-color: var(--blue);
 }
 
 .ucalgary

@@ -23,11 +23,11 @@
 
 .count
 {
-    font-family: var(--display);
+    font-family: var(--figure);
     user-select: none;
     -webkit-user-select: none;
     font-size: 0.6em;
-    font-weight: 400;
+    font-weight: 800;
     color: var(--blue);
 }
 

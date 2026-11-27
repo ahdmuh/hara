@@ -21,21 +21,22 @@ export default function TakePart()
 {
     return (
         <section className={styles.section} id="take-part">
-            <Reveal className={styles.intro} group>
-                <RevealItem as="header">
-                    <h2>Take Part in Our Study</h2>
-                </RevealItem>
-                <RevealItem>
-                    <p>
-                        We are looking for people with hand dysfunction, ideally stroke survivors, to help validate our design by playing our games.
-                    </p>
-                </RevealItem>
-                <RevealItem className={styles.cta}>
-                    <LinkButton to={`mailto:${CONTACT_EMAIL}`} size="large" icon={<Mail />}>Contact Us</LinkButton>
-                    <a className={styles.email} href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
-                </RevealItem>
-            </Reveal>
-            <div className={styles.card}>
+            <div className={styles.pamphlet}>
+                <Reveal className={styles.intro} group>
+                    <RevealItem as="header">
+                        <h2>Take Part in Our Study</h2>
+                    </RevealItem>
+                    <RevealItem>
+                        <p>
+                            We are looking for people with hand dysfunction, ideally stroke survivors,
+                            to help validate our design by playing our games.
+                        </p>
+                    </RevealItem>
+                    <RevealItem className={styles.cta}>
+                        <LinkButton to={`mailto:${CONTACT_EMAIL}`} size="large" icon={<Mail />}>Contact Us</LinkButton>
+                        <a className={styles.email} href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+                    </RevealItem>
+                </Reveal>
                 <Reveal className={styles.session}>
                     <div className={styles.total}>
                         <span className={styles.minutes}>60</span>

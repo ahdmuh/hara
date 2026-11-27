@@ -40,3 +40,27 @@
 {
     background-size: 100% 1px;
 }
+
+.out
+{
+    display: inline-block;
+    width: 0.62em;
+    height: 0.62em;
+    margin-left: 0.16em;
+    vertical-align: 0.42em;
+    opacity: 0.6;
+    transition: transform 0.4s var(--ease), opacity 0.3s var(--ease);
+}
+
+.out svg
+{
+    width: 100%;
+    height: 100%;
+}
+
+.ucalgary:hover .out,
+.ucalgary:focus-visible .out
+{
+    opacity: 1;
+    transform: translate(2px, -2px);
+}
