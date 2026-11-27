@@ -125,10 +125,11 @@
 .pole
 {
     position: absolute;
+    z-index: 1;
     left: 0;
-    top: 0.2rem;
+    top: 0;
     width: 2px;
-    height: 2.4rem;
+    height: 2.6rem;
     border-radius: 2px;
     background: var(--graphite);
 }
@@ -154,7 +155,7 @@
 .pennant
 {
     position: relative;
-    left: 2px;
+    left: 1px;
     display: grid;
     place-items: center;
     width: 2.6rem;

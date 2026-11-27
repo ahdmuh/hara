@@ -4,7 +4,7 @@ import { useIntent } from "../Intents";
 import { music, saveVolume, storedVolume, VOLUME_STEPS } from "../Music";
 import { sounds } from "../Sounds";
 import Hints from "../ui/Hints";
-import { Logout, Reload, Usb, UserPlus, Volume2 } from "../ui/Icons";
+import { Logout, Reload, Usb, User, UserPlus, Volume2 } from "../ui/Icons";
 import { EASE } from "../ui/Motion";
 import Wordmark from "../ui/Wordmark";
 import screen from "./Screen.module.css";
@@ -13,6 +13,7 @@ import Ring from "../ui/Ring";
 
 const ROWS = [
     { id: "recalibrate", label: "Recalibrate", icon: Reload },
+    { id: "account", label: "Account", icon: User },
     { id: "clinician", label: "Clinician", icon: UserPlus },
     { id: "device", label: "Device", icon: Usb },
     { id: "volume", label: "Volume", icon: Volume2 },
@@ -26,13 +27,14 @@ interface ISettingsProps
     connected: boolean;
     firmware: string | null;
     linked: boolean;
+    email: string | null;
     onLink: () => void;
     onRecalibrate: () => void;
     onSignOut: () => void;
     onBack: () => void;
 }
 
-export default function Settings({ connected, firmware, linked, onLink, onRecalibrate, onSignOut, onBack }: ISettingsProps)
+export default function Settings({ connected, firmware, linked, email, onLink, onRecalibrate, onSignOut, onBack }: ISettingsProps)
 {
     const [row, setRow] = useState(0);
     const [volume, setVolume] = useState(storedVolume);
@@ -103,6 +105,8 @@ export default function Settings({ connected, firmware, linked, onLink, onRecali
     {
         switch (id)
         {
+            case "account":
+                return <span className={styles.muted}>{email ?? "Signed In"}</span>;
             case "clinician":
                 return <span className={linked ? styles.good : styles.muted}>{linked ? "Linked" : "Not Linked"}</span>;
             case "device":

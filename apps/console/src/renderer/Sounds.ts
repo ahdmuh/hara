@@ -1,4 +1,4 @@
-export type Sound = "move" | "select" | "back" | "open" | "insert" | "error" | "type";
+export type Sound = "move" | "select" | "back" | "open" | "insert" | "error" | "type" | "welcome";
 
 const MAXIMUM_GAIN = 1.6;
 
@@ -54,6 +54,11 @@ class Sounds
             case "type":
                 this.click(now, 0.05 + Math.random() * 0.02);
                 this.tone(2200 + Math.random() * 500, now, 0.03, 0.012, "sine");
+                break;
+            case "welcome":
+                [523.25, 659.25, 783.99, 1046.5].forEach((pitch, index) => this.tone(pitch, now + index * 0.09, 0.9, 0.06, "sine"));
+                [1567.98, 2093].forEach((pitch, index) => this.tone(pitch, now + 0.36 + index * 0.07, 1.2, 0.02, "sine"));
+                this.tone(261.63, now, 1.4, 0.05, "triangle");
                 break;
             case "error":
                 this.tone(329.63, now, 0.14, 0.07, "triangle");

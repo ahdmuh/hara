@@ -142,7 +142,7 @@ export default function Calibration({ onDone }: { onDone: () => void })
                                 >
                                     <span className={styles.check}><Check /></span>
                                     <div className={screen.heading}>
-                                        <h1>You Are All Set</h1>
+                                        <h1>Calibration Complete</h1>
                                         <p>Every game will now stay within the limits of your hand.</p>
                                     </div>
                                 </motion.div>
