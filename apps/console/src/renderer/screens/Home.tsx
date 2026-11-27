@@ -210,13 +210,13 @@ export default function Home({ name, connected, initial, onPlay, onOpen }: IHome
                             key={entry.id}
                             type="button"
                             data-tour={entry.id}
+                            aria-label={entry.label}
                             className={`${styles.round} ${styles[entry.id]} ${active ? styles.active : ""}`}
                             animate={{ scale: active ? 1.08 : 1 }}
                             transition={SPRING}
                             onClick={() => activate(entry.id)}
                         >
                             <Icon />
-                            <span>{entry.label}</span>
                         </motion.button>
                     );
                 })}
