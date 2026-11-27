@@ -134,13 +134,21 @@ export default function App()
     {
         const onKeyDown = (event: KeyboardEvent) =>
         {
-            if (event.ctrlKey && event.shiftKey && event.code === "KeyD")
+            if (import.meta.env.DEV && event.ctrlKey && event.shiftKey && event.code === "KeyD")
             {
                 setDebugging(shown => !shown);
             }
         };
+        const ignore = (event: DragEvent) => event.preventDefault();
         window.addEventListener("keydown", onKeyDown);
-        return () => window.removeEventListener("keydown", onKeyDown);
+        window.addEventListener("dragover", ignore);
+        window.addEventListener("drop", ignore);
+        return () =>
+        {
+            window.removeEventListener("keydown", onKeyDown);
+            window.removeEventListener("dragover", ignore);
+            window.removeEventListener("drop", ignore);
+        };
     }, []);
 
     const showStart = useCallback(() => setView({ name: "start" }), [setView]);

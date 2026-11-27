@@ -1,6 +1,6 @@
 export type Sound = "move" | "select" | "back" | "open" | "insert" | "error" | "type";
 
-const MAXIMUM_GAIN = 0.5;
+const MAXIMUM_GAIN = 1.6;
 
 class Sounds
 {

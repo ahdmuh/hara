@@ -1,6 +1,6 @@
 import track from "./assets/audio/rainy-night-jazz.mp3";
 
-const MAXIMUM_LEVEL = 0.18;
+const MAXIMUM_LEVEL = 0.1;
 const FADE_SECONDS = 1.6;
 const INTRO_SECONDS = 4.5;
 const CROSSFADE_SECONDS = 4;

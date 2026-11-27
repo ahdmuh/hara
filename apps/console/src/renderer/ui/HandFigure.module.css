@@ -26,20 +26,6 @@
     fill: var(--white);
 }
 
-.crease,
-.cuff
-{
-    fill: none;
-    stroke: var(--blue);
-    stroke-width: 2;
-    stroke-linecap: round;
-}
-
-.cuff
-{
-    stroke-width: 2.5;
-}
-
 .fold
 {
     stroke: var(--blue);

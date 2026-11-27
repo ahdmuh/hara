@@ -38,7 +38,7 @@ export default function HandDemo({ action }: { action: HandAction })
 
     return (
         <div className={styles.demo} role="img" aria-label="How to move your hand for this step">
-            <svg className={styles.pressure} viewBox="4 -6 118 176" aria-hidden="true">
+            <svg className={styles.pressure} viewBox="-8 -18 156 190" aria-hidden="true">
                 {FINGERS.map((finger) =>
                 {
                     const [x, y] = tipOf(finger, current.pose[finger]);

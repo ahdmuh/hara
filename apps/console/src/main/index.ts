@@ -1,8 +1,9 @@
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, Menu } from "electron";
 import { CHANNELS } from "../shared/IBridge";
 import { DeviceConnection } from "./DeviceConnection";
+import { lockDown, nativeMenu } from "./NativeShell";
 import { SerialPortProvider } from "./SerialPortProvider";
 import { SessionStore } from "./SessionStore";
 
@@ -47,8 +48,12 @@ function createWindow(): void
             contextIsolation: true,
             sandbox: true,
             nodeIntegration: false,
+            devTools: !app.isPackaged,
+            spellcheck: false,
         },
     });
+
+    lockDown(mainWindow);
 
     mainWindow.once("ready-to-show", () => mainWindow.show());
 
@@ -70,6 +75,7 @@ device.onMessage(message => broadcast(CHANNELS.deviceMessage, message));
 
 void app.whenReady().then(() =>
 {
+    Menu.setApplicationMenu(nativeMenu());
     openSessions();
     createWindow();
     device.start();
