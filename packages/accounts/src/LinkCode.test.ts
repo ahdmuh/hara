@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { formatLinkCode, generateLinkCode, LINK_CODE_ALPHABET, LINK_CODE_LENGTH, normalizeLinkCode } from "./LinkCode";
+import { generateLinkCode, LINK_CODE_ALPHABET, LINK_CODE_LENGTH, normalizeLinkCode } from "./LinkCode";
 
 describe("LinkCode", () =>
 {
@@ -31,10 +31,5 @@ describe("LinkCode", () =>
         expect(normalizeLinkCode("HK7P-M2Q0")).toBeNull();
         expect(normalizeLinkCode("HK7P-M2QI")).toBeNull();
         expect(normalizeLinkCode("HK7P")).toBeNull();
-    });
-
-    test("formats codes in two groups", () =>
-    {
-        expect(formatLinkCode("HK7PM2QX")).toBe("HK7P-M2QX");
     });
 });

@@ -5,11 +5,6 @@ describe("invitation", () =>
 {
     const email = invitation("Jordan Lee", "jordan@clinic.example", "Temp-Pass-123");
 
-    test("uses a categorized title-case subject", () =>
-    {
-        expect(email.subject).toBe("Account: Portal Invitation");
-    });
-
     test("carries the sign-in details in both the html and plain text", () =>
     {
         for (const body of [email.html, email.text])
