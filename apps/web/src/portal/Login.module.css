@@ -205,8 +205,11 @@
     transition: color 0.2s var(--ease), background-color 0.2s var(--ease);
 }
 
-.switch:hover
+@media (hover: hover) and (pointer: fine)
 {
-    color: var(--ink);
-    background: var(--mist);
+    .switch:hover
+    {
+        color: var(--ink);
+        background: var(--mist);
+    }
 }

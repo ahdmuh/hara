@@ -74,13 +74,11 @@
     transition: border-color 0.3s var(--ease);
 }
 
-.email:hover,
 .email:focus-visible
 {
     color: var(--white);
 }
 
-.email:hover svg,
 .email:focus-visible svg
 {
     opacity: 1;
@@ -88,7 +86,6 @@
     transform: translateY(-1px);
 }
 
-.email:hover span,
 .email:focus-visible span
 {
     border-color: var(--blue);
@@ -98,4 +95,24 @@
 {
     margin-left: 0.35em;
     color: var(--white);
+}
+
+@media (hover: hover) and (pointer: fine)
+{
+    .email:hover
+    {
+        color: var(--white);
+    }
+
+    .email:hover svg
+    {
+        opacity: 1;
+        color: var(--blue);
+        transform: translateY(-1px);
+    }
+
+    .email:hover span
+    {
+        border-color: var(--blue);
+    }
 }

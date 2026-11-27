@@ -36,11 +36,6 @@
     transition: transform 0.3s var(--ease);
 }
 
-.button:hover .content svg:last-child:not(:first-child)
-{
-    transform: translateX(3px);
-}
-
 .small
 {
     height: 36px;
@@ -69,24 +64,11 @@
     box-shadow: 0 1px 0 rgb(255 255 255 / 25%) inset, 0 -2px 0 rgb(0 0 0 / 15%) inset, 0 10px 24px -10px var(--blue-glow);
 }
 
-.primary:hover:not(:disabled)
-{
-    background: var(--blue-deep);
-    box-shadow: 0 1px 0 rgb(255 255 255 / 25%) inset, 0 -2px 0 rgb(0 0 0 / 15%) inset, 0 14px 32px -10px var(--blue-glow);
-    transform: translateY(-1px);
-}
-
 .dark
 {
     background: var(--ink);
     color: var(--white);
     box-shadow: 0 1px 0 rgb(255 255 255 / 12%) inset, 0 8px 20px -12px rgb(0 0 0 / 50%);
-}
-
-.dark:hover:not(:disabled)
-{
-    background: var(--graphite);
-    transform: translateY(-1px);
 }
 
 .ghost
@@ -96,23 +78,12 @@
     box-shadow: 0 0 0 1px var(--line-strong) inset;
 }
 
-.ghost:hover:not(:disabled)
-{
-    background: var(--white);
-    box-shadow: 0 0 0 1px var(--line-strong) inset, 0 8px 20px -14px rgb(22 22 26 / 30%);
-}
-
 .light
 {
     background: rgb(255 255 255 / 8%);
     color: var(--white);
     box-shadow: 0 0 0 1px rgb(255 255 255 / 16%) inset;
     backdrop-filter: blur(12px);
-}
-
-.light:hover:not(:disabled)
-{
-    background: rgb(255 255 255 / 14%);
 }
 
 .spinner
@@ -149,5 +120,37 @@
     to
     {
         rotate: 360deg;
+    }
+}
+
+@media (hover: hover) and (pointer: fine)
+{
+    .button:hover .content svg:last-child:not(:first-child)
+    {
+        transform: translateX(3px);
+    }
+
+    .primary:hover:not(:disabled)
+    {
+        background: var(--blue-deep);
+        box-shadow: 0 1px 0 rgb(255 255 255 / 25%) inset, 0 -2px 0 rgb(0 0 0 / 15%) inset, 0 14px 32px -10px var(--blue-glow);
+        transform: translateY(-1px);
+    }
+
+    .dark:hover:not(:disabled)
+    {
+        background: var(--graphite);
+        transform: translateY(-1px);
+    }
+
+    .ghost:hover:not(:disabled)
+    {
+        background: var(--white);
+        box-shadow: 0 0 0 1px var(--line-strong) inset, 0 8px 20px -14px rgb(22 22 26 / 30%);
+    }
+
+    .light:hover:not(:disabled)
+    {
+        background: rgb(255 255 255 / 14%);
     }
 }

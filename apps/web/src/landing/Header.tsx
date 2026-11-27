@@ -37,12 +37,19 @@ export default function Header()
 
     const [branded, setBranded] = useState(false);
 
-    useMotionValueEvent(scrollY, "change", (value) =>
+    useMotionValueEvent(scrollY, "change", value => setScrolled(value > 24));
+
+    useEffect(() =>
     {
-        setScrolled(value > 24);
         const title = document.getElementById("hero-title");
-        setBranded(title ? title.getBoundingClientRect().bottom < 72 : value > 240);
-    });
+        if (!title)
+        {
+            return;
+        }
+        const observer = new IntersectionObserver(([entry]) => setBranded(!!entry && !entry.isIntersecting && entry.boundingClientRect.top < 0), { rootMargin: "-72px 0px 0px 0px" });
+        observer.observe(title);
+        return () => observer.disconnect();
+    }, []);
 
     useEffect(() =>
     {
@@ -76,8 +83,8 @@ export default function Header()
                     aria-hidden={!branded}
                     tabIndex={branded ? 0 : -1}
                     initial={false}
-                    animate={branded ? { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" } : { opacity: 0, y: 14, scale: 0.86, filter: "blur(6px)" }}
-                    transition={{ duration: 0.5, ease: EASE }}
+                    animate={branded ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 12, scale: 0.9 }}
+                    transition={{ duration: 0.45, ease: EASE }}
                     style={{ pointerEvents: branded ? "auto" : "none" }}
                 >
                     <Wordmark />

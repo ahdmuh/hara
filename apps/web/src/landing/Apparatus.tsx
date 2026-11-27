@@ -85,7 +85,7 @@ export default function Apparatus()
             <div className={styles.body}>
                 <motion.svg
                     className={styles.diagram}
-                    viewBox="44 100 520 412"
+                    viewBox="44 44 520 468"
                     role="img"
                     aria-label="Top-down diagram of the HARA device"
                     initial={{ opacity: 0, y: 24 }}
@@ -205,12 +205,16 @@ export default function Apparatus()
                             <button
                                 type="button"
                                 className={`${styles.item} ${active === part.id ? styles.current : ""}`}
-                                onMouseEnter={() =>
+                                onPointerEnter={(event) =>
                                 {
-                                    setPinned(true);
-                                    setActive(part.id);
+                                    if (event.pointerType === "mouse")
+                                    {
+                                        setPinned(true);
+                                        setActive(part.id);
+                                    }
                                 }}
-                                onMouseLeave={() => setPinned(false)}
+                                onPointerLeave={() => setPinned(false)}
+                                onClick={() => setActive(part.id)}
                                 onFocus={() =>
                                 {
                                     setPinned(true);

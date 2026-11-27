@@ -53,12 +53,6 @@
     transition: background-color 0.5s var(--ease), box-shadow 0.5s var(--ease);
 }
 
-.person:hover .avatar
-{
-    background: var(--blue);
-    box-shadow: 0 8px 20px -8px var(--blue-glow);
-}
-
 .who
 {
     display: grid;
@@ -91,5 +85,14 @@
     .people
     {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (hover: hover) and (pointer: fine)
+{
+    .person:hover .avatar
+    {
+        background: var(--blue);
+        box-shadow: 0 8px 20px -8px var(--blue-glow);
     }
 }

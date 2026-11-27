@@ -43,7 +43,7 @@ export default function Loop()
 
     return (
         <Reveal className={styles.loop}>
-            <div ref={ref} onPointerEnter={() => setPaused(true)} onPointerLeave={() => setPaused(false)}>
+            <div ref={ref} onPointerEnter={event => setPaused(event.pointerType === "mouse")} onPointerLeave={() => setPaused(false)}>
                 <div className={styles.words} role="tablist" aria-label="How a Session Works">
                     {STAGES.map((entry, index) => (
                         <button

@@ -29,13 +29,11 @@
     transition: background-size 0.45s var(--ease);
 }
 
-.ucalgary:hover .shield,
 .ucalgary:focus-visible .shield
 {
     transform: translateY(-2px) rotate(-6deg) scale(1.08);
 }
 
-.ucalgary:hover .name,
 .ucalgary:focus-visible .name
 {
     background-size: 100% 1px;
@@ -58,9 +56,27 @@
     height: 100%;
 }
 
-.ucalgary:hover .out,
 .ucalgary:focus-visible .out
 {
     opacity: 1;
     transform: translate(2px, -2px);
+}
+
+@media (hover: hover) and (pointer: fine)
+{
+    .ucalgary:hover .shield
+    {
+        transform: translateY(-2px) rotate(-6deg) scale(1.08);
+    }
+
+    .ucalgary:hover .name
+    {
+        background-size: 100% 1px;
+    }
+
+    .ucalgary:hover .out
+    {
+        opacity: 1;
+        transform: translate(2px, -2px);
+    }
 }

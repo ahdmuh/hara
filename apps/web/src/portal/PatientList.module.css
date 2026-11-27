@@ -233,17 +233,6 @@
     transition: color 0.2s var(--ease), background-color 0.2s var(--ease);
 }
 
-.sort:hover
-{
-    color: var(--ink);
-    background: var(--paper);
-}
-
-.sort:hover .caret
-{
-    opacity: 0.5 !important;
-}
-
 .sorted
 {
     color: var(--ink);
@@ -266,7 +255,6 @@
     transition: background-color 0.2s var(--ease);
 }
 
-.row:hover,
 .row:focus-visible
 {
     background: #f7f7fb;
@@ -448,11 +436,6 @@ th.numeric .sort
     transition: transform 0.2s var(--ease), opacity 0.2s var(--ease);
 }
 
-.pages button:hover:not(:disabled)
-{
-    transform: translateY(-1px);
-}
-
 .pages button:disabled
 {
     opacity: 0.4;
@@ -535,5 +518,30 @@ th.numeric .sort
     .milestone
     {
         grid-column: 1 / -1;
+    }
+}
+
+@media (hover: hover) and (pointer: fine)
+{
+    .sort:hover
+    {
+        color: var(--ink);
+        background: var(--paper);
+    }
+
+    .sort:hover .caret
+    {
+        opacity: 0.5 !important;
+    }
+
+    .row:hover
+    {
+        background: #f7f7fb;
+        box-shadow: none;
+    }
+
+    .pages button:hover:not(:disabled)
+    {
+        transform: translateY(-1px);
     }
 }
