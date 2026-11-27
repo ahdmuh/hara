@@ -16,6 +16,7 @@ interface IToast
 
 interface IToastApi
 {
+    clear: () => void;
     error: (title: string, message?: string) => void;
     success: (title: string, message?: string) => void;
 }
@@ -56,6 +57,12 @@ export function ToastProvider({ children }: { children: ReactNode })
     }, [dismiss]);
 
     const api = useMemo<IToastApi>(() => ({
+        clear: () =>
+        {
+            timers.current.forEach(timer => window.clearTimeout(timer));
+            timers.current.clear();
+            setToasts([]);
+        },
         error: (title, message) => push("error", title, message),
         success: (title, message) => push("success", title, message),
     }), [push]);

@@ -1,0 +1,102 @@
+.field
+{
+    display: grid;
+    gap: 8px;
+}
+
+.field label
+{
+    font-size: 14px;
+    font-weight: 650;
+    color: var(--graphite);
+    transition: color 0.25s var(--ease);
+}
+
+.control
+{
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--white);
+    box-shadow: 0 0 0 1px var(--line-strong) inset, 0 1px 2px rgb(22 22 26 / 4%);
+    transition: box-shadow 0.25s var(--ease), background-color 0.25s var(--ease);
+}
+
+.control:hover
+{
+    box-shadow: 0 0 0 1px rgb(22 22 26 / 28%) inset, 0 1px 2px rgb(22 22 26 / 4%);
+}
+
+.control:focus-within
+{
+    box-shadow: 0 0 0 2px var(--indigo) inset, 0 0 0 5px rgb(90 75 255 / 14%);
+}
+
+.invalid label
+{
+    color: var(--danger-deep);
+}
+
+.invalid .control,
+.invalid .control:hover
+{
+    background: #fffafa;
+    box-shadow: 0 0 0 2px var(--danger) inset, 0 0 0 5px rgb(229 72 77 / 12%);
+}
+
+.icon
+{
+    display: grid;
+    place-items: center;
+    padding-left: 16px;
+    color: var(--steel);
+}
+
+.icon svg,
+.reveal svg
+{
+    width: 20px;
+    height: 20px;
+}
+
+.control input
+{
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0 16px;
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
+    font-size: 16px;
+    font-weight: 500;
+    outline: none;
+}
+
+.control input::placeholder
+{
+    color: var(--fog);
+}
+
+.reveal
+{
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin-right: 6px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--steel);
+    transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.reveal:hover
+{
+    background: var(--mist);
+    color: var(--ink);
+}
+
