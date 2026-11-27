@@ -20,6 +20,33 @@
     font-size: clamp(36px, 5vw, 64px);
 }
 
+.start
+{
+    display: inline-block;
+    margin: 0 0.08em;
+    padding: 0.12em 0.32em 0.08em;
+    border: 0.06em solid var(--ink);
+    border-radius: 0.22em;
+    font-family: var(--display);
+    font-size: 0.72em;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    vertical-align: 0.12em;
+    box-shadow: 0 0.07em 0 var(--ink);
+    transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease), background-color 0.3s var(--ease), color 0.3s var(--ease);
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.start:hover
+{
+    transform: translateY(0.05em);
+    box-shadow: 0 0.02em 0 var(--ink);
+    background: var(--ink);
+    color: var(--white);
+}
+
 .head p
 {
     max-width: 420px;
