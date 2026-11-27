@@ -59,16 +59,13 @@ export default function Apparatus()
         {
             return;
         }
-        const timer = window.setInterval(() =>
+        const timer = window.setTimeout(() =>
         {
-            setActive((current) =>
-            {
-                const index = PARTS.findIndex(part => part.id === current);
-                return PARTS[(index + 1) % PARTS.length]?.id ?? null;
-            });
+            const index = PARTS.findIndex(part => part.id === active);
+            setActive(PARTS[(index + 1) % PARTS.length]?.id ?? null);
         }, CYCLE_MILLISECONDS);
-        return () => window.clearInterval(timer);
-    }, [inView, pinned]);
+        return () => window.clearTimeout(timer);
+    }, [inView, pinned, active]);
 
     const on = (part: Part) => (active === part ? styles.on : "");
 
