@@ -6,8 +6,6 @@ import { useInputSource } from "../InputContext";
 import { useIntent } from "../Intents";
 import { TapDetector } from "../TapDetector";
 import { Check } from "../ui/Icons";
-import HandDemo, { type HandAction } from "../ui/HandDemo";
-import HandGlyph from "../ui/HandGlyph";
 import Hints from "../ui/Hints";
 import { EASE } from "../ui/Motion";
 import Wordmark from "../ui/Wordmark";
@@ -17,6 +15,8 @@ import styles from "./Calibration.module.css";
 const HOLD_SECONDS = 2;
 const TAP_GOAL = 10;
 
+type CalibrationStep = "open" | "relax" | "fist" | "push" | "tap";
+
 type StepCheck = (frame: IHandFrame) => boolean;
 
 function most(frame: IHandFrame, test: (position: number, force: number) => boolean): boolean
@@ -24,7 +24,7 @@ function most(frame: IHandFrame, test: (position: number, force: number) => bool
     return FINGERS.filter(finger => test(frame.fingers[finger].position, frame.fingers[finger].force)).length >= 3;
 }
 
-const STEPS: { id: HandAction; title: string; note: string; check?: StepCheck }[] = [
+const STEPS: { id: CalibrationStep; title: string; note: string; check?: StepCheck }[] = [
     { id: "open", title: "Open Your Hand", note: "Spread every finger as wide as you comfortably can, then hold.", check: frame => most(frame, position => position <= -0.6) },
     { id: "relax", title: "Let Your Hand Rest", note: "Relax your fingers and let them settle.", check: frame => most(frame, position => Math.abs(position) <= 0.2) },
     { id: "fist", title: "Make a Fist", note: "Close every finger as far as you comfortably can, then hold.", check: frame => most(frame, position => position >= 0.7) },
@@ -162,9 +162,6 @@ export default function Calibration({ raw, onDone }: ICalibrationProps)
                                     <span className={styles.hold} aria-hidden="true">
                                         <span ref={ring} className={styles.meter} />
                                     </span>
-                                    <div className={styles.visual}>
-                                        <HandDemo action={step.id} />
-                                    </div>
                                 </motion.div>
                             )
                         : (
@@ -195,7 +192,6 @@ export default function Calibration({ raw, onDone }: ICalibrationProps)
                                 />
                             </span>
                             <span className={styles.finger}>{finger}</span>
-                            <HandGlyph finger={finger} />
                         </li>
                     ))}
                 </ul>
