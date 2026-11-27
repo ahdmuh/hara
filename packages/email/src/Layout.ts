@@ -8,7 +8,7 @@ const FONT = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, s
 const INK = "#16161a";
 const GRAPHITE = "#3b3b43";
 const STEEL = "#85858f";
-const PAPER = "#f8f8f6";
+const PAPER = "#fcfbf8";
 const BLUE = "#0a84ff";
 
 export interface IEmail
