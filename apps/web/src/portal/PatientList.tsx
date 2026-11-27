@@ -7,10 +7,11 @@ import Avatar from "../ui/Avatar";
 import { daysSince, relative } from "./Format";
 import { GAMES, patients, trend, type Game, type IPatient } from "./MockData";
 import styles from "./PatientList.module.css";
+import MilestoneBadge from "./MilestoneBadge";
 import Sparkline from "./Sparkline";
 
 const PAGE_SIZE = 20;
-const ROW = { hidden: { opacity: 0, y: 6 }, shown: { opacity: 1, y: 0, transition: { duration: 0.3, ease: EASE } } };
+const ROW_TRANSITION = { duration: 0.3, ease: EASE, layout: { duration: 0.35, ease: EASE } };
 
 type SortKey = "name" | "lastSession" | "sessions" | Game;
 type Filter = "all" | "active" | "inactive";
@@ -191,75 +192,79 @@ export default function PatientList()
                 <table className={styles.table}>
                     <colgroup>
                         <col className={styles.colPatient} />
-                        <col className={styles.colLast} />
-                        <col className={styles.colSessions} />
                         <col className={styles.colMetric} />
                         <col className={styles.colMetric} />
                         <col className={styles.colMetric} />
                         <col className={styles.colMilestone} />
+                        <col className={styles.colSessions} />
+                        <col className={styles.colLast} />
                     </colgroup>
                     <thead>
                         <tr>
                             {header("name", "Patient")}
-                            {header("lastSession", "Last Session")}
-                            {header("sessions", "Sessions", styles.numeric)}
                             {GAMES.map(game => header(game.id, game.name))}
                             <th>Latest Milestone</th>
+                            {header("sessions", "Sessions", styles.numeric)}
+                            {header("lastSession", "Last Session")}
                         </tr>
                     </thead>
-                    <AnimatePresence mode="wait" initial={false}>
-                        <motion.tbody
-                            key={`${current}-${filter}-${sort.key}-${sort.descending}`}
-                            initial="hidden"
-                            animate="shown"
-                            exit="gone"
-                            variants={{ shown: { transition: { staggerChildren: 0.018 } }, gone: { opacity: 0, transition: { duration: 0.12 } } }}
-                        >
-                            {slice.map(row => (
-                                <motion.tr
-                                    key={row.patient.id}
-                                    className={styles.row}
-                                    variants={ROW}
-                                    onClick={() => navigate(`/patients/${row.patient.id}`)}
-                                    onKeyDown={(event) =>
+                    <tbody>
+                        {slice.map(row => (
+                            <motion.tr
+                                key={row.patient.id}
+                                className={styles.row}
+                                layout="position"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={ROW_TRANSITION}
+                                onClick={() => navigate(`/patients/${row.patient.id}`)}
+                                onKeyDown={(event) =>
+                                {
+                                    if (event.key === "Enter")
                                     {
-                                        if (event.key === "Enter")
-                                        {
-                                            navigate(`/patients/${row.patient.id}`);
-                                        }
-                                    }}
-                                    tabIndex={0}
-                                    aria-label={`Open ${row.patient.name}`}
-                                >
-                                    <td>
-                                        <span className={styles.patient}>
-                                            <Avatar name={row.patient.name} size={38} />
-                                            <span className={styles.identity}>
-                                                <strong>{row.patient.name}</strong>
-                                                <span>{`${row.patient.age} · ${row.patient.id}`}</span>
+                                        navigate(`/patients/${row.patient.id}`);
+                                    }
+                                }}
+                                tabIndex={0}
+                                aria-label={`Open ${row.patient.name}`}
+                            >
+                                <td>
+                                    <span className={styles.patient}>
+                                        <Avatar name={row.patient.name} size={38} />
+                                        <span className={styles.identity}>
+                                            <strong>{row.patient.name}</strong>
+                                            <span>{`${row.patient.age} · ${row.patient.id}`}</span>
+                                        </span>
+                                    </span>
+                                </td>
+                                {GAMES.map(game => (
+                                    <td key={game.id} data-label={game.name}>
+                                        <span className={styles.metric}>
+                                            <Sparkline values={row.trends[game.id]} width={72} height={24} />
+                                            <span className={styles.value}>
+                                                {row.current[game.id].toFixed(game.digits)}
+                                                <small>{game.unit}</small>
                                             </span>
                                         </span>
                                     </td>
-                                    <td data-label="Last Session">
-                                        <span className={daysSince(row.lastSession) >= 7 ? styles.idle : ""}>{relative(row.lastSession)}</span>
-                                    </td>
-                                    <td data-label="Sessions" className={styles.numeric}>{row.patient.sessions.length}</td>
-                                    {GAMES.map(game => (
-                                        <td key={game.id} data-label={game.name}>
-                                            <span className={styles.metric}>
-                                                <Sparkline values={row.trends[game.id]} width={72} height={24} />
-                                                <span className={styles.value}>
-                                                    {row.current[game.id].toFixed(game.digits)}
-                                                    <small>{game.unit}</small>
+                                ))}
+                                <td data-label="Latest Milestone" className={styles.milestone}>
+                                    {row.patient.milestones[0]
+                                        ? (
+                                                <span className={styles.badge}>
+                                                    <MilestoneBadge kind={row.patient.milestones[0].kind} size={26} />
+                                                    {row.patient.milestones[0].title}
                                                 </span>
-                                            </span>
-                                        </td>
-                                    ))}
-                                    <td data-label="Latest Milestone" className={styles.milestone}>{row.patient.milestones[0]?.title ?? "None"}</td>
-                                </motion.tr>
-                            ))}
-                        </motion.tbody>
-                    </AnimatePresence>
+                                            )
+                                        : "None"}
+                                </td>
+                                <td data-label="Sessions" className={styles.numeric}>{row.patient.sessions.length}</td>
+                                <td data-label="Last Session">
+                                    <span className={daysSince(row.lastSession) >= 7 ? styles.idle : ""}>{relative(row.lastSession)}</span>
+                                </td>
+                            </motion.tr>
+                        ))}
+                    </tbody>
                 </table>
                 {slice.length === 0 && (
                     <motion.p className={styles.empty} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

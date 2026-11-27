@@ -165,12 +165,17 @@
 
 .colPatient
 {
-    width: 22%;
+    width: 20%;
 }
 
-.colLast
+.colMetric
 {
-    width: 11%;
+    width: 13.5%;
+}
+
+.colMilestone
+{
+    width: 20%;
 }
 
 .colSessions
@@ -178,14 +183,9 @@
     width: 8%;
 }
 
-.colMetric
+.colLast
 {
-    width: 14%;
-}
-
-.colMilestone
-{
-    width: 17%;
+    width: 11.5%;
 }
 
 .table th
@@ -354,6 +354,18 @@ th.numeric .sort
     font-size: 11px;
     font-weight: 600;
     color: var(--steel);
+}
+
+.badge
+{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 650;
+    color: var(--ink);
 }
 
 .milestone

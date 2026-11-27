@@ -97,7 +97,7 @@
 {
     display: grid;
     place-items: center;
-    height: 240px;
+    height: 300px;
     border-radius: var(--radius);
     background: var(--paper);
     color: var(--steel);

@@ -4,12 +4,13 @@ import { Link } from "../Router";
 import Avatar from "../ui/Avatar";
 import Button from "../ui/Button";
 import Dialog from "../ui/Dialog";
-import { ArrowLeft, Sliders, Trophy } from "../ui/Icons";
+import { ArrowLeft, Sliders } from "../ui/Icons";
 import { EASE, RISE, SPRING, STAGGER } from "../ui/Motion";
 import { useToast } from "../ui/Toast";
 import Tooltip from "../ui/Tooltip";
 import { daysSince, fullDate, relative } from "./Format";
 import LineChart from "./LineChart";
+import MilestoneBadge from "./MilestoneBadge";
 import { findPatient, FINGER_NAMES, GAME_INFO, GAMES, saveTargets, type Game, type IPatient } from "./MockData";
 import styles from "./PatientDetail.module.css";
 
@@ -159,23 +160,26 @@ export default function PatientDetail({ id }: { id: string })
                         ))}
                     </div>
                 </div>
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={game}
-                        initial={{ opacity: 0, x: 12 }}
-                        animate={{ opacity: 1, x: 0, transition: { duration: 0.35, ease: EASE } }}
-                        exit={{ opacity: 0, x: -12, transition: { duration: 0.15 } }}
-                    >
-                        <LineChart
-                            dates={sessions.map(session => session.date)}
-                            series={series}
-                            maximum={meta.maximum}
-                            unit={meta.unit}
-                            digits={meta.digits}
-                            target={(patient.targets[game] / 100) * meta.maximum}
-                        />
-                    </motion.div>
-                </AnimatePresence>
+                <div className={styles.stage}>
+                    <AnimatePresence initial={false}>
+                        <motion.div
+                            key={game}
+                            className={styles.layer}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1, transition: { duration: 0.35, ease: EASE } }}
+                            exit={{ opacity: 0, transition: { duration: 0.2, ease: EASE } }}
+                        >
+                            <LineChart
+                                dates={sessions.map(session => session.date)}
+                                series={series}
+                                maximum={meta.maximum}
+                                unit={meta.unit}
+                                digits={meta.digits}
+                                target={(patient.targets[game] / 100) * meta.maximum}
+                            />
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
             </motion.section>
             <div className={styles.columns}>
                 <motion.section className={styles.panel} variants={RISE}>
@@ -225,7 +229,7 @@ export default function PatientDetail({ id }: { id: string })
                         <ol className={styles.milestones}>
                             {patient.milestones.map(milestone => (
                                 <li key={`${milestone.title}-${milestone.date}`}>
-                                    <span className={styles.trophy} aria-hidden="true"><Trophy /></span>
+                                    <MilestoneBadge kind={milestone.kind} size={36} />
                                     <span>
                                         <strong>{milestone.title}</strong>
                                         <small>{fullDate(milestone.date)}</small>
