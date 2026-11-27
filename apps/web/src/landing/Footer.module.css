@@ -1,0 +1,60 @@
+.footer
+{
+    padding: 0 12px 12px;
+}
+
+.panel
+{
+    display: grid;
+    gap: clamp(24px, 4vw, 48px);
+    padding: clamp(28px, 5vw, 64px) max(var(--gutter), calc((100% - var(--content)) / 2));
+    border-radius: var(--radius-large);
+    background: var(--void);
+    color: var(--white);
+    overflow: hidden;
+}
+
+.mark
+{
+    font-size: clamp(64px, 28vw, 504px);
+    line-height: 0.8;
+    color: var(--white);
+    text-shadow: 0 0 80px var(--indigo-glow);
+}
+
+.row
+{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-top: 24px;
+    border-top: 1px solid rgb(255 255 255 / 10%);
+}
+
+.row p
+{
+    max-width: 420px;
+    color: rgb(255 255 255 / 60%);
+}
+
+.links
+{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+}
+
+.links > a:first-child
+{
+    font-weight: 600;
+    color: rgb(255 255 255 / 80%);
+    transition: color 0.2s var(--ease);
+}
+
+.links > a:first-child:hover
+{
+    color: var(--white);
+}

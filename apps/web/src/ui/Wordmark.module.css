@@ -1,0 +1,14 @@
+.wordmark
+{
+    display: inline-flex;
+    font-family: var(--display);
+    font-weight: 900;
+    font-variation-settings: "ROND" 0;
+    letter-spacing: 0.02em;
+    line-height: 0.8;
+}
+
+.letter
+{
+    display: inline-block;
+}

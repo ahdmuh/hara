@@ -1,0 +1,150 @@
+:root
+{
+    --paper: #f2f2ef;
+    --white: #ffffff;
+    --mist: #e6e6e9;
+    --fog: #cfcfd5;
+    --steel: #85858f;
+    --graphite: #3b3b43;
+    --ink: #16161a;
+    --void: #050506;
+    --indigo: #5a4bff;
+    --indigo-deep: #3d2fd6;
+    --indigo-soft: #ecebff;
+    --indigo-glow: rgb(90 75 255 / 45%);
+    --danger: #e5484d;
+    --danger-deep: #b8262b;
+    --danger-soft: #fdeded;
+    --line: rgb(22 22 26 / 9%);
+    --line-strong: rgb(22 22 26 / 16%);
+    --display: "Doto Variable", ui-monospace, monospace;
+    --sans: "Figtree Variable", system-ui, sans-serif;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --radius-small: 12px;
+    --radius: 20px;
+    --radius-large: 32px;
+    --shadow-soft: 0 1px 0 rgb(255 255 255 / 90%) inset, 0 1px 2px rgb(22 22 26 / 6%), 0 8px 24px -12px rgb(22 22 26 / 14%);
+    --shadow-lift: 0 1px 0 rgb(255 255 255 / 90%) inset, 0 2px 4px rgb(22 22 26 / 6%), 0 24px 48px -20px rgb(22 22 26 / 28%);
+    --ring: 0 0 0 2px var(--white), 0 0 0 4px var(--indigo), 0 0 24px 2px var(--indigo-glow);
+    --gutter: clamp(16px, 4vw, 48px);
+    --content: 1200px;
+    color-scheme: light;
+}
+
+*,
+*::before,
+*::after
+{
+    box-sizing: border-box;
+}
+
+html
+{
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+body
+{
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+p
+{
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4
+{
+    font-weight: 750;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    text-wrap: balance;
+}
+
+p
+{
+    text-wrap: pretty;
+}
+
+a
+{
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input
+{
+    font: inherit;
+    color: inherit;
+}
+
+button
+{
+    cursor: pointer;
+}
+
+ul
+{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+img,
+video,
+svg
+{
+    display: block;
+}
+
+::selection
+{
+    background: var(--indigo);
+    color: var(--white);
+}
+
+:focus-visible
+{
+    outline: none;
+    box-shadow: var(--ring);
+}
+
+[id]
+{
+    scroll-margin-top: 96px;
+}
+
+@media (prefers-reduced-motion: reduce)
+{
+    html
+    {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after
+    {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
