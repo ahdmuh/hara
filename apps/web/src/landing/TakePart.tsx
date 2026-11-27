@@ -5,7 +5,7 @@ import { EASE } from "../ui/Motion";
 import Reveal, { RevealItem } from "../ui/Reveal";
 import styles from "./TakePart.module.css";
 
-export const CONTACT_EMAIL = "hello@projecthara.ca";
+export const CONTACT_EMAIL = "contact@projecthara.ca";
 
 const SESSION = [
     { label: "Calibration", minutes: 15 },
