@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { GAMES, type IGame } from "../Games";
-import { useIntent } from "../Intents";
+import { useInputMode, useIntent } from "../Intents";
 import { sounds } from "../Sounds";
 import { firstName } from "@hara/accounts";
 import Cartridge from "../ui/Cartridge";
@@ -55,6 +55,7 @@ export default function Home({ name, connected, initial, onPlay, onOpen }: IHome
     const now = useNow();
     const selected = GAMES[game] ?? GAMES[0];
     const [inserting, setInserting] = useState(false);
+    const mode = useInputMode();
     const [touring, setTouring] = useState(false);
 
     useEffect(() =>
@@ -119,8 +120,12 @@ export default function Home({ name, connected, initial, onPlay, onOpen }: IHome
                 return target !== dock;
             }
             case "down":
-                setZone(zone === "games" ? "dock" : "games");
-                return true;
+                if (zone === "games" || mode === "hand")
+                {
+                    setZone(zone === "games" ? "dock" : "games");
+                    return true;
+                }
+                return false;
             case "up":
                 setZone("games");
                 return zone !== "games";
