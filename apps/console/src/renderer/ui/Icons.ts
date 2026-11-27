@@ -5,6 +5,7 @@ export { ChevronRight } from "pixelarticons/react/ChevronRight.js";
 export { ChevronUp } from "pixelarticons/react/ChevronUp.js";
 export { Home } from "pixelarticons/react/Home.js";
 export { InfoBox } from "pixelarticons/react/InfoBox.js";
+export { Lightbulb } from "pixelarticons/react/Lightbulb.js";
 export { Login } from "pixelarticons/react/Login.js";
 export { Logout } from "pixelarticons/react/Logout.js";
 export { Reload } from "pixelarticons/react/Reload.js";
