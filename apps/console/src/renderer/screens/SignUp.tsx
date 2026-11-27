@@ -30,7 +30,7 @@ const FILTERS: Record<string, (value: string) => string> = {
 
 const STEPS = [
     { id: "name", title: "What Is Your Name?", note: "", type: "text", label: "Full Name" },
-    { id: "email", title: "What Is Your Email?", note: "You'll use it to sign in on another console.", type: "email", label: "Email" },
+    { id: "email", title: "What Is Your Email?", note: "", type: "email", label: "Email" },
     { id: "birthday", title: "When Is Your Birthday?", note: "", type: "text", label: "Birthday" },
     { id: "password", title: "Choose a Password", note: `At least ${MINIMUM_PASSWORD} characters.`, type: "password", label: "Password" },
     {
