@@ -21,8 +21,8 @@ const STEPS = [
 ];
 
 const TARGETS = [
-    { sign: "≤", value: "100", unit: "ms", label: "Sensor to Screen" },
-    { sign: "≥", value: "100", unit: "Hz", label: "Sample Rate" },
+    { sign: "≤", value: "100", unit: "ms", label: "Response Time" },
+    { sign: "≥", value: "100", unit: "Hz", label: "Readings per Second" },
     { sign: "±", value: "5", unit: "%", label: "Position Accuracy" },
     { sign: "±", value: "10", unit: "%", label: "Force Accuracy" },
 ];
