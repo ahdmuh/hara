@@ -171,7 +171,17 @@ export default function Login()
                 transition={{ duration: 0.9, ease: EASE }}
             >
                 <video className={styles.video} src={handVideo} poster={handPoster} autoPlay muted loop playsInline aria-hidden="true" />
-                <Wordmark className={styles.wordmark} animate delay={0.2} />
+                <div className={styles.brand}>
+                    <Wordmark className={styles.wordmark} animate delay={0.2} />
+                    <motion.span
+                        className={styles.portal}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.9, ease: EASE }}
+                    >
+                        Portal
+                    </motion.span>
+                </div>
             </motion.aside>
             <main className={styles.panel}>
                 <LinkButton to={siteHref("/")} variant="ghost" size="small" icon={<ArrowLeft />} className={styles.back}>Home</LinkButton>

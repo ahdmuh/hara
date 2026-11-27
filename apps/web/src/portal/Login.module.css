@@ -34,13 +34,29 @@
     -webkit-mask-image: radial-gradient(50% 100% at 50% 100%, #000 50%, transparent 100%);
 }
 
-.wordmark
+.brand
 {
     position: relative;
-    margin-bottom: 30%;
+    display: grid;
+    justify-items: center;
+    gap: 14px;
+    margin-bottom: 46%;
+}
+
+.wordmark
+{
     font-size: clamp(52px, 7.6vw, 124px);
     color: var(--white);
-    text-shadow: 0 0 28px rgb(255 255 255 / 14%);
+    text-shadow: 0 0 22px rgb(10 132 255 / 30%), 0 0 60px rgb(10 132 255 / 18%);
+}
+
+.portal
+{
+    font-size: clamp(15px, 1.4vw, 18px);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: rgb(255 255 255 / 55%);
+    text-shadow: 0 0 10px var(--void), 0 0 20px var(--void);
 }
 
 .panel
@@ -155,12 +171,16 @@
 
     .video
     {
-        height: 80%;
+        height: 60%;
+    }
+
+    .brand
+    {
+        margin-bottom: 24%;
     }
 
     .wordmark
     {
-        margin-bottom: 18%;
         font-size: 16vw;
     }
 
