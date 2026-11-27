@@ -3,7 +3,7 @@
     display: grid;
     width: min(var(--content), calc(100% - 2 * var(--gutter)));
     margin: 0 auto;
-    padding-top: clamp(96px, 14vw, 180px);
+    padding-top: var(--section);
 }
 
 .statement
@@ -64,7 +64,7 @@
 
 .problem
 {
-    padding: clamp(40px, 6vw, 88px) 0 clamp(64px, 9vw, 128px);
+    padding: clamp(40px, 6vw, 88px) 0 var(--section);
 }
 
 .problem p

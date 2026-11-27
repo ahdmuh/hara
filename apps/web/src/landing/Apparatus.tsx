@@ -76,7 +76,7 @@ export default function Apparatus()
         <div ref={ref} className={`${styles.apparatus} ${active ? styles.focused : ""}`}>
             <Reveal className={styles.head} group>
                 <RevealItem as="header">
-                    <h2>Meet the Device</h2>
+                    <h2>How It Works</h2>
                 </RevealItem>
                 <RevealItem>
                     <p>A tabletop device that measures, assists and resists each finger on its own.</p>
@@ -126,8 +126,12 @@ export default function Apparatus()
                             <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#16161a" floodOpacity="0.22" />
                         </filter>
                     </defs>
-                    <g className={`${styles.part} ${on("base")}`}>
+                    <g aria-hidden="true">
                         <rect className={styles.housing} x="60" y="384" width="480" height="112" rx="32" filter="url(#haraShadow)" />
+                        <circle className={styles.stopRing} cx="508" cy="356" r="24" filter="url(#haraSoft)" />
+                    </g>
+                    <g className={`${styles.part} ${on("base")}`}>
+                        <rect className={styles.housing} x="60" y="384" width="480" height="112" rx="32" />
                         <rect className={styles.bevel} x="62" y="386" width="476" height="108" rx="30" />
                         {MOTORS.map(x => (
                             <g key={x}>
@@ -156,9 +160,23 @@ export default function Apparatus()
                         <rect className={styles.palm} x="196" y="300" width="208" height="76" rx="38" />
                         <rect className={styles.palmPad} x="214" y="314" width="172" height="48" rx="24" />
                     </g>
+                    <g filter="url(#haraSoft)" aria-hidden="true">
+                        {RAILS.map((rail, index) => (
+                            <rect
+                                key={index}
+                                className={styles.railShadow}
+                                transform={`translate(${rail.x} ${rail.y}) rotate(${rail.angle})`}
+                                x="-12"
+                                y={-rail.length}
+                                width="24"
+                                height={rail.length}
+                                rx="12"
+                            />
+                        ))}
+                    </g>
                     {RAILS.map((rail, index) => (
                         <g key={index} transform={`translate(${rail.x} ${rail.y}) rotate(${rail.angle})`}>
-                            <g className={`${styles.part} ${on("rails")}`} filter="url(#haraSoft)">
+                            <g className={`${styles.part} ${on("rails")}`}>
                                 <rect className={styles.rail} x="-12" y={-rail.length} width="24" height={rail.length} rx="12" />
                                 <rect className={styles.groove} x="-2" y={-rail.length + 14} width="4" height={rail.length - 28} rx="2" />
                             </g>
@@ -167,7 +185,8 @@ export default function Apparatus()
                                     className={styles.cuff}
                                     style={{ "--from": `${-rail.length + 34}px`, "--to": `${-rail.length + 34 + rail.travel}px`, "--i": index } as CSSProperties}
                                 >
-                                    <rect className={styles.cuffBody} x="-17" y="-15" width="34" height="30" rx="11" filter="url(#haraSoft)" />
+                                    <rect className={styles.cuffShadow} x="-16" y="-11" width="32" height="30" rx="11" />
+                                    <rect className={styles.cuffBody} x="-17" y="-15" width="34" height="30" rx="11" />
                                     <rect className={styles.cuffShine} x="-12" y="-12" width="24" height="4" rx="2" />
                                     <circle className={styles.led} cx="0" cy="3" r="3.5" />
                                 </g>
@@ -175,7 +194,7 @@ export default function Apparatus()
                         </g>
                     ))}
                     <g className={`${styles.part} ${on("stop")}`}>
-                        <circle className={styles.stopRing} cx="508" cy="356" r="24" filter="url(#haraSoft)" />
+                        <circle className={styles.stopRing} cx="508" cy="356" r="24" />
                         <circle className={styles.stop} cx="508" cy="356" r="16" />
                         <ellipse className={styles.stopShine} cx="503" cy="350" rx="6" ry="3.5" />
                     </g>

@@ -31,6 +31,7 @@
     --shadow-lift: 0 1px 0 rgb(255 255 255 / 90%) inset, 0 2px 4px rgb(22 22 26 / 6%), 0 24px 48px -20px rgb(22 22 26 / 28%);
     --gutter: clamp(16px, 4vw, 48px);
     --content: 1200px;
+    --section: clamp(88px, 11vw, 152px);
     color-scheme: only light;
 }
 
