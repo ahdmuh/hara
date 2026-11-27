@@ -1,0 +1,53 @@
+.note
+{
+    color: var(--graphite);
+}
+
+.pin
+{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin: 24px 0 12px;
+    padding: 18px;
+    border-radius: 18px;
+    background: var(--void);
+    box-shadow: 0 0 40px rgb(0 0 0 / 80%) inset;
+}
+
+.pin span
+{
+    display: grid;
+    place-items: center;
+    font-family: var(--display);
+    font-size: clamp(36px, 9vw, 52px);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--white);
+    text-shadow: 0 0 20px var(--indigo-glow);
+    user-select: all;
+    transition: color 0.3s var(--ease), opacity 0.3s var(--ease);
+}
+
+.expired span
+{
+    opacity: 0.3;
+}
+
+.timer
+{
+    min-height: 24px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 650;
+    font-variant-numeric: tabular-nums;
+    color: var(--steel);
+}
+
+.actions
+{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+}
