@@ -1,0 +1,362 @@
+.stage
+{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    gap: 1.6rem;
+    width: min(64rem, 100%);
+    margin: 0 auto;
+}
+
+.timelines
+{
+    display: grid;
+    min-width: 0;
+    gap: 0.8rem;
+    padding: 1.4rem 1.8rem;
+    border-radius: 1.8rem;
+    background: var(--white);
+    box-shadow: var(--shadow-soft), 0 0 0 1px var(--line) inset;
+}
+
+.timeline
+{
+    display: grid;
+    grid-template-columns: 12rem 1fr;
+    align-items: center;
+    gap: 1.6rem;
+    min-height: 4.2rem;
+}
+
+.timeline + .timeline
+{
+    border-top: 1px solid var(--line);
+    padding-top: 0.8rem;
+}
+
+.label
+{
+    display: grid;
+    gap: 0.1rem;
+}
+
+.label strong
+{
+    font-size: 1.1rem;
+}
+
+.value
+{
+    font-family: var(--figure);
+    font-size: 1.8rem;
+    font-weight: 900;
+    font-variation-settings: "ROND" 0;
+    line-height: 1;
+    color: var(--fog);
+}
+
+.track
+{
+    position: relative;
+    height: 4.6rem;
+    margin-right: 5rem;
+}
+
+.line
+{
+    position: absolute;
+    left: 0.6rem;
+    right: 0;
+    top: 2.4rem;
+    height: 2px;
+    border-radius: 2px;
+    background: repeating-linear-gradient(90deg, var(--fog) 0 0.5rem, transparent 0.5rem 0.9rem);
+    transform-origin: left;
+}
+
+.start
+{
+    position: absolute;
+    left: 0;
+    top: 1.85rem;
+    display: grid;
+    justify-items: start;
+    gap: 0.35rem;
+}
+
+.node
+{
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 50%;
+    background: var(--blue);
+    box-shadow: 0 0 0 0.25rem var(--blue-soft), 0 0.3rem 0.8rem -0.2rem var(--blue-glow);
+}
+
+.start small
+{
+    font-size: 0.8rem;
+    font-weight: 650;
+    white-space: nowrap;
+    color: var(--graphite);
+}
+
+.reached
+{
+    position: absolute;
+    left: 0.6rem;
+    right: 0;
+    top: 2.4rem;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--blue);
+    transform-origin: left;
+}
+
+.flag
+{
+    position: absolute;
+    top: 0;
+    display: grid;
+    justify-items: start;
+    translate: -1px 0;
+}
+
+.pole
+{
+    position: absolute;
+    left: 0;
+    top: 0.2rem;
+    width: 2px;
+    height: 2.4rem;
+    border-radius: 2px;
+    background: var(--graphite);
+}
+
+[data-metric="range"] .pennant
+{
+    background: #fed7aa;
+    box-shadow: 0 0 0 1.5px #fb923c inset, var(--shadow-soft);
+}
+
+[data-metric="strength"] .pennant
+{
+    background: #fecaca;
+    box-shadow: 0 0 0 1.5px #f87171 inset, var(--shadow-soft);
+}
+
+[data-metric="speed"] .pennant
+{
+    background: #bae6fd;
+    box-shadow: 0 0 0 1.5px #38bdf8 inset, var(--shadow-soft);
+}
+
+.pennant
+{
+    position: relative;
+    left: 2px;
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 1.7rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+    background: var(--white);
+    box-shadow: var(--shadow-soft), 0 0 0 1px var(--line) inset;
+    transform-origin: left center;
+    animation: wave 2.6s ease-in-out infinite;
+}
+
+.pennant svg
+{
+    width: 1.3rem;
+    height: 1.3rem;
+}
+
+.flag small
+{
+    position: absolute;
+    top: 2.9rem;
+    left: 0;
+    translate: -50% 0;
+    font-size: 0.75rem;
+    font-weight: 650;
+    white-space: nowrap;
+    color: var(--steel);
+}
+
+@keyframes wave
+{
+    0%,
+    100%
+    {
+        transform: skewY(0deg) scaleX(1);
+    }
+
+    50%
+    {
+        transform: skewY(-4deg) scaleX(0.94);
+    }
+}
+
+.milestones
+{
+    display: grid;
+    min-width: 0;
+    gap: 1rem;
+}
+
+.milestones h2
+{
+    font-size: 1.3rem;
+}
+
+.shelf
+{
+    --bleed: calc((100vw - min(64rem, 100vw - 5.2rem)) / 2);
+    position: relative;
+    min-width: 0;
+    margin: 0 calc(var(--bleed) * -1);
+}
+
+.shelf::after
+{
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 7rem;
+    background: linear-gradient(90deg, transparent, var(--paper) 80%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s var(--ease);
+}
+
+.fading::after
+{
+    opacity: 1;
+}
+
+.badges
+{
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 8.4rem;
+    gap: 0.8rem;
+    padding: 0.4rem var(--bleed) 0.6rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 var(--bleed);
+    scrollbar-width: none;
+}
+
+.badges::-webkit-scrollbar
+{
+    display: none;
+}
+
+.badges li
+{
+    scroll-snap-align: start;
+    display: grid;
+    justify-items: center;
+    align-content: start;
+    gap: 0.6rem;
+    padding: 1.1rem 0.5rem 1rem;
+    border-radius: 1.3rem;
+    background: var(--white);
+    box-shadow: var(--shadow-soft), 0 0 0 1px var(--line) inset;
+    text-align: center;
+}
+
+.badge
+{
+    display: grid;
+    place-items: center;
+    width: 3.6rem;
+    height: 3.6rem;
+}
+
+.badge svg
+{
+    width: 100%;
+    height: 100%;
+}
+
+.locked .badge
+{
+    filter: grayscale(1);
+    opacity: 0.3;
+}
+
+.title
+{
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--graphite);
+}
+
+.locked .title
+{
+    color: var(--steel);
+}
+
+.mystery .badge
+{
+    border-radius: 50%;
+    background: var(--paper);
+    box-shadow: 0 0 0 1.5px var(--fog) inset;
+}
+
+.question
+{
+    font-family: var(--display);
+    font-size: 1.8rem;
+    color: var(--fog);
+}
+
+.mystery .title
+{
+    letter-spacing: 0.1em;
+    color: var(--fog);
+}
+
+.more
+{
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    right: 1.6rem;
+    display: grid;
+    place-items: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    margin-top: -1.4rem;
+    border: 0;
+    border-radius: 50%;
+    background: var(--white);
+    box-shadow: var(--shadow-lift), 0 0 0 1px var(--line) inset;
+    color: var(--blue);
+}
+
+.more svg
+{
+    width: 1.4rem;
+    height: 1.4rem;
+    animation: nudge 1.8s ease-in-out infinite;
+}
+
+@keyframes nudge
+{
+    0%,
+    100%
+    {
+        transform: translateX(0);
+    }
+
+    50%
+    {
+        transform: translateX(0.25rem);
+    }
+}

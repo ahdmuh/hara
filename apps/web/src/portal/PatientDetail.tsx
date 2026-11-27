@@ -14,7 +14,7 @@ import { useToast } from "../ui/Toast";
 import Tooltip from "../ui/Tooltip";
 import { daysSince, fullDate, relative } from "./Format";
 import LineChart from "./LineChart";
-import MilestoneBadge from "./MilestoneBadge";
+import { MilestoneBadge } from "@hara/badges";
 import { FINGER_NAMES, GAME_INFO, GAMES, MILESTONE_TITLES, type Game } from "./Games";
 import styles from "./PatientDetail.module.css";
 

@@ -1,0 +1,239 @@
+.home
+{
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    overflow: hidden;
+}
+
+.top
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3rem 2.6rem 0;
+}
+
+.brand
+{
+    font-size: 1.5rem;
+}
+
+.meta
+{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.greeting
+{
+    font-size: 1rem;
+    font-weight: 650;
+    color: var(--graphite);
+}
+
+.stage
+{
+    display: grid;
+    grid-template-rows: 1fr auto auto 1fr;
+    justify-items: center;
+    min-height: 0;
+}
+
+.tagSlot
+{
+    grid-row: 2;
+    display: grid;
+    place-items: end center;
+    min-height: 6.4rem;
+    margin-bottom: 5.2rem;
+}
+
+.tag
+{
+    position: relative;
+    display: grid;
+    gap: 0.25rem;
+    min-width: 18rem;
+    padding: 1rem 1.6rem 1.1rem;
+    border-radius: 1.2rem;
+    background: var(--white);
+    box-shadow: var(--shadow-lift), 0 0 0 1px var(--line) inset;
+    text-align: center;
+    transform-origin: bottom center;
+    transition: opacity 0.4s var(--ease);
+}
+
+.tag::after
+{
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -0.45rem;
+    width: 1rem;
+    height: 1rem;
+    translate: -50% 0;
+    rotate: 45deg;
+    border-radius: 0.2rem;
+    background: var(--white);
+    box-shadow: 1px 1px 0 var(--line);
+}
+
+.tag strong
+{
+    font-size: 1.35rem;
+    font-weight: 750;
+    letter-spacing: -0.015em;
+}
+
+.tag span
+{
+    font-size: 0.95rem;
+    color: var(--steel);
+}
+
+.quiet
+{
+    opacity: 0.5;
+}
+
+.row
+{
+    grid-row: 3;
+    display: flex;
+    align-items: center;
+    gap: 4.5rem;
+}
+
+.pips
+{
+    grid-row: 4;
+    align-self: start;
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 3.4rem;
+}
+
+.pips li
+{
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 1rem;
+    background: var(--fog);
+    transition: width 0.5s var(--ease), background-color 0.5s var(--ease);
+}
+
+.pips .pip
+{
+    width: 1.6rem;
+    background: var(--blue);
+}
+
+.dock
+{
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: end;
+    height: 10rem;
+    padding: 0 2.6rem 1.4rem;
+}
+
+.shape
+{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.fill
+{
+    fill: var(--white);
+}
+
+.edge
+{
+    fill: none;
+    stroke: var(--blue);
+    stroke-width: 2.5;
+    vector-effect: non-scaling-stroke;
+}
+
+.round
+{
+    position: relative;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: 0.2rem;
+    width: 5.6rem;
+    height: 5.6rem;
+    border: 0;
+    border-radius: 50%;
+    background: linear-gradient(180deg, var(--white) 0%, #f1f1f3 100%);
+    box-shadow: var(--shadow-soft), 0 0 0 0.18rem var(--mist);
+    color: var(--graphite);
+    font-size: 0.75rem;
+    font-weight: 700;
+    transition: box-shadow 0.35s var(--ease), color 0.35s var(--ease);
+}
+
+.round svg
+{
+    width: 1.7rem;
+    height: 1.7rem;
+}
+
+.settings
+{
+    grid-column: 1;
+}
+
+.progress
+{
+    grid-column: 3;
+}
+
+.active
+{
+    color: var(--blue);
+    box-shadow: var(--shadow-lift), 0 0 0 0.22rem var(--blue), 0 0 1.6rem -0.2rem var(--blue-glow);
+}
+
+.clock
+{
+    position: absolute;
+    left: 50%;
+    top: 0.7rem;
+    translate: -50% 0;
+    display: grid;
+    justify-items: center;
+}
+
+.time
+{
+    font-family: var(--figure);
+    font-size: 2.3rem;
+    font-weight: 900;
+    font-variation-settings: "ROND" 0;
+    line-height: 1.1;
+    color: var(--ink);
+}
+
+.date
+{
+    font-size: 0.9rem;
+    font-weight: 650;
+    color: var(--steel);
+}
+
+.hints
+{
+    position: relative;
+    grid-column: 2;
+    align-self: end;
+    padding-bottom: 0.3rem;
+}

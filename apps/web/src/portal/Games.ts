@@ -14,12 +14,4 @@ export const GAMES: { id: Game; name: string; unit: string; maximum: number; dig
 
 export const GAME_INFO = Object.fromEntries(GAMES.map(game => [game.id, game])) as Record<Game, (typeof GAMES)[number]>;
 
-export const MILESTONE_TITLES: Record<MilestoneKind, string> = {
-    linked: "Linked to Clinician",
-    first: "First Session",
-    sessions10: "10 Sessions",
-    sessions25: "25 Sessions",
-    sessions50: "50 Sessions",
-    difficulty: "Unlocked Medium Difficulty",
-    range: "Range of Motion Above 60%",
-};
+export { MILESTONE_TITLES } from "@hara/badges";

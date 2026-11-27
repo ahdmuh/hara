@@ -1,0 +1,34 @@
+.wordmark
+{
+    display: inline-flex;
+    align-items: baseline;
+    font-family: var(--display);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    color: var(--white);
+    filter: drop-shadow(0 0.04em 0.06em rgb(10 132 255 / 22%)) drop-shadow(0 0.02em 0.02em rgb(22 22 26 / 12%));
+    -webkit-text-stroke: var(--wordmark-stroke);
+    paint-order: stroke fill;
+}
+
+.letter
+{
+    display: inline-block;
+}
+
+.trademark
+{
+    align-self: baseline;
+    width: 0;
+    margin-left: 0.06em;
+    overflow: visible;
+    white-space: nowrap;
+    font-family: var(--sans);
+    font-size: max(0.075em, 0.34rem);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    color: var(--steel);
+    -webkit-text-stroke: 0;
+}

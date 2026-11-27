@@ -26,8 +26,14 @@
       "name": "@hara/console",
       "version": "0.1.0",
       "dependencies": {
+        "@fontsource-variable/doto": "5.3.0",
+        "@fontsource-variable/figtree": "5.3.0",
+        "@fontsource/righteous": "5.3.0",
+        "@hara/badges": "workspace:*",
         "@hara/input": "workspace:*",
         "excalibur": "1.0.1",
+        "motion": "14.14.0",
+        "pixelarticons": "2.4.2",
         "react": "19.3.1",
         "react-dom": "19.3.1",
         "serialport": "13.0.0",
@@ -51,6 +57,7 @@
         "@fontsource-variable/figtree": "5.3.0",
         "@fontsource/righteous": "5.3.0",
         "@hara/accounts": "workspace:*",
+        "@hara/badges": "workspace:*",
         "convex": "1.51.0",
         "motion": "14.14.0",
         "pixelarticons": "2.4.2",
@@ -67,6 +74,16 @@
     "packages/accounts": {
       "name": "@hara/accounts",
       "version": "0.1.0",
+    },
+    "packages/badges": {
+      "name": "@hara/badges",
+      "version": "0.1.0",
+      "devDependencies": {
+        "@types/react": "19.3.3",
+      },
+      "peerDependencies": {
+        "react": "19.3.1",
+      },
     },
     "packages/email": {
       "name": "@hara/email",
@@ -207,6 +224,8 @@
     "@fontsource/righteous": ["@fontsource/righteous@5.3.0", "", {}, "sha512-xr3w0E1jtc7xoXLfgJrcaKqWjvh5XiAAthVLrl9v9HKC7TfwMy3nARytetfi2GIgo51+aWsEJ51Uyd3XEXbj/A=="],
 
     "@hara/accounts": ["@hara/accounts@workspace:packages/accounts"],
+
+    "@hara/badges": ["@hara/badges@workspace:packages/badges"],
 
     "@hara/console": ["@hara/console@workspace:apps/console"],
 

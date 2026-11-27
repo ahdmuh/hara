@@ -1,0 +1,16 @@
+.rolling
+{
+    display: inline-flex;
+}
+
+.slot
+{
+    display: inline-grid;
+    overflow: hidden;
+}
+
+.character
+{
+    grid-area: 1 / 1;
+    display: inline-block;
+}

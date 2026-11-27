@@ -1,0 +1,60 @@
+.stack
+{
+    position: fixed;
+    z-index: 90;
+    top: 1.4rem;
+    left: 50%;
+    display: grid;
+    justify-items: center;
+    gap: 0.6rem;
+    translate: -50% 0;
+    pointer-events: none;
+}
+
+.stack li
+{
+    pointer-events: auto;
+}
+
+.toast
+{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 0.7rem 1.3rem 0.7rem 0.75rem;
+    border-radius: 999px;
+    background: var(--white);
+    box-shadow: var(--shadow-lift), 0 0 0 1px var(--line) inset;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+}
+
+.icon
+{
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    color: var(--white);
+}
+
+.icon svg
+{
+    width: 1.15rem;
+    height: 1.15rem;
+}
+
+.error .icon
+{
+    background: #e5484d;
+    box-shadow: 0 0.4rem 1rem -0.4rem rgb(229 72 77 / 60%);
+}
+
+.info .icon
+{
+    background: var(--blue);
+    box-shadow: 0 0.4rem 1rem -0.4rem var(--blue-glow);
+}

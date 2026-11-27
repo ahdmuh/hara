@@ -1,0 +1,135 @@
+.count
+{
+    font-size: 0.95rem;
+    font-weight: 650;
+    color: var(--steel);
+}
+
+.stage
+{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 4rem;
+    width: min(72rem, 100%);
+    margin: 0 auto;
+}
+
+.step,
+.done
+{
+    display: grid;
+    gap: 1.6rem;
+    justify-items: start;
+}
+
+.visual
+{
+    width: min(17rem, 100%);
+}
+
+.hold
+{
+    display: block;
+    width: min(22rem, 100%);
+    height: 0.35rem;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: var(--mist);
+}
+
+.meter
+{
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--blue);
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+.check
+{
+    display: grid;
+    place-items: center;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background: var(--blue);
+    color: var(--white);
+    box-shadow: 0 0.8rem 2rem -0.6rem var(--blue-glow);
+}
+
+.check svg
+{
+    width: 2.6rem;
+    height: 2.6rem;
+}
+
+.fingers
+{
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1rem;
+    height: min(30rem, 58vh);
+    padding: 1.6rem;
+    border-radius: 2rem;
+    background: var(--white);
+    box-shadow: var(--shadow-lift), 0 0 0 1px var(--line) inset;
+    transition: opacity 0.6s var(--ease);
+}
+
+.rest
+{
+    opacity: 0.4;
+}
+
+.fingers li
+{
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+    gap: 0.8rem;
+    justify-items: center;
+}
+
+.column
+{
+    position: relative;
+    width: 100%;
+    max-width: 3.2rem;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: var(--paper);
+    box-shadow: 0 0 0 1px var(--line) inset;
+}
+
+.column::after
+{
+    content: "";
+    position: absolute;
+    left: 0.4rem;
+    right: 0.4rem;
+    top: 50%;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--line-strong);
+}
+
+.bar
+{
+    position: absolute;
+    inset: 0;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #4aa3ff 0%, var(--blue) 100%);
+    transform: scaleY(0.5);
+    transform-origin: bottom;
+    will-change: transform;
+}
+
+.finger
+{
+    font-size: 0.85rem;
+    font-weight: 650;
+    text-transform: capitalize;
+    color: var(--steel);
+}

@@ -1,0 +1,122 @@
+.screen
+{
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(80% 80% at 50% 50%, #121218 0%, var(--void) 100%);
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 5%) inset, 0 0 2.4rem rgb(0 0 0 / 80%) inset;
+}
+
+.art
+{
+    width: 64%;
+    height: auto;
+    overflow: visible;
+}
+
+.arc
+{
+    fill: none;
+    stroke: rgb(255 255 255 / 10%);
+    stroke-width: 6;
+    stroke-linecap: round;
+}
+
+.sweep
+{
+    fill: none;
+    stroke: var(--blue);
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 14;
+    animation: sweep 2.8s var(--ease) infinite alternate;
+}
+
+.tick
+{
+    fill: rgb(255 255 255 / 35%);
+}
+
+.bar
+{
+    fill: rgb(255 255 255 / 10%);
+}
+
+.band
+{
+    fill: rgb(10 132 255 / 14%);
+    stroke: rgb(10 132 255 / 70%);
+    stroke-width: 1;
+    stroke-dasharray: 3 2;
+}
+
+.fill
+{
+    fill: var(--white);
+    transform-box: fill-box;
+    transform-origin: left;
+    transform: scaleX(0.74);
+    animation: press 3.2s var(--ease) infinite;
+}
+
+.beat
+{
+    fill: rgb(255 255 255 / 12%);
+    animation: beat 2.4s linear infinite;
+    animation-delay: calc(var(--i) * 0.24s);
+}
+
+.still *
+{
+    animation-play-state: paused;
+}
+
+@keyframes sweep
+{
+    from
+    {
+        stroke-dashoffset: 78;
+    }
+
+    to
+    {
+        stroke-dashoffset: 14;
+    }
+}
+
+@keyframes press
+{
+    0%,
+    100%
+    {
+        transform: scaleX(0.15);
+    }
+
+    40%,
+    70%
+    {
+        transform: scaleX(0.74);
+    }
+
+    55%
+    {
+        transform: scaleX(0.79);
+    }
+}
+
+@keyframes beat
+{
+    0%,
+    20%,
+    100%
+    {
+        fill: rgb(255 255 255 / 12%);
+    }
+
+    8%
+    {
+        fill: var(--blue);
+    }
+}

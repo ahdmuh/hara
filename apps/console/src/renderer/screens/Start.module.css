@@ -1,0 +1,69 @@
+.center
+{
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 0.8rem;
+}
+
+.mark
+{
+    font-size: 9rem;
+    font-weight: inherit;
+}
+
+.press
+{
+    margin-top: 1.4rem;
+}
+
+.prompt
+{
+    display: inline-flex;
+    padding: 0.9rem 2.2rem;
+    border-radius: 999px;
+    background: var(--white);
+    box-shadow: var(--shadow-soft), 0 0 0 1px var(--line) inset;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--blue);
+    animation: breathe 2.4s ease-in-out infinite;
+}
+
+.foot
+{
+    display: grid;
+    justify-items: center;
+    gap: 0.8rem;
+}
+
+.version
+{
+    min-height: 1em;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--fog);
+}
+
+.words
+{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+@keyframes breathe
+{
+    0%,
+    100%
+    {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50%
+    {
+        opacity: 0.55;
+        transform: scale(0.98);
+    }
+}

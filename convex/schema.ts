@@ -21,6 +21,8 @@ export const milestoneKind = v.union(
     v.literal("sessions50"),
     v.literal("difficulty"),
     v.literal("range"),
+    v.literal("strength"),
+    v.literal("speed"),
 );
 
 export const targets = v.object({ rangeOfMotion: v.number(), strength: v.number(), speed: v.number() });
