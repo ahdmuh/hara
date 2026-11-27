@@ -53,3 +53,5 @@ Every PR must reference its associated story ID (`HARA-<id>`) in the branch name
 ```
 
 Testing should cover the story's acceptance criteria.
+
+Installers are built by the **Release** workflow, which runs only when started from the Actions tab or when a `v*` tag is pushed. A tag also publishes a GitHub release. Participant install steps are in [INSTALLING.md](INSTALLING.md).
