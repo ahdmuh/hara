@@ -25,6 +25,8 @@ const FAILURES: Record<string, [string, string]> = {
     NOT_FOUND: ["Clinician Not Found", "Refresh the page and try again."],
 };
 
+const EMPTY_TRANSITION = { duration: 0.4, ease: EASE };
+
 type Pending = { kind: "reset" | "resend"; clinician: IClinician } | null;
 
 function Clinicians({ inviting, setInviting }: { inviting: boolean; setInviting: (open: boolean) => void })
@@ -140,7 +142,7 @@ function Clinicians({ inviting, setInviting }: { inviting: boolean; setInviting:
             <div className={styles.head}>
                 <h1>
                     Clinicians
-                    <span className={styles.count}>{data === undefined ? "" : clinicians.length}</span>
+                    {clinicians.length > 0 && <span className={styles.count}>{clinicians.length}</span>}
                 </h1>
                 <div className={styles.tools}>
                     <label className={styles.search}>
@@ -150,52 +152,59 @@ function Clinicians({ inviting, setInviting }: { inviting: boolean; setInviting:
                     <Button icon={<UserPlus />} onClick={() => setInviting(true)}>Add Clinician</Button>
                 </div>
             </div>
-            <ul className={styles.list}>
-                <AnimatePresence initial={false}>
-                    {visible.map(clinician => (
-                        <motion.li
-                            key={clinician.id}
-                            layout
-                            className={styles.row}
-                            initial={{ opacity: 0, y: -8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.35, ease: EASE }}
-                        >
-                            <span className={styles.person}>
-                                <Avatar name={clinician.name} size={40} />
-                                <span>
-                                    <strong>{clinician.name}</strong>
-                                    <small>{clinician.email}</small>
-                                </span>
-                            </span>
-                            <span className={`${styles.status} ${styles[clinician.status]}`}>
-                                <i aria-hidden="true" />
-                                {clinician.status === "active" ? "Active" : "Invited"}
-                            </span>
-                            <span className={styles.meta}>
-                                <small>Added</small>
-                                {fullDate(clinician.addedAt)}
-                            </span>
-                            <span className={styles.meta}>
-                                <small>Last Active</small>
-                                {clinician.lastActiveAt === undefined ? "Not Yet" : relative(clinician.lastActiveAt)}
-                            </span>
-                            <Button
-                                variant="ghost"
-                                size="small"
-                                icon={clinician.status === "active" ? <Mail /> : <Send />}
-                                onClick={() => setPending({ kind: clinician.status === "active" ? "reset" : "resend", clinician })}
+            {visible.length > 0 && (
+                <ul className={styles.list}>
+                    <AnimatePresence initial={false}>
+                        {visible.map(clinician => (
+                            <motion.li
+                                key={clinician.id}
+                                layout
+                                className={styles.row}
+                                initial={{ opacity: 0, y: -8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.35, ease: EASE }}
                             >
-                                {clinician.status === "active" ? "Send Password Reset" : "Resend Invitation"}
-                            </Button>
-                        </motion.li>
-                    ))}
-                </AnimatePresence>
-            </ul>
-            {data !== undefined && visible.length === 0 && (
-                <p className={styles.empty}>{clinicians.length === 0 ? "No clinicians yet. Add your first one to send them an invitation." : "No clinicians match your search."}</p>
+                                <span className={styles.person}>
+                                    <Avatar name={clinician.name} size={40} />
+                                    <span>
+                                        <strong>{clinician.name}</strong>
+                                        <small>{clinician.email}</small>
+                                    </span>
+                                </span>
+                                <span className={`${styles.status} ${styles[clinician.status]}`}>
+                                    <i aria-hidden="true" />
+                                    {clinician.status === "active" ? "Active" : "Invited"}
+                                </span>
+                                <span className={styles.meta}>
+                                    <small>Added</small>
+                                    {fullDate(clinician.addedAt)}
+                                </span>
+                                <span className={styles.meta}>
+                                    <small>Last Active</small>
+                                    {clinician.lastActiveAt === undefined ? "Not Yet" : relative(clinician.lastActiveAt)}
+                                </span>
+                                <Button
+                                    variant="ghost"
+                                    size="small"
+                                    icon={clinician.status === "active" ? <Mail /> : <Send />}
+                                    onClick={() => setPending({ kind: clinician.status === "active" ? "reset" : "resend", clinician })}
+                                >
+                                    {clinician.status === "active" ? "Send Password Reset" : "Resend Invitation"}
+                                </Button>
+                            </motion.li>
+                        ))}
+                    </AnimatePresence>
+                </ul>
             )}
+            {data !== undefined && clinicians.length === 0 && (
+                <motion.div className={styles.empty} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={EMPTY_TRANSITION}>
+                    <strong>No Clinicians Yet</strong>
+                    <p>Add a clinician to send them an invitation with a temporary password.</p>
+                    <Button icon={<UserPlus />} onClick={() => setInviting(true)}>Add Clinician</Button>
+                </motion.div>
+            )}
+            {clinicians.length > 0 && visible.length === 0 && <p className={styles.none}>No clinicians match your search.</p>}
             <Dialog open={inviting} title="Add Clinician" onClose={closeInvite}>
                 <form className={styles.form} onSubmit={invite} noValidate>
                     <p className={styles.note}>They receive an email with a temporary password and set their own when they first sign in.</p>

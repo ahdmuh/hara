@@ -34,6 +34,20 @@ export default function Login()
     const [invalid, setInvalid] = useState<FieldName[]>([]);
     const [values, setValues] = useState(EMPTY);
     const setup = account?.passwordChangeRequired === true;
+    const [ready, setReady] = useState(false);
+    const [shownSetup, setShownSetup] = useState(setup);
+
+    if (!loading && !ready)
+    {
+        setReady(true);
+    }
+    if (setup !== shownSetup)
+    {
+        setShownSetup(setup);
+        setValues(EMPTY);
+        setInvalid([]);
+        setBusy(false);
+    }
 
     useEffect(() =>
     {
@@ -57,20 +71,19 @@ export default function Login()
         setAttempt(value => value + 1);
     }
 
-    async function submitSignIn(): Promise<void>
+    async function submitSignIn(): Promise<boolean>
     {
         const email = normalizeEmail(values.email);
         if (!email || !values.password)
         {
             fail("Missing Details", "Enter your email and password.", [!email ? "email" : "password"]);
-            return;
+            return false;
         }
         const result = await signIn({ username: email, password: values.password });
         if (result.status === "complete")
         {
             setTemporary(values.password);
-            setValues(EMPTY);
-            return;
+            return true;
         }
         setValues(current => ({ ...current, password: "" }));
         const error = result.userError.error;
@@ -86,6 +99,7 @@ export default function Login()
         {
             fail("Incorrect Email or Password", "Check your details and try again.", ["email", "password"]);
         }
+        return false;
     }
 
     async function submitSetup(): Promise<void>
@@ -134,8 +148,15 @@ export default function Login()
             return;
         }
         setBusy(true);
-        await (setup ? submitSetup() : submitSignIn());
-        setBusy(false);
+        if (setup)
+        {
+            await submitSetup();
+            setBusy(false);
+        }
+        else if (!(await submitSignIn()))
+        {
+            setBusy(false);
+        }
     }
 
     const isInvalid = (key: FieldName) => invalid.includes(key);
@@ -156,7 +177,7 @@ export default function Login()
                 <LinkButton to={siteHref("/")} variant="ghost" size="small" icon={<ArrowLeft />} className={styles.back}>Home</LinkButton>
                 <div className={styles.card}>
                     <AnimatePresence mode="wait" initial={false}>
-                        {!loading && (
+                        {ready && (
                             <motion.form
                                 key={setup ? "setup" : "signIn"}
                                 className={styles.form}

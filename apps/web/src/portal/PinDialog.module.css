@@ -28,10 +28,11 @@
 .pin span
 {
     font-family: var(--display);
+    font-weight: 600;
     font-size: clamp(30px, 8vw, 44px);
     letter-spacing: 0.12em;
     color: var(--white);
-    text-shadow: 0 0 24px var(--blue-glow);
+    text-shadow: 0 0 28px rgb(255 255 255 / 14%);
     user-select: all;
 }
 
@@ -111,6 +112,7 @@
 .code
 {
     font-family: var(--display);
+    font-weight: 600;
     font-size: 15px;
     letter-spacing: 0.08em;
 }
