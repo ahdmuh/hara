@@ -1,6 +1,6 @@
 import { portalHref } from "../Site";
 import { LinkButton } from "../ui/Button";
-import { Login } from "../ui/Icons";
+import { Login, Mail } from "../ui/Icons";
 import Reveal from "../ui/Reveal";
 import UCalgary from "../ui/UCalgary";
 import Wordmark from "../ui/Wordmark";
@@ -21,7 +21,10 @@ export default function Footer()
                         <UCalgary className={styles.ucalgary} />
                     </p>
                     <div className={styles.links}>
-                        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+                        <a className={styles.email} href={`mailto:${CONTACT_EMAIL}`}>
+                            <Mail aria-hidden="true" />
+                            <span>{CONTACT_EMAIL}</span>
+                        </a>
                         <LinkButton to={portalHref("/login")} variant="light" size="small" icon={<Login />}>Portal</LinkButton>
                     </div>
                 </div>
