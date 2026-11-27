@@ -97,7 +97,7 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
                                     </AnimatePresence>
                                 </div>
                                 <p className={styles.valid}>
-                                    {`${created.label || "Unnamed patient"} · Valid until ${fullDate(created.expiresAt)}`}
+                                    {`${created.label || "Unnamed Patient"} · Valid until ${fullDate(created.expiresAt)}`}
                                 </p>
                                 <div className={styles.actions}>
                                     <Button variant="ghost" icon={<Copy />} onClick={() => void copy(created.code, "PIN Copied")}>Copy PIN</Button>
@@ -146,7 +146,7 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
                                             <span className={styles.row}>
                                                 <span className={styles.code}>{formatPin(pin.code)}</span>
                                                 <span className={styles.meta}>
-                                                    <strong>{pin.label || "Unnamed patient"}</strong>
+                                                    <strong>{pin.label || "Unnamed Patient"}</strong>
                                                     <small>{`Until ${fullDate(pin.expiresAt)}`}</small>
                                                 </span>
                                                 <button type="button" className={styles.icon} aria-label={`Copy PIN ${pin.code}`} onClick={() => void copy(pin.code, "PIN Copied")}>
