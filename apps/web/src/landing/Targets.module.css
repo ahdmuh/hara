@@ -1,0 +1,233 @@
+.targets
+{
+    display: grid;
+    gap: clamp(20px, 3vw, 32px);
+    margin-top: clamp(40px, 6vw, 72px);
+}
+
+.head h3
+{
+    font-size: clamp(22px, 2.2vw, 28px);
+}
+
+.list
+{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(20px, 3vw, 44px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.item
+{
+    display: grid;
+    align-content: start;
+    gap: 10px;
+}
+
+.art
+{
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 6px;
+    overflow: visible;
+}
+
+.value
+{
+    display: flex;
+    align-items: baseline;
+    font-family: var(--figure);
+    font-size: clamp(34px, 3.6vw, 48px);
+    font-weight: 900;
+    font-variation-settings: "ROND" 0;
+    line-height: 1;
+    letter-spacing: 0;
+    white-space: nowrap;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.sign
+{
+    margin-right: 4px;
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 0.6em;
+    color: var(--steel);
+}
+
+.value small
+{
+    margin-left: 6px;
+    font-family: var(--sans);
+    font-size: 0.42em;
+    font-weight: 700;
+    letter-spacing: 0;
+    color: var(--blue);
+}
+
+.label
+{
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--graphite);
+}
+
+.window
+{
+    fill: var(--blue-soft);
+    stroke: rgb(10 132 255 / 35%);
+    stroke-dasharray: 3 3;
+}
+
+.node
+{
+    fill: var(--ink);
+}
+
+.pulse
+{
+    fill: var(--blue);
+    animation: travel 1.8s var(--ease) infinite;
+}
+
+.tick
+{
+    fill: var(--mist);
+    animation: scan 1s linear infinite;
+    animation-delay: calc(var(--i) * 0.05s);
+}
+
+.band
+{
+    fill: var(--blue-soft);
+}
+
+.rule
+{
+    stroke: var(--fog);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+}
+
+.marker
+{
+    fill: var(--blue);
+    animation: drift 2.6s ease-in-out infinite;
+}
+
+.arc
+{
+    fill: none;
+    stroke: var(--mist);
+    stroke-width: 8;
+    stroke-linecap: round;
+}
+
+.zone
+{
+    fill: none;
+    stroke: var(--blue);
+    stroke-width: 8;
+    stroke-linecap: round;
+}
+
+.needle
+{
+    transform-box: view-box;
+    transform-origin: 80px 50px;
+    animation: hold 2.4s ease-in-out infinite;
+}
+
+.needle line
+{
+    stroke: var(--ink);
+    stroke-width: 3;
+    stroke-linecap: round;
+}
+
+.needle circle
+{
+    fill: var(--ink);
+}
+
+@keyframes travel
+{
+    0%
+    {
+        transform: translateX(0);
+        opacity: 0;
+    }
+
+    10%
+    {
+        opacity: 1;
+    }
+
+    70%,
+    100%
+    {
+        transform: translateX(121px);
+        opacity: 0;
+    }
+}
+
+@keyframes scan
+{
+    0%,
+    100%
+    {
+        fill: var(--mist);
+    }
+
+    8%
+    {
+        fill: var(--blue);
+    }
+
+    30%
+    {
+        fill: var(--mist);
+    }
+}
+
+@keyframes drift
+{
+    0%,
+    100%
+    {
+        transform: translateX(-7px);
+    }
+
+    50%
+    {
+        transform: translateX(7px);
+    }
+}
+
+@keyframes hold
+{
+    0%,
+    100%
+    {
+        transform: rotate(-9deg);
+    }
+
+    50%
+    {
+        transform: rotate(9deg);
+    }
+}
+
+@media (max-width: 860px)
+{
+    .list
+    {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        row-gap: 40px;
+    }
+}

@@ -83,7 +83,8 @@
     font-family: var(--figure);
     user-select: none;
     -webkit-user-select: none;
-    font-weight: 300;
+    font-weight: 900;
+    font-variation-settings: "ROND" 0;
     font-size: clamp(56px, 7vw, 88px);
     line-height: 1;
     color: var(--ink);

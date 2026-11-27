@@ -21,10 +21,11 @@
     font-family: var(--figure);
     user-select: none;
     -webkit-user-select: none;
-    font-weight: 300;
+    font-weight: 900;
+    font-variation-settings: "ROND" 0;
     font-size: clamp(88px, 13vw, 184px);
     line-height: 0.9;
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
     font-variant-numeric: tabular-nums;
     color: var(--blue);
 }
@@ -80,55 +81,9 @@
     color: var(--steel);
 }
 
-.steps
-{
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(24px, 4vw, 56px);
-    margin: clamp(72px, 10vw, 128px) 0 clamp(56px, 8vw, 96px);
-    padding: 0;
-    list-style: none;
-}
-
-.step
-{
-    display: grid;
-    align-content: start;
-    gap: 12px;
-    padding-top: 24px;
-    border-top: 1px solid var(--line-strong);
-}
-
-.number
-{
-    font-family: var(--figure);
-    user-select: none;
-    -webkit-user-select: none;
-    font-weight: 650;
-    font-size: 15px;
-    color: var(--blue);
-}
-
-.step h3
-{
-    font-size: clamp(24px, 2.4vw, 30px);
-}
-
-.step p
-{
-    max-width: 340px;
-    color: var(--graphite);
-}
-
 
 @media (max-width: 960px)
 {
-    .steps
-    {
-        grid-template-columns: 1fr;
-        gap: 32px;
-    }
-
 }
 
 @media (max-width: 640px)

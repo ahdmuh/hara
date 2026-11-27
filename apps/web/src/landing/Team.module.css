@@ -44,10 +44,10 @@
     border-radius: 16px;
     background: var(--ink);
     color: var(--white);
-    font-family: var(--figure);
+    font-family: var(--sans);
     user-select: none;
     -webkit-user-select: none;
-    font-weight: 650;
+    font-weight: 700;
     font-size: 15px;
     letter-spacing: 0.04em;
     transition: background-color 0.5s var(--ease), box-shadow 0.5s var(--ease);
