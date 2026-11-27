@@ -66,7 +66,7 @@ function footer(): string
 {
     return `<tr><td style="padding:0 12px 12px;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-radius:24px;background:#050506;">
-<tr><td style="padding:32px 32px 8px;"><img src="${SITE_URL}/email/hara-white.png" width="132" height="48" alt="HARA" style="display:block;border:0;outline:none;"></td></tr>
+<tr><td style="padding:26px 24px 2px;"><img src="${SITE_URL}/email/hara-white.png" width="157" height="71" alt="HARA" style="display:block;border:0;outline:none;"></td></tr>
 <tr><td style="padding:16px 32px 32px;font:400 13px/1.6 ${FONT};color:#9a9aa3;">
 A capstone project from the Schulich School of Engineering at the
 <a href="${SCHULICH_URL}" style="color:#ffffff;text-decoration:none;white-space:nowrap;"><img src="${SITE_URL}/email/ucalgary-shield-white.png" width="13" height="16" alt="" style="border:0;outline:none;vertical-align:-3px;margin-right:4px;">University of Calgary</a>.<br>

@@ -21,6 +21,7 @@
     --line-strong: rgb(22 22 26 / 16%);
     --display: "Righteous", var(--sans);
     --figure: "Nunito Variable", var(--sans);
+    --wordmark-glow: 0 0 1px rgb(10 132 255 / 85%), 0 0 1px rgb(10 132 255 / 85%), 0 0 16px rgb(10 132 255 / 34%), 0 0 48px rgb(10 132 255 / 18%);
     --sans: "Figtree Variable", system-ui, sans-serif;
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
     --radius-small: 12px;
