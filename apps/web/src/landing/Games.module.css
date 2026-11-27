@@ -162,10 +162,10 @@
     align-items: center;
     gap: clamp(24px, 4vw, 64px);
     padding: clamp(28px, 4vw, 48px);
-    border-radius: var(--radius-large);
-    background: var(--ink);
-    color: var(--white);
-    box-shadow: 0 0 0 1px rgb(255 255 255 / 6%) inset, 0 30px 60px -30px rgb(22 22 26 / 60%);
+    border-radius: 28px;
+    background: var(--white);
+    color: var(--ink);
+    box-shadow: var(--shadow-soft);
 }
 
 .targets h2
@@ -185,7 +185,7 @@
     display: grid;
     gap: 10px;
     padding-left: 18px;
-    border-left: 1px solid rgb(255 255 255 / 12%);
+    border-left: 1px solid var(--line-strong);
 }
 
 .value
@@ -205,7 +205,7 @@
     font-family: var(--sans);
     font-size: 0.6em;
     font-weight: 700;
-    color: rgb(255 255 255 / 55%);
+    color: var(--steel);
 }
 
 .value small
@@ -221,7 +221,7 @@
 {
     font-size: 14px;
     font-weight: 600;
-    color: rgb(255 255 255 / 60%);
+    color: var(--steel);
 }
 
 @keyframes sweep
