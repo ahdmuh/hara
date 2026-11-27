@@ -64,7 +64,7 @@
 
 .problem
 {
-    padding: clamp(40px, 6vw, 88px) 0 var(--section);
+    padding: clamp(40px, 6vw, 88px) 0 var(--block);
 }
 
 .problem p
