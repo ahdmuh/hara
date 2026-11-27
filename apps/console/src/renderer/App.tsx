@@ -8,6 +8,7 @@ import { createDeviceRawSource, createDeviceSource, createProvisionalRawSource, 
 import type { IGame } from "./Games";
 import { InputContext } from "./InputContext";
 import { startIntents } from "./Intents";
+import { useSync } from "./Sync";
 import { CALIBRATED_THRESHOLDS, GENEROUS_THRESHOLDS } from "./TapDetector";
 import type { HandCalibration } from "@hara/input";
 import { createKeyboardSource } from "./KeyboardSource";
@@ -123,6 +124,8 @@ export default function App()
     useEffect(() => startIntents(window, source, calibration ? CALIBRATED_THRESHOLDS : GENEROUS_THRESHOLDS), [source, calibration]);
 
     const owner = account?.username ?? null;
+    const [synced, setSynced] = useState(0);
+    useSync(owner, synced);
 
     useEffect(() =>
     {
@@ -280,7 +283,7 @@ export default function App()
                         {
                             if (result && owner)
                             {
-                                void bridge.saveCalibration(owner, result);
+                                void bridge.saveCalibration(owner, result).then(() => setSynced(count => count + 1));
                                 setCalibration(result);
                                 setCalibratedAt(new Date());
                             }

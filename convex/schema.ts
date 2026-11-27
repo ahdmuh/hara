@@ -1,7 +1,7 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
-const fingerCalibration = v.object({
+export const fingerCalibration = v.object({
     open: v.number(),
     relaxed: v.number(),
     fist: v.number(),
