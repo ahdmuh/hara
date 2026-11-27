@@ -1,5 +1,5 @@
 import { motion, useAnimate } from "motion/react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import type { IGame } from "../Games";
 import GameArt from "./GameArt";
 import { SPRING } from "./Motion";
@@ -17,10 +17,13 @@ interface ICartridgeProps
 export default function Cartridge({ game, selected, inserting, onChoose }: ICartridgeProps)
 {
     const [scope, animate] = useAnimate<HTMLDivElement>();
+    const previous = useRef(selected);
 
     useEffect(() =>
     {
-        if (selected)
+        const becameSelected = selected && !previous.current;
+        previous.current = selected;
+        if (becameSelected)
         {
             void animate(scope.current, { rotateY: [0, 360] }, { duration: 1.9, ease: [0.45, 0, 0.2, 1] });
         }
