@@ -81,6 +81,58 @@
     color: var(--graphite);
 }
 
+.rules
+{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 12px;
+    margin: -6px 0 2px;
+    padding: 0;
+    list-style: none;
+}
+
+.rules li
+{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--steel);
+    transition: color 0.3s var(--ease);
+}
+
+.tick
+{
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    background: var(--mist);
+    color: transparent;
+    transition: background-color 0.3s var(--ease), color 0.3s var(--ease), transform 0.3s var(--ease);
+}
+
+.tick svg
+{
+    width: 14px;
+    height: 14px;
+}
+
+.met
+{
+    color: var(--ink) !important;
+}
+
+.met .tick
+{
+    background: var(--rise);
+    color: var(--white);
+    transform: scale(1.06);
+}
+
 .submit
 {
     width: 100%;

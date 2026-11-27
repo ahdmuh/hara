@@ -1,0 +1,23 @@
+.anchor
+{
+    position: relative;
+    display: inline-flex;
+}
+
+.tip
+{
+    position: absolute;
+    z-index: 30;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    translate: -50% 0;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: var(--ink);
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+    box-shadow: 0 10px 24px -10px rgb(22 22 26 / 50%);
+}

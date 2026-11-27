@@ -33,7 +33,7 @@ export default function App()
     {
         if (portalRoot)
         {
-            navigate("/patients", { replace: true });
+            navigate("/login", { replace: true });
         }
     }, [portalRoot]);
 

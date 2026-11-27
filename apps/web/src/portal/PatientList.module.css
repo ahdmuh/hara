@@ -46,7 +46,7 @@
 
 .search:focus-within
 {
-    box-shadow: 0 0 0 2px var(--blue) inset, 0 0 0 5px rgb(0 149 219 / 14%);
+    box-shadow: 0 0 0 1px var(--blue) inset, 0 0 0 4px rgb(0 149 219 / 9%);
 }
 
 .search > svg
@@ -90,6 +90,15 @@
 {
     width: 16px;
     height: 16px;
+}
+
+.toolbar
+{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
 }
 
 .filters
@@ -149,8 +158,34 @@
 .table
 {
     width: 100%;
-    min-width: 980px;
+    min-width: 1040px;
+    table-layout: fixed;
     border-collapse: collapse;
+}
+
+.colPatient
+{
+    width: 22%;
+}
+
+.colLast
+{
+    width: 11%;
+}
+
+.colSessions
+{
+    width: 8%;
+}
+
+.colMetric
+{
+    width: 14%;
+}
+
+.colMilestone
+{
+    width: 17%;
 }
 
 .table th
@@ -248,6 +283,8 @@
     border-bottom: 1px solid var(--line);
     font-size: 14px;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .row:last-child td
@@ -271,27 +308,6 @@ th.numeric .sort
     display: flex;
     align-items: center;
     gap: 12px;
-}
-
-.avatar
-{
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 38px;
-    height: 38px;
-    border-radius: 12px;
-    background: var(--ink);
-    color: var(--white);
-    font-family: var(--display);
-    font-size: 16px;
-    font-weight: 900;
-    transition: background-color 0.25s var(--ease);
-}
-
-.row:hover .avatar
-{
-    background: var(--blue);
 }
 
 .identity
@@ -356,6 +372,7 @@ th.numeric .sort
 .pager
 {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
@@ -402,6 +419,11 @@ th.numeric .sort
 {
     width: 20px;
     height: 20px;
+}
+
+.top
+{
+    gap: 14px;
 }
 
 @media (max-width: 860px)

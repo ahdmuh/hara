@@ -1,12 +1,14 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useState, type CSSProperties } from "react";
 import { Link } from "../Router";
+import Avatar from "../ui/Avatar";
 import Button from "../ui/Button";
 import Dialog from "../ui/Dialog";
 import { ArrowLeft, Sliders, Trophy } from "../ui/Icons";
 import { EASE, RISE, SPRING, STAGGER } from "../ui/Motion";
 import { useToast } from "../ui/Toast";
-import { daysSince, fullDate, initials, relative } from "./Format";
+import Tooltip from "../ui/Tooltip";
+import { daysSince, fullDate, relative } from "./Format";
 import LineChart from "./LineChart";
 import { findPatient, FINGER_NAMES, GAME_INFO, GAMES, saveTargets, type Game, type IPatient } from "./MockData";
 import styles from "./PatientDetail.module.css";
@@ -110,7 +112,7 @@ export default function PatientDetail({ id }: { id: string })
                 </Link>
             </motion.div>
             <motion.header className={styles.head} variants={RISE}>
-                <span className={styles.avatar} aria-hidden="true">{initials(patient.name)}</span>
+                <Avatar name={patient.name} size={72} />
                 <div className={styles.title}>
                     <h1>{patient.name}</h1>
                     <p>{`Age ${patient.age} · ID ${patient.id} · Linked ${fullDate(patient.linkedAt)}`}</p>
@@ -240,13 +242,15 @@ export default function PatientDetail({ id }: { id: string })
                                     <span className={styles.calibrationDate}>{fullDate(calibration.date)}</span>
                                     <span className={styles.bars} aria-label="Range per Finger">
                                         {calibration.range.map((value, index) => (
-                                            <span key={index} title={`${FINGER_NAMES[index]} ${value}%`}>
-                                                <motion.i
-                                                    initial={{ scaleY: 0 }}
-                                                    animate={{ scaleY: value / 100 }}
-                                                    transition={{ duration: 0.6, delay: 0.3 + index * 0.04, ease: EASE }}
-                                                />
-                                            </span>
+                                            <Tooltip key={index} label={`${FINGER_NAMES[index]} ${value}%`} className={styles.barTip}>
+                                                <span className={styles.track}>
+                                                    <motion.i
+                                                        initial={{ scaleY: 0 }}
+                                                        animate={{ scaleY: value / 100 }}
+                                                        transition={{ duration: 0.6, delay: 0.3 + index * 0.04, ease: EASE }}
+                                                    />
+                                                </span>
+                                            </Tooltip>
                                         ))}
                                     </span>
                                 </li>
