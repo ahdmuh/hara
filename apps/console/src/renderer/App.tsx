@@ -179,6 +179,8 @@ export default function App()
             sounds.play("welcome");
         }
         arrival.current = view.name;
+        const onboarding = view.name === "start" || view.name === "welcome" || view.name === "signUp" || view.name === "signIn" || view.name === "calibration";
+        music.setTheme(onboarding ? "onboarding" : "home");
         if (!ready || view.name === "play")
         {
             music.pause();
