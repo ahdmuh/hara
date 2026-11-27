@@ -164,6 +164,16 @@
     animation-delay: calc(var(--i) * -0.45s);
 }
 
+.railShadow
+{
+    fill: var(--white);
+}
+
+.cuffShadow
+{
+    fill: rgb(22 22 26 / 16%);
+}
+
 .cuffBody
 {
     fill: url(#haraCuff);

@@ -2,7 +2,7 @@
 {
     width: min(var(--content), calc(100% - 2 * var(--gutter)));
     margin: 0 auto;
-    padding-top: clamp(96px, 14vw, 180px);
+    padding-top: var(--section);
 }
 
 .pamphlet

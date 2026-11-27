@@ -1,6 +1,6 @@
 .loop
 {
-    margin: clamp(80px, 11vw, 140px) 0 clamp(56px, 8vw, 96px);
+    margin: var(--section) 0 0;
 }
 
 .words
