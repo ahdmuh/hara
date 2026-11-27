@@ -200,7 +200,7 @@ function Clinicians({ inviting, setInviting }: { inviting: boolean; setInviting:
             {data !== undefined && clinicians.length === 0 && (
                 <motion.div className={styles.empty} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={EMPTY_TRANSITION}>
                     <strong>No Clinicians Yet</strong>
-                    <p>Add a clinician to send them an invitation with a temporary password.</p>
+                    <p>Everyone you invite appears here, with their status and when they were last active.</p>
                     <Button icon={<UserPlus />} onClick={() => setInviting(true)}>Add Clinician</Button>
                 </motion.div>
             )}

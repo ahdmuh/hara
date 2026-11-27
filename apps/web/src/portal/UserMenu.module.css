@@ -25,6 +25,37 @@
     box-shadow: 0 0 0 1px rgb(255 255 255 / 20%) inset;
 }
 
+.avatar
+{
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    background: rgb(255 255 255 / 10%);
+    color: rgb(255 255 255 / 82%);
+}
+
+.avatar svg
+{
+    width: 20px;
+    height: 20px;
+}
+
+.large
+{
+    width: 40px;
+    height: 40px;
+    border-radius: 13px;
+}
+
+.large svg
+{
+    width: 22px;
+    height: 22px;
+}
+
 .chevron
 {
     display: grid;
