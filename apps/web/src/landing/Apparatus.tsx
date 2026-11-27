@@ -76,7 +76,7 @@ export default function Apparatus()
         <div ref={ref} className={`${styles.apparatus} ${active ? styles.focused : ""}`}>
             <Reveal className={styles.head} group>
                 <RevealItem as="header">
-                    <h2>Under the Hood</h2>
+                    <h2>Meet the Device</h2>
                 </RevealItem>
                 <RevealItem>
                     <p>A tabletop device that measures, assists and resists each finger on its own.</p>
