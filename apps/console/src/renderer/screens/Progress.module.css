@@ -1,6 +1,7 @@
 .stage
 {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     align-content: center;
     gap: 1.6rem;
     width: min(64rem, 100%);
@@ -10,6 +11,7 @@
 .timelines
 {
     display: grid;
+    min-width: 0;
     gap: 0.8rem;
     padding: 1.4rem 1.8rem;
     border-radius: 1.8rem;
@@ -56,7 +58,8 @@
 .track
 {
     position: relative;
-    height: 3rem;
+    height: 4.6rem;
+    margin-right: 5rem;
 }
 
 .line
@@ -64,7 +67,7 @@
     position: absolute;
     left: 0.6rem;
     right: 0;
-    top: 1rem;
+    top: 2.4rem;
     height: 2px;
     border-radius: 2px;
     background: repeating-linear-gradient(90deg, var(--fog) 0 0.5rem, transparent 0.5rem 0.9rem);
@@ -75,7 +78,7 @@
 {
     position: absolute;
     left: 0;
-    top: 0.45rem;
+    top: 1.85rem;
     display: grid;
     justify-items: start;
     gap: 0.35rem;
@@ -98,30 +101,100 @@
     color: var(--graphite);
 }
 
-.ghost
-{
-    position: absolute;
-    top: 0.75rem;
-    width: 0.7rem;
-    height: 0.7rem;
-    border-radius: 50%;
-    background: var(--paper);
-    box-shadow: 0 0 0 1.5px var(--fog) inset;
-}
-
 .future
 {
     position: absolute;
-    right: 0;
-    top: 1.75rem;
+    left: 45%;
+    translate: -50% 0;
+    top: 2.9rem;
     font-size: 0.8rem;
     font-weight: 600;
     color: var(--steel);
 }
 
+.reached
+{
+    position: absolute;
+    left: 0.6rem;
+    right: 0;
+    top: 2.4rem;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--blue);
+    transform-origin: left;
+}
+
+.flag
+{
+    position: absolute;
+    top: 0;
+    display: grid;
+    justify-items: start;
+    translate: -1px 0;
+}
+
+.pole
+{
+    position: absolute;
+    left: 0;
+    top: 0.2rem;
+    width: 2px;
+    height: 2.4rem;
+    border-radius: 2px;
+    background: var(--graphite);
+}
+
+.pennant
+{
+    position: relative;
+    left: 2px;
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 1.7rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+    background: var(--white);
+    box-shadow: var(--shadow-soft), 0 0 0 1px var(--line) inset;
+    transform-origin: left center;
+    animation: wave 2.6s ease-in-out infinite;
+}
+
+.pennant svg
+{
+    width: 1.3rem;
+    height: 1.3rem;
+}
+
+.flag small
+{
+    position: absolute;
+    top: 2.9rem;
+    left: 0;
+    translate: -50% 0;
+    font-size: 0.75rem;
+    font-weight: 650;
+    white-space: nowrap;
+    color: var(--steel);
+}
+
+@keyframes wave
+{
+    0%,
+    100%
+    {
+        transform: skewY(0deg) scaleX(1);
+    }
+
+    50%
+    {
+        transform: skewY(-4deg) scaleX(0.94);
+    }
+}
+
 .milestones
 {
     display: grid;
+    min-width: 0;
     gap: 1rem;
 }
 
@@ -133,6 +206,7 @@
 .shelf
 {
     position: relative;
+    min-width: 0;
 }
 
 .shelf::after

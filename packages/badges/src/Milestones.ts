@@ -10,6 +10,6 @@ export const MILESTONE_TITLES: Record<MilestoneKind, string> = {
     sessions50: "50 Sessions",
     difficulty: "Unlocked Medium Difficulty",
     range: "Range of Motion Above 60%",
-    strength: "New Strength Best",
-    speed: "New Speed Best",
+    strength: "Strength Above 12 N",
+    speed: "Speed Above 3.6 Taps/s",
 };

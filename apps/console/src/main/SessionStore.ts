@@ -3,7 +3,7 @@ import type { HandCalibration } from "@hara/input";
 
 export type Game = "rangeOfMotion" | "strength" | "speed";
 
-export type MilestoneKind = "first" | "sessions10" | "sessions25" | "sessions50" | "difficulty" | "range";
+export type MilestoneKind = "first" | "sessions10" | "sessions25" | "sessions50" | "difficulty" | "range" | "strength" | "speed";
 
 type Value = string | number | null;
 

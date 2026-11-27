@@ -17,6 +17,10 @@ interface IProgressProps
     onBack: () => void;
 }
 
+const NEXT: Record<string, MilestoneKind> = { range: "range", strength: "strength", speed: "speed" };
+
+const FLAG_AT = 0.86;
+
 const SHOWN: MilestoneKind[] = ["linked", "first", "sessions10", "range", "strength", "speed"];
 
 const HIDDEN = 8;
@@ -90,8 +94,25 @@ export default function Progress({ calibratedAt, achieved, onBack }: IProgressPr
                                     <span className={styles.node} />
                                     <small>{calibratedAt ? `Calibrated ${formatDay(calibratedAt)}` : "Not Calibrated"}</small>
                                 </span>
+                                <motion.span
+                                    className={styles.reached}
+                                    initial={{ scaleX: 0 }}
+                                    animate={{ scaleX: 0 }}
+                                    transition={{ type: "spring", stiffness: 120, damping: 20 }}
+                                />
                                 <span className={styles.future}>Your First Session Will Appear Here</span>
-                                {[1, 2, 3].map(ghost => <span key={ghost} className={styles.ghost} style={{ left: `${ghost * 22 + 12}%` }} />)}
+                                <motion.span
+                                    className={styles.flag}
+                                    initial={{ left: "100%", opacity: 0 }}
+                                    animate={{ left: `${FLAG_AT * 100}%`, opacity: 1 }}
+                                    transition={{ type: "spring", stiffness: 110, damping: 18, delay: 0.35 + 0.1 * index }}
+                                >
+                                    <span className={styles.pole} />
+                                    <span className={styles.pennant}>
+                                        <MilestoneBadge kind={NEXT[game.id] ?? "first"} size={22} />
+                                    </span>
+                                    <small>{MILESTONE_TITLES[NEXT[game.id] ?? "first"]}</small>
+                                </motion.span>
                             </div>
                         </motion.li>
                     ))}
