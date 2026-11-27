@@ -23,11 +23,6 @@
     justify-items: start;
 }
 
-.visual
-{
-    width: min(17rem, 100%);
-}
-
 .hold
 {
     display: block;
@@ -87,7 +82,7 @@
 .fingers li
 {
     display: grid;
-    grid-template-rows: 1fr auto auto;
+    grid-template-rows: 1fr auto;
     gap: 0.8rem;
     justify-items: center;
 }
