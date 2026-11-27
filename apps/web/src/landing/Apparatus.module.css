@@ -44,37 +44,55 @@
 
 .focused .part:not(.on)
 {
-    opacity: 0.32;
+    opacity: 0.38;
 }
 
 .housing
 {
-    fill: var(--ink);
+    fill: url(#haraHousing);
+}
+
+.bevel
+{
+    fill: none;
+    stroke: rgb(255 255 255 / 9%);
+    stroke-width: 1.5;
+}
+
+.knurl
+{
+    fill: none;
+    stroke: rgb(255 255 255 / 16%);
+    stroke-width: 3;
+    stroke-dasharray: 2 2.6;
 }
 
 .motor
 {
-    fill: #2a2a31;
-    stroke: rgb(255 255 255 / 14%);
-    stroke-width: 1.5;
-    transition: fill 0.5s var(--ease), stroke 0.5s var(--ease);
+    fill: url(#haraMotor);
+    transition: fill 0.5s var(--ease);
 }
 
 .spindle
 {
-    fill: rgb(255 255 255 / 55%);
+    fill: rgb(255 255 255 / 70%);
+    transition: fill 0.5s var(--ease);
 }
 
 .on .motor
 {
-    fill: var(--blue);
-    stroke: rgb(255 255 255 / 40%);
+    fill: url(#haraCuffOn);
+}
+
+.on .spindle
+{
+    fill: var(--white);
 }
 
 .encoder
 {
     fill: none;
-    stroke: rgb(255 255 255 / 22%);
+    stroke: transparent;
     stroke-width: 2;
     stroke-dasharray: 3 4;
     transition: stroke 0.5s var(--ease);
@@ -82,7 +100,7 @@
 
 .loadCell
 {
-    fill: rgb(255 255 255 / 30%);
+    fill: rgb(255 255 255 / 22%);
     transition: fill 0.5s var(--ease);
 }
 
@@ -104,36 +122,45 @@
     fill: none;
     stroke: var(--fog);
     stroke-width: 1.5;
-    stroke-dasharray: 4 5;
+    stroke-dasharray: 3 5;
+    stroke-linecap: round;
     animation: flow 1.6s linear infinite;
 }
 
 .palm
 {
-    fill: var(--white);
-    stroke: var(--line-strong);
-    stroke-width: 1.5;
+    fill: url(#haraRail);
+    stroke: var(--line);
+    stroke-width: 1;
+}
+
+.palmPad
+{
+    fill: var(--paper);
 }
 
 .rail
 {
-    fill: var(--white);
-    stroke: var(--ink);
-    stroke-width: 1.5;
-    transition: stroke 0.5s var(--ease), fill 0.5s var(--ease);
+    fill: url(#haraRail);
+    stroke: var(--line-strong);
+    stroke-width: 1;
+    transition: stroke 0.5s var(--ease);
 }
 
 .groove
 {
-    stroke: var(--fog);
-    stroke-width: 2;
-    stroke-linecap: round;
+    fill: var(--mist);
+    transition: fill 0.5s var(--ease);
 }
 
 .on .rail
 {
     stroke: var(--blue);
-    fill: var(--blue-soft);
+}
+
+.on .groove
+{
+    fill: rgb(10 132 255 / 35%);
 }
 
 .cuff
@@ -142,37 +169,48 @@
     animation-delay: calc(var(--i) * -0.45s);
 }
 
-.cuff rect
+.cuffBody
 {
-    fill: var(--ink);
-    transition: fill 0.5s var(--ease);
+    fill: url(#haraCuff);
 }
 
-.cuff circle
+.cuffShine
+{
+    fill: rgb(255 255 255 / 12%);
+}
+
+.led
 {
     fill: var(--blue);
+    filter: drop-shadow(0 0 3px var(--blue));
 }
 
-.on .cuff rect
+.on .cuffBody
 {
-    fill: var(--blue);
+    fill: url(#haraCuffOn);
 }
 
-.on .cuff circle
+.on .led
 {
     fill: var(--white);
+    filter: drop-shadow(0 0 3px var(--white));
 }
 
 .stopRing
 {
-    fill: var(--white);
-    stroke: var(--ink);
-    stroke-width: 1.5;
+    fill: #f7f7f5;
+    stroke: var(--line-strong);
+    stroke-width: 1;
 }
 
 .stop
 {
-    fill: var(--danger);
+    fill: url(#haraStop);
+}
+
+.stopShine
+{
+    fill: rgb(255 255 255 / 45%);
 }
 
 .on .stop

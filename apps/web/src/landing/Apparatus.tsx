@@ -76,7 +76,7 @@ export default function Apparatus()
         <div ref={ref} className={`${styles.apparatus} ${active ? styles.focused : ""}`}>
             <Reveal className={styles.head} group>
                 <RevealItem as="header">
-                    <h2>How HARA Works</h2>
+                    <h2>Under the Hood</h2>
                 </RevealItem>
                 <RevealItem>
                     <p>A tabletop device that measures, assists and resists each finger on its own.</p>
@@ -85,7 +85,7 @@ export default function Apparatus()
             <div className={styles.body}>
                 <motion.svg
                     className={styles.diagram}
-                    viewBox="0 0 600 520"
+                    viewBox="44 100 520 412"
                     role="img"
                     aria-label="Top-down diagram of the HARA device"
                     initial={{ opacity: 0, y: 24 }}
@@ -93,20 +93,55 @@ export default function Apparatus()
                     viewport={{ once: true, margin: "0px 0px -15% 0px" }}
                     transition={{ duration: 0.9, ease: EASE }}
                 >
+                    <defs>
+                        <linearGradient id="haraHousing" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0" stopColor="#2b2b32" />
+                            <stop offset="1" stopColor="#111115" />
+                        </linearGradient>
+                        <linearGradient id="haraRail" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0" stopColor="#ffffff" />
+                            <stop offset="1" stopColor="#ececea" />
+                        </linearGradient>
+                        <linearGradient id="haraCuff" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0" stopColor="#2c2c33" />
+                            <stop offset="1" stopColor="#0d0d10" />
+                        </linearGradient>
+                        <linearGradient id="haraCuffOn" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0" stopColor="#4aa3ff" />
+                            <stop offset="1" stopColor="#0a6fe0" />
+                        </linearGradient>
+                        <radialGradient id="haraStop" cx="0.4" cy="0.35" r="0.7">
+                            <stop offset="0" stopColor="#ff8a8a" />
+                            <stop offset="0.6" stopColor="#e5484d" />
+                            <stop offset="1" stopColor="#b8262b" />
+                        </radialGradient>
+                        <radialGradient id="haraMotor" cx="0.4" cy="0.35" r="0.75">
+                            <stop offset="0" stopColor="#4a4a53" />
+                            <stop offset="1" stopColor="#1c1c21" />
+                        </radialGradient>
+                        <filter id="haraShadow" x="-20%" y="-20%" width="140%" height="160%">
+                            <feDropShadow dx="0" dy="8" stdDeviation="10" floodColor="#16161a" floodOpacity="0.16" />
+                        </filter>
+                        <filter id="haraSoft" x="-40%" y="-40%" width="180%" height="180%">
+                            <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#16161a" floodOpacity="0.22" />
+                        </filter>
+                    </defs>
                     <g className={`${styles.part} ${on("base")}`}>
-                        <rect className={styles.housing} x="60" y="384" width="480" height="112" rx="30" />
+                        <rect className={styles.housing} x="60" y="384" width="480" height="112" rx="32" filter="url(#haraShadow)" />
+                        <rect className={styles.bevel} x="62" y="386" width="476" height="108" rx="30" />
                         {MOTORS.map(x => (
                             <g key={x}>
-                                <circle className={styles.motor} cx={x} cy="440" r="20" />
-                                <circle className={styles.spindle} cx={x} cy="440" r="6" />
+                                <circle className={styles.knurl} cx={x} cy="440" r="22" />
+                                <circle className={styles.motor} cx={x} cy="440" r="18" />
+                                <circle className={styles.spindle} cx={x} cy="440" r="5.5" />
                             </g>
                         ))}
                     </g>
                     <g className={`${styles.part} ${on("sensors")}`}>
                         {MOTORS.map(x => (
                             <g key={x}>
-                                <circle className={styles.encoder} cx={x} cy="440" r="27" />
-                                <rect className={styles.loadCell} x={x - 7} y="394" width="14" height="10" rx="2" />
+                                <circle className={styles.encoder} cx={x} cy="440" r="28" />
+                                <rect className={styles.loadCell} x={x - 8} y="396" width="16" height="8" rx="4" />
                             </g>
                         ))}
                     </g>
@@ -117,27 +152,32 @@ export default function Apparatus()
                             d={`M${rail.x},${rail.y} C${rail.x},${rail.y + 50} ${MOTORS[index] ?? 0},${380} ${MOTORS[index] ?? 0},${420}`}
                         />
                     ))}
-                    <rect className={styles.palm} x="196" y="300" width="208" height="76" rx="38" />
+                    <g filter="url(#haraShadow)">
+                        <rect className={styles.palm} x="196" y="300" width="208" height="76" rx="38" />
+                        <rect className={styles.palmPad} x="214" y="314" width="172" height="48" rx="24" />
+                    </g>
                     {RAILS.map((rail, index) => (
                         <g key={index} transform={`translate(${rail.x} ${rail.y}) rotate(${rail.angle})`}>
-                            <g className={`${styles.part} ${on("rails")}`}>
-                                <rect className={styles.rail} x="-11" y={-rail.length} width="22" height={rail.length} rx="11" />
-                                <line className={styles.groove} x1="0" y1={-rail.length + 14} x2="0" y2="-14" />
+                            <g className={`${styles.part} ${on("rails")}`} filter="url(#haraSoft)">
+                                <rect className={styles.rail} x="-12" y={-rail.length} width="24" height={rail.length} rx="12" />
+                                <rect className={styles.groove} x="-2" y={-rail.length + 14} width="4" height={rail.length - 28} rx="2" />
                             </g>
                             <g className={`${styles.part} ${on("cuffs")}`}>
                                 <g
                                     className={styles.cuff}
                                     style={{ "--from": `${-rail.length + 34}px`, "--to": `${-rail.length + 34 + rail.travel}px`, "--i": index } as CSSProperties}
                                 >
-                                    <rect x="-16" y="-15" width="32" height="30" rx="10" />
-                                    <circle cx="0" cy="0" r="4" />
+                                    <rect className={styles.cuffBody} x="-17" y="-15" width="34" height="30" rx="11" filter="url(#haraSoft)" />
+                                    <rect className={styles.cuffShine} x="-12" y="-12" width="24" height="4" rx="2" />
+                                    <circle className={styles.led} cx="0" cy="3" r="3.5" />
                                 </g>
                             </g>
                         </g>
                     ))}
                     <g className={`${styles.part} ${on("stop")}`}>
-                        <circle className={styles.stopRing} cx="508" cy="358" r="22" />
-                        <circle className={styles.stop} cx="508" cy="358" r="14" />
+                        <circle className={styles.stopRing} cx="508" cy="356" r="24" filter="url(#haraSoft)" />
+                        <circle className={styles.stop} cx="508" cy="356" r="16" />
+                        <ellipse className={styles.stopShine} cx="503" cy="350" rx="6" ry="3.5" />
                     </g>
                 </motion.svg>
                 <Reveal as="ol" className={styles.list} group>
