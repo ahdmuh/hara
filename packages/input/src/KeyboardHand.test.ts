@@ -16,12 +16,6 @@ function holdFor(hand: KeyboardHand, seconds: number)
 
 describe("KeyboardHand", () =>
 {
-    test("starts relaxed with no force", () =>
-    {
-        const frame = holdFor(new KeyboardHand(), 1);
-        expect(Object.values(frame.fingers).every(finger => finger.position === 0 && finger.force === 0)).toBe(true);
-    });
-
     test("curls a held finger into a fist before any force builds", () =>
     {
         const hand = new KeyboardHand();

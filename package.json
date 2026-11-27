@@ -17,6 +17,7 @@
         "typecheck": "tsc && bun run --filter './apps/*' --filter './packages/*' typecheck"
     },
     "dependencies": {
+        "@hara/email": "workspace:*",
         "convex": "1.51.0"
     },
     "devDependencies": {

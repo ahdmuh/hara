@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { useEffect } from "react";
 import Landing from "./landing/Landing";
+import Admin from "./portal/Admin";
 import Login from "./portal/Login";
 import Portal from "./portal/Portal";
 import { navigate, usePath } from "./Router";
@@ -8,13 +9,17 @@ import { isPortalHost } from "./Site";
 import { PAGE } from "./ui/Motion";
 import { ToastProvider } from "./ui/Toast";
 
-type Screen = "landing" | "login" | "portal";
+type Screen = "landing" | "login" | "portal" | "admin";
 
 function screenFor(path: string): Screen
 {
     if (path === "/login")
     {
         return "login";
+    }
+    if (path === "/admin")
+    {
+        return "admin";
     }
     if (path === "/patients" || path.startsWith("/patients/"))
     {
@@ -46,6 +51,7 @@ export default function App()
                             {screen === "landing" && <Landing />}
                             {screen === "login" && <Login />}
                             {screen === "portal" && <Portal />}
+                            {screen === "admin" && <Admin />}
                         </motion.div>
                     )}
                 </AnimatePresence>

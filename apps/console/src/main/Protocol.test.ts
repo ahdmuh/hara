@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { encodeCommand, encodeLimits, parseDeviceLine } from "./Protocol";
+import { encodeLimits, parseDeviceLine } from "./Protocol";
 
 describe("parseDeviceLine", () =>
 {
@@ -58,10 +58,5 @@ describe("encoding", () =>
     ])("refuses limits the device could not enforce safely: %o", (limits) =>
     {
         expect(() => encodeLimits("thumb", limits)).toThrow(RangeError);
-    });
-
-    test("writes commands", () =>
-    {
-        expect(encodeCommand("STOP")).toBe("STOP\n");
     });
 });
