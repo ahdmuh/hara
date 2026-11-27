@@ -74,7 +74,7 @@
 .minutes
 {
     font-family: var(--display);
-    font-weight: 600;
+    font-weight: 800;
     font-size: clamp(56px, 7vw, 88px);
     line-height: 1;
     color: var(--ink);

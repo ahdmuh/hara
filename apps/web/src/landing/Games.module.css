@@ -193,7 +193,7 @@
     display: flex;
     align-items: baseline;
     font-family: var(--display);
-    font-weight: 600;
+    font-weight: 800;
     font-size: clamp(28px, 3vw, 42px);
     line-height: 1;
     white-space: nowrap;
