@@ -521,27 +521,24 @@ th.numeric .sort
     }
 }
 
-@media (hover: hover) and (pointer: fine)
+:global(.mouse) .sort:hover
 {
-    .sort:hover
-    {
-        color: var(--ink);
-        background: var(--paper);
-    }
+    color: var(--ink);
+    background: var(--paper);
+}
 
-    .sort:hover .caret
-    {
-        opacity: 0.5 !important;
-    }
+:global(.mouse) .sort:hover .caret
+{
+    opacity: 0.5 !important;
+}
 
-    .row:hover
-    {
-        background: #f7f7fb;
-        box-shadow: none;
-    }
+:global(.mouse) .row:hover
+{
+    background: #f7f7fb;
+    box-shadow: none;
+}
 
-    .pages button:hover:not(:disabled)
-    {
-        transform: translateY(-1px);
-    }
+:global(.mouse) .pages button:hover:not(:disabled)
+{
+    transform: translateY(-1px);
 }

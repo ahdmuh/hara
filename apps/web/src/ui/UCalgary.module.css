@@ -62,21 +62,18 @@
     transform: translate(2px, -2px);
 }
 
-@media (hover: hover) and (pointer: fine)
+:global(.mouse) .ucalgary:hover .shield
 {
-    .ucalgary:hover .shield
-    {
-        transform: translateY(-2px) rotate(-6deg) scale(1.08);
-    }
+    transform: translateY(-2px) rotate(-6deg) scale(1.08);
+}
 
-    .ucalgary:hover .name
-    {
-        background-size: 100% 1px;
-    }
+:global(.mouse) .ucalgary:hover .name
+{
+    background-size: 100% 1px;
+}
 
-    .ucalgary:hover .out
-    {
-        opacity: 1;
-        transform: translate(2px, -2px);
-    }
+:global(.mouse) .ucalgary:hover .out
+{
+    opacity: 1;
+    transform: translate(2px, -2px);
 }

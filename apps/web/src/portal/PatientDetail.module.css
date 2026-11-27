@@ -514,21 +514,18 @@
     }
 }
 
-@media (hover: hover) and (pointer: fine)
+:global(.mouse) .back:hover
 {
-    .back:hover
-    {
-        background: var(--white);
-        color: var(--ink);
-    }
+    background: var(--white);
+    color: var(--ink);
+}
 
-    .back:hover svg
-    {
-        transform: translateX(-3px);
-    }
+:global(.mouse) .back:hover svg
+{
+    transform: translateX(-3px);
+}
 
-    .chip:hover
-    {
-        background: var(--mist);
-    }
+:global(.mouse) .chip:hover
+{
+    background: var(--mist);
 }

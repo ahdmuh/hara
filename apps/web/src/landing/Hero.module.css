@@ -1,6 +1,6 @@
 .hero
 {
-    padding: 12px;
+    padding: calc(12px + env(safe-area-inset-top)) 12px 12px;
 }
 
 .screen
@@ -152,6 +152,14 @@
     }
 }
 
+@media (orientation: portrait)
+{
+    .screen
+    {
+        max-height: none;
+    }
+}
+
 @media (max-width: 860px)
 {
     .wordmark
@@ -161,8 +169,7 @@
 
     .video
     {
-        height: 46%;
-        margin-bottom: 30%;
+        height: 56%;
     }
 
     .title
@@ -186,6 +193,15 @@
     .cta
     {
         justify-content: center;
+    }
+}
+
+@media (max-width: 560px)
+{
+    .video
+    {
+        height: 46%;
+        margin-bottom: 30%;
     }
 }
 

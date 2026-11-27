@@ -12,6 +12,14 @@ if (!root)
     throw new Error("Missing #root element.");
 }
 
+function trackPointer(event: PointerEvent): void
+{
+    document.documentElement.classList.toggle("mouse", event.pointerType === "mouse");
+}
+
+window.addEventListener("pointermove", trackPointer, { passive: true });
+window.addEventListener("pointerdown", trackPointer, { passive: true });
+
 createRoot(root).render(
     <StrictMode>
         <App />

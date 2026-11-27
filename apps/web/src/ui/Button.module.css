@@ -123,34 +123,31 @@
     }
 }
 
-@media (hover: hover) and (pointer: fine)
+:global(.mouse) .button:hover .content svg:last-child:not(:first-child)
 {
-    .button:hover .content svg:last-child:not(:first-child)
-    {
-        transform: translateX(3px);
-    }
+    transform: translateX(3px);
+}
 
-    .primary:hover:not(:disabled)
-    {
-        background: var(--blue-deep);
-        box-shadow: 0 1px 0 rgb(255 255 255 / 25%) inset, 0 -2px 0 rgb(0 0 0 / 15%) inset, 0 14px 32px -10px var(--blue-glow);
-        transform: translateY(-1px);
-    }
+:global(.mouse) .primary:hover:not(:disabled)
+{
+    background: var(--blue-deep);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 25%) inset, 0 -2px 0 rgb(0 0 0 / 15%) inset, 0 14px 32px -10px var(--blue-glow);
+    transform: translateY(-1px);
+}
 
-    .dark:hover:not(:disabled)
-    {
-        background: var(--graphite);
-        transform: translateY(-1px);
-    }
+:global(.mouse) .dark:hover:not(:disabled)
+{
+    background: var(--graphite);
+    transform: translateY(-1px);
+}
 
-    .ghost:hover:not(:disabled)
-    {
-        background: var(--white);
-        box-shadow: 0 0 0 1px var(--line-strong) inset, 0 8px 20px -14px rgb(22 22 26 / 30%);
-    }
+:global(.mouse) .ghost:hover:not(:disabled)
+{
+    background: var(--white);
+    box-shadow: 0 0 0 1px var(--line-strong) inset, 0 8px 20px -14px rgb(22 22 26 / 30%);
+}
 
-    .light:hover:not(:disabled)
-    {
-        background: rgb(255 255 255 / 14%);
-    }
+:global(.mouse) .light:hover:not(:disabled)
+{
+    background: rgb(255 255 255 / 14%);
 }

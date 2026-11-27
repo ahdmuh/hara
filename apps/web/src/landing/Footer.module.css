@@ -1,6 +1,6 @@
 .footer
 {
-    padding: 0 12px 12px;
+    padding: 0 12px calc(12px + env(safe-area-inset-bottom));
 }
 
 .panel
@@ -17,10 +17,16 @@
 .mark
 {
     font-size: clamp(48px, 13vw, 176px);
+    display: flex;
     line-height: 0.8;
     color: var(--white);
     -webkit-text-stroke: var(--wordmark-stroke);
     paint-order: stroke fill;
+}
+
+.mark > span
+{
+    line-height: 0.74;
 }
 
 .row
@@ -97,22 +103,19 @@
     color: var(--white);
 }
 
-@media (hover: hover) and (pointer: fine)
+:global(.mouse) .email:hover
 {
-    .email:hover
-    {
-        color: var(--white);
-    }
+    color: var(--white);
+}
 
-    .email:hover svg
-    {
-        opacity: 1;
-        color: var(--blue);
-        transform: translateY(-1px);
-    }
+:global(.mouse) .email:hover svg
+{
+    opacity: 1;
+    color: var(--blue);
+    transform: translateY(-1px);
+}
 
-    .email:hover span
-    {
-        border-color: var(--blue);
-    }
+:global(.mouse) .email:hover span
+{
+    border-color: var(--blue);
 }

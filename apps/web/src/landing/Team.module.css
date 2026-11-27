@@ -88,11 +88,8 @@
     }
 }
 
-@media (hover: hover) and (pointer: fine)
+:global(.mouse) .person:hover .avatar
 {
-    .person:hover .avatar
-    {
-        background: var(--blue);
-        box-shadow: 0 8px 20px -8px var(--blue-glow);
-    }
+    background: var(--blue);
+    box-shadow: 0 8px 20px -8px var(--blue-glow);
 }
