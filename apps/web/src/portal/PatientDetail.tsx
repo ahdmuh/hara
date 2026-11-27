@@ -1,5 +1,9 @@
+import { useMutation, useQuery } from "convex/react";
+import type { FunctionReturnType } from "convex/server";
 import { AnimatePresence, motion } from "motion/react";
 import { useState, type CSSProperties } from "react";
+import { api } from "../../../../convex/_generated/api";
+import type { Id } from "../../../../convex/_generated/dataModel";
 import { Link } from "../Router";
 import Avatar from "../ui/Avatar";
 import Button from "../ui/Button";
@@ -11,16 +15,36 @@ import Tooltip from "../ui/Tooltip";
 import { daysSince, fullDate, relative } from "./Format";
 import LineChart from "./LineChart";
 import MilestoneBadge from "./MilestoneBadge";
-import { findPatient, FINGER_NAMES, GAME_INFO, GAMES, saveTargets, type Game, type IPatient } from "./MockData";
+import { FINGER_NAMES, GAME_INFO, GAMES, MILESTONE_TITLES, type Game } from "./Games";
 import styles from "./PatientDetail.module.css";
 
-const FINGER_COLORS = ["#5a4bff", "#16161a", "#a89eff", "#85858f", "#2e2470"];
+const FINGER_COLORS = ["#0095db", "#16161a", "#7cc8ee", "#85858f", "#00507a"];
+
+type IPatient = NonNullable<FunctionReturnType<typeof api.Clinician.patient>>;
 const HISTORY_STEP = 10;
 
 function Targets({ patient, open, onClose }: { patient: IPatient; open: boolean; onClose: () => void })
 {
     const toast = useToast();
+    const save = useMutation(api.Clinician.setTargets);
     const [targets, setTargets] = useState(patient.targets);
+    const [busy, setBusy] = useState(false);
+
+    async function submit(): Promise<void>
+    {
+        setBusy(true);
+        try
+        {
+            await save({ patientID: patient.id as Id<"patients">, targets });
+            toast.success("Targets Saved", "They reach the patient's app on next sync.");
+            onClose();
+        }
+        catch
+        {
+            toast.error("Could Not Save Targets", "Check your connection and try again.");
+        }
+        setBusy(false);
+    }
     return (
         <Dialog open={open} title="Adjust Targets" onClose={onClose}>
             <p className={styles.dialogNote}>
@@ -47,16 +71,7 @@ function Targets({ patient, open, onClose }: { patient: IPatient; open: boolean;
             </div>
             <div className={styles.dialogActions}>
                 <Button variant="ghost" onClick={onClose}>Cancel</Button>
-                <Button
-                    onClick={() =>
-                    {
-                        saveTargets(patient.id, targets);
-                        toast.success("Targets Saved", "They reach the patient's app on next sync.");
-                        onClose();
-                    }}
-                >
-                    Save Targets
-                </Button>
+                <Button busy={busy} onClick={() => void submit()}>Save Targets</Button>
             </div>
         </Dialog>
     );
@@ -64,8 +79,8 @@ function Targets({ patient, open, onClose }: { patient: IPatient; open: boolean;
 
 export default function PatientDetail({ id }: { id: string })
 {
-    const patient = findPatient(id);
-    const [game, setGame] = useState<Game>("range");
+    const patient = useQuery(api.Clinician.patient, { patientID: id });
+    const [game, setGame] = useState<Game>("rangeOfMotion");
     const [hidden, setHidden] = useState<number[]>([]);
     const [shown, setShown] = useState(HISTORY_STEP);
     const [targetsOpen, setTargetsOpen] = useState(false);
@@ -75,7 +90,12 @@ export default function PatientDetail({ id }: { id: string })
         setHidden(current => (current.includes(index) ? current.filter(entry => entry !== index) : [...current, index]));
     }
 
-    if (!patient)
+    if (patient === undefined)
+    {
+        return <div className={styles.loading} aria-label="Loading Patient" />;
+    }
+
+    if (patient === null)
     {
         return (
             <div className={styles.missing}>
@@ -96,7 +116,7 @@ export default function PatientDetail({ id }: { id: string })
         values: sessions.map(session => session.fingers[index] ?? 0),
     })).filter((_, index) => !hidden.includes(index));
     const minutes = patient.sessions.reduce((sum, session) => sum + session.minutes, 0);
-    const lastSession = patient.sessions[0]?.date;
+    const lastSession = patient.sessions[0]?.startedAt;
     const stats = [
         { label: "Sessions", value: patient.sessions.length.toString() },
         { label: "Minutes Played", value: minutes.toLocaleString("en-CA") },
@@ -116,7 +136,7 @@ export default function PatientDetail({ id }: { id: string })
                 <Avatar name={patient.name} size={72} />
                 <div className={styles.title}>
                     <h1>{patient.name}</h1>
-                    <p>{`Age ${patient.age} · ID ${patient.id} · Linked ${fullDate(patient.linkedAt)}`}</p>
+                    <p>{`${patient.age === null ? "Age Unknown" : `Age ${patient.age}`} · Linked ${fullDate(patient.linkedAt)}`}</p>
                 </div>
                 <Button variant="dark" icon={<Sliders />} onClick={() => setTargetsOpen(true)}>Adjust Targets</Button>
             </motion.header>
@@ -170,7 +190,7 @@ export default function PatientDetail({ id }: { id: string })
                             exit={{ opacity: 0, transition: { duration: 0.2, ease: EASE } }}
                         >
                             <LineChart
-                                dates={sessions.map(session => session.date)}
+                                dates={sessions.map(session => session.startedAt)}
                                 series={series}
                                 maximum={meta.maximum}
                                 unit={meta.unit}
@@ -203,7 +223,7 @@ export default function PatientDetail({ id }: { id: string })
                                         exit={{ opacity: 0 }}
                                         transition={{ duration: 0.3, ease: EASE }}
                                     >
-                                        <td>{fullDate(session.date)}</td>
+                                        <td>{fullDate(session.startedAt)}</td>
                                         <td>{GAME_INFO[session.game].name}</td>
                                         <td className={styles.numeric}>{session.minutes}</td>
                                         <td className={styles.numeric}>{session.score.toLocaleString("en-CA")}</td>
@@ -228,11 +248,11 @@ export default function PatientDetail({ id }: { id: string })
                         <h2>Milestones</h2>
                         <ol className={styles.milestones}>
                             {patient.milestones.map(milestone => (
-                                <li key={`${milestone.title}-${milestone.date}`}>
+                                <li key={`${milestone.kind}-${milestone.achievedAt}`}>
                                     <MilestoneBadge kind={milestone.kind} size={36} />
                                     <span>
-                                        <strong>{milestone.title}</strong>
-                                        <small>{fullDate(milestone.date)}</small>
+                                        <strong>{MILESTONE_TITLES[milestone.kind]}</strong>
+                                        <small>{fullDate(milestone.achievedAt)}</small>
                                     </span>
                                 </li>
                             ))}
@@ -242,8 +262,8 @@ export default function PatientDetail({ id }: { id: string })
                         <h2>Calibration History</h2>
                         <ol className={styles.calibrations}>
                             {patient.calibrations.map(calibration => (
-                                <li key={calibration.date}>
-                                    <span className={styles.calibrationDate}>{fullDate(calibration.date)}</span>
+                                <li key={calibration.takenAt}>
+                                    <span className={styles.calibrationDate}>{fullDate(calibration.takenAt)}</span>
                                     <span className={styles.bars} aria-label="Range per Finger">
                                         {calibration.range.map((value, index) => (
                                             <Tooltip key={index} label={`${FINGER_NAMES[index]} ${value}%`} className={styles.barTip}>

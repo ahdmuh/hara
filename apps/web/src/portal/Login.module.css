@@ -170,3 +170,22 @@
         padding-top: 72px;
     }
 }
+
+.switch
+{
+    justify-self: center;
+    padding: 6px 10px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 650;
+    color: var(--steel);
+    transition: color 0.2s var(--ease), background-color 0.2s var(--ease);
+}
+
+.switch:hover
+{
+    color: var(--ink);
+    background: var(--mist);
+}

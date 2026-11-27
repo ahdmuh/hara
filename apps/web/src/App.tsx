@@ -1,13 +1,12 @@
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import Landing from "./landing/Landing";
-import Admin from "./portal/Admin";
-import Login from "./portal/Login";
-import Portal from "./portal/Portal";
 import { navigate, usePath } from "./Router";
 import { isPortalHost } from "./Site";
 import { PAGE } from "./ui/Motion";
 import { ToastProvider } from "./ui/Toast";
+
+const PortalApp = lazy(() => import("./portal/PortalApp"));
 
 type Screen = "landing" | "login" | "portal" | "admin";
 
@@ -48,10 +47,13 @@ export default function App()
                 <AnimatePresence mode="wait">
                     {!portalRoot && (
                         <motion.div key={screen} variants={PAGE} initial="hidden" animate="shown" exit="gone">
-                            {screen === "landing" && <Landing />}
-                            {screen === "login" && <Login />}
-                            {screen === "portal" && <Portal />}
-                            {screen === "admin" && <Admin />}
+                            {screen === "landing"
+                                ? <Landing />
+                                : (
+                                        <Suspense fallback={null}>
+                                            <PortalApp screen={screen} />
+                                        </Suspense>
+                                    )}
                         </motion.div>
                     )}
                 </AnimatePresence>

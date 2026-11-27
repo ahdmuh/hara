@@ -485,6 +485,22 @@
     gap: 10px;
 }
 
+.loading
+{
+    height: 60vh;
+    border-radius: var(--radius);
+    background: linear-gradient(90deg, transparent 0%, rgb(22 22 26 / 4%) 50%, transparent 100%) 0 0 / 200% 100%;
+    animation: shimmer 1.4s linear infinite;
+}
+
+@keyframes shimmer
+{
+    to
+    {
+        background-position: -200% 0;
+    }
+}
+
 .missing
 {
     display: grid;

@@ -1,13 +1,17 @@
+import { useQuery } from "convex/react";
+import type { FunctionReturnType } from "convex/server";
 import { AnimatePresence, motion } from "motion/react";
 import { useDeferredValue, useMemo, useState } from "react";
+import { api } from "../../../../convex/_generated/api";
 import { navigate } from "../Router";
-import { ChevronLeft, ChevronRight, ChevronDown, Close, Search } from "../ui/Icons";
-import { EASE, SPRING } from "../ui/Motion";
 import Avatar from "../ui/Avatar";
+import { ChevronDown, ChevronLeft, ChevronRight, Close, Key, Search } from "../ui/Icons";
+import Button from "../ui/Button";
+import { EASE, SPRING } from "../ui/Motion";
 import { daysSince, relative } from "./Format";
-import { GAMES, patients, trend, type Game, type IPatient } from "./MockData";
-import styles from "./PatientList.module.css";
+import { GAMES, MILESTONE_TITLES, type Game } from "./Games";
 import MilestoneBadge from "./MilestoneBadge";
+import styles from "./PatientList.module.css";
 import Sparkline from "./Sparkline";
 
 const PAGE_SIZE = 20;
@@ -15,6 +19,7 @@ const ROW_TRANSITION = { duration: 0.3, ease: EASE, layout: { duration: 0.35, ea
 
 type SortKey = "name" | "lastSession" | "sessions" | Game;
 type Filter = "all" | "active" | "inactive";
+type IPatient = NonNullable<FunctionReturnType<typeof api.Clinician.patients>>[number];
 
 const FILTERS: { id: Filter; label: string }[] = [
     { id: "all", label: "All" },
@@ -28,20 +33,19 @@ interface IRow
 {
     patient: IPatient;
     search: string;
-    lastSession: number | undefined;
-    trends: Record<Game, number[]>;
     current: Record<Game, number>;
 }
 
 function toRow(patient: IPatient): IRow
 {
-    const trends = { range: trend(patient, "range"), strength: trend(patient, "strength"), speed: trend(patient, "speed") };
     return {
         patient,
-        search: `${patient.name} ${patient.id}`.toLowerCase(),
-        lastSession: patient.sessions[0]?.date,
-        trends,
-        current: { range: trends.range.at(-1) ?? 0, strength: trends.strength.at(-1) ?? 0, speed: trends.speed.at(-1) ?? 0 },
+        search: patient.name.toLowerCase(),
+        current: {
+            rangeOfMotion: patient.trends.rangeOfMotion.at(-1) ?? 0,
+            strength: patient.trends.strength.at(-1) ?? 0,
+            speed: patient.trends.speed.at(-1) ?? 0,
+        },
     };
 }
 
@@ -52,17 +56,18 @@ function compare(first: IRow, second: IRow, key: SortKey): number
         case "name":
             return COLLATOR.compare(first.patient.name, second.patient.name);
         case "lastSession":
-            return (first.lastSession ?? 0) - (second.lastSession ?? 0);
+            return (first.patient.lastSession ?? 0) - (second.patient.lastSession ?? 0);
         case "sessions":
-            return first.patient.sessions.length - second.patient.sessions.length;
+            return first.patient.sessionCount - second.patient.sessionCount;
         default:
             return first.current[key] - second.current[key];
     }
 }
 
-export default function PatientList()
+export default function PatientList({ onLink }: { onLink: () => void })
 {
-    const rows = useMemo(() => patients().map(toRow), []);
+    const data = useQuery(api.Clinician.patients);
+    const rows = useMemo(() => (data ?? []).map(toRow), [data]);
     const [query, setQuery] = useState("");
     const deferredQuery = useDeferredValue(query);
     const [filter, setFilter] = useState<Filter>("all");
@@ -76,7 +81,7 @@ export default function PatientList()
             .filter(row => !needle || row.search.includes(needle))
             .filter((row) =>
             {
-                const idle = daysSince(row.lastSession);
+                const idle = daysSince(row.patient.lastSession);
                 return filter === "all" || (filter === "active" ? idle < 7 : idle >= 7);
             })
             .sort((first, second) => compare(first, second, sort.key) * (sort.descending ? -1 : 1));
@@ -114,7 +119,7 @@ export default function PatientList()
     {
         const active = sort.key === key;
         return (
-            <th className={className} aria-sort={active ? (sort.descending ? "descending" : "ascending") : "none"}>
+            <th key={key} className={className} aria-sort={active ? (sort.descending ? "descending" : "ascending") : "none"}>
                 <button type="button" className={`${styles.sort} ${active ? styles.sorted : ""}`} onClick={() => sortBy(key)}>
                     {label}
                     <motion.span
@@ -134,13 +139,13 @@ export default function PatientList()
             <div className={styles.head}>
                 <h1>
                     Patients
-                    <span className={styles.count}>{rows.length}</span>
+                    <span className={styles.count}>{data === undefined ? "" : rows.length}</span>
                 </h1>
                 <label className={styles.search}>
                     <Search />
                     <input
                         type="search"
-                        placeholder="Search by name or ID"
+                        placeholder="Search by name"
                         value={query}
                         onChange={(event) =>
                         {
@@ -233,14 +238,14 @@ export default function PatientList()
                                         <Avatar name={row.patient.name} size={38} />
                                         <span className={styles.identity}>
                                             <strong>{row.patient.name}</strong>
-                                            <span>{`${row.patient.age} · ${row.patient.id}`}</span>
+                                            <span>{row.patient.age === null ? "Age Unknown" : `Age ${row.patient.age}`}</span>
                                         </span>
                                     </span>
                                 </td>
                                 {GAMES.map(game => (
                                     <td key={game.id} data-label={game.name}>
                                         <span className={styles.metric}>
-                                            <Sparkline values={row.trends[game.id]} width={72} height={24} />
+                                            <Sparkline values={row.patient.trends[game.id]} width={72} height={24} />
                                             <span className={styles.value}>
                                                 {row.current[game.id].toFixed(game.digits)}
                                                 <small>{game.unit}</small>
@@ -249,28 +254,36 @@ export default function PatientList()
                                     </td>
                                 ))}
                                 <td data-label="Latest Milestone" className={styles.milestone}>
-                                    {row.patient.milestones[0]
+                                    {row.patient.milestone
                                         ? (
                                                 <span className={styles.badge}>
-                                                    <MilestoneBadge kind={row.patient.milestones[0].kind} size={26} />
-                                                    {row.patient.milestones[0].title}
+                                                    <MilestoneBadge kind={row.patient.milestone.kind} size={26} />
+                                                    {MILESTONE_TITLES[row.patient.milestone.kind]}
                                                 </span>
                                             )
                                         : "None"}
                                 </td>
-                                <td data-label="Sessions" className={styles.numeric}>{row.patient.sessions.length}</td>
+                                <td data-label="Sessions" className={styles.numeric}>{row.patient.sessionCount}</td>
                                 <td data-label="Last Session">
-                                    <span className={daysSince(row.lastSession) >= 7 ? styles.idle : ""}>{relative(row.lastSession)}</span>
+                                    <span className={daysSince(row.patient.lastSession) >= 7 ? styles.idle : ""}>{relative(row.patient.lastSession)}</span>
                                 </td>
                             </motion.tr>
                         ))}
                     </tbody>
                 </table>
-                {slice.length === 0 && (
-                    <motion.p className={styles.empty} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                        No patients match your search.
-                    </motion.p>
+                {data !== undefined && rows.length === 0 && (
+                    <motion.div className={styles.empty} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                        <strong>No Patients Yet</strong>
+                        <p>Create a PIN for a patient. Once they sign up with it, they appear here.</p>
+                        <Button icon={<Key />} onClick={onLink}>Link Patient</Button>
+                    </motion.div>
                 )}
+                {rows.length > 0 && slice.length === 0 && (
+                    <motion.div className={styles.empty} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                        <p>No patients match your search.</p>
+                    </motion.div>
+                )}
+                {data === undefined && <div className={styles.loading} aria-label="Loading Patients" />}
             </div>
             {pager("bottom")}
         </div>

@@ -10,6 +10,8 @@ bun run dev
 
 Run `bunx convex dev` once to sign in to Convex and write `.env.local`.
 
+Create the first admin with `bunx convex run Accounts:bootstrapAdmin '{"name": "…", "email": "…"}'`. It emails a temporary password.
+
 `bun run dev` uses keyboard input (keys 1 to 5). Run `VITE_INPUT=device bun run dev` to read the device.
 
 ## Commits

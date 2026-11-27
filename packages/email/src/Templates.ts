@@ -18,16 +18,21 @@ export function invitation(name: string, email: string, temporaryPassword: strin
     });
 }
 
-export function passwordReset(name: string, resetUrl: string): IEmail
+export function passwordReset(name: string, email: string, temporaryPassword: string): IEmail
 {
     return render({
         category: "Security",
         title: "Password Reset",
         greeting: `Hi ${name},`,
         paragraphs: [
-            "A password reset was requested for your HARA portal account. Use the button below to choose a new password.",
-            "If you did not expect this email, you can ignore it and your password will stay the same.",
+            "Your HARA portal password has been reset by an administrator. Sign in with the temporary password below, and you will be asked to choose a new one straight away.",
+            "If you did not ask for this, reply to this email so we can look into it.",
         ],
-        action: { label: "Reset Password", url: resetUrl },
+        details: [
+            { label: "Email", value: email },
+            { label: "Temporary Password", value: temporaryPassword },
+        ],
+        action: { label: "Sign In to the Portal", url: `${PORTAL_URL}/login` },
+        closing: "For your security, this temporary password stops working once you set a new one.",
     });
 }

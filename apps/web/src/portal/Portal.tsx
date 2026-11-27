@@ -33,9 +33,13 @@ export default function Portal()
                     </Button>
                 )}
             >
-                {() => (detail?.id ? <PatientDetail id={detail.id} /> : <PatientList />)}
+                {() => (
+                    <>
+                        {detail?.id ? <PatientDetail id={detail.id} /> : <PatientList onLink={() => setPinOpen(true)} />}
+                        <PinDialog open={pinOpen} onClose={() => setPinOpen(false)} />
+                    </>
+                )}
             </Shell>
-            <PinDialog open={pinOpen} onClose={() => setPinOpen(false)} />
         </>
     );
 }

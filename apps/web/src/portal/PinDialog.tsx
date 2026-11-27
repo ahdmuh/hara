@@ -1,5 +1,7 @@
+import { useMutation, useQuery } from "convex/react";
 import { AnimatePresence, motion } from "motion/react";
 import { useState, type FormEvent } from "react";
+import { api } from "../../../../convex/_generated/api";
 import Button from "../ui/Button";
 import Dialog from "../ui/Dialog";
 import Field from "../ui/Field";
@@ -8,7 +10,7 @@ import { EASE } from "../ui/Motion";
 import { useToast } from "../ui/Toast";
 import { useAccount } from "./Auth";
 import { fullDate } from "./Format";
-import { createPin, formatPin, inviteMessage, revokePin, usePendingPins, VALID_DAYS, type ILinkPin } from "./Links";
+import { formatPin, inviteMessage, VALID_DAYS, type ILinkPin } from "./Links";
 import styles from "./PinDialog.module.css";
 
 const CONFIRM_MILLISECONDS = 3000;
@@ -16,8 +18,11 @@ const CONFIRM_MILLISECONDS = 3000;
 export default function PinDialog({ open, onClose }: { open: boolean; onClose: () => void })
 {
     const toast = useToast();
-    const account = useAccount();
-    const pending = usePendingPins();
+    const { account } = useAccount();
+    const pending = useQuery(api.Clinician.pins) ?? [];
+    const createPin = useMutation(api.Clinician.createPin);
+    const revokePin = useMutation(api.Clinician.revokePin);
+    const [busy, setBusy] = useState(false);
     const [label, setLabel] = useState("");
     const [created, setCreated] = useState<ILinkPin | null>(null);
     const [confirming, setConfirming] = useState<string | null>(null);
@@ -30,11 +35,24 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
         onClose();
     }
 
-    function create(event: FormEvent): void
+    async function create(event: FormEvent): Promise<void>
     {
         event.preventDefault();
-        setCreated(createPin(label));
-        setLabel("");
+        if (busy)
+        {
+            return;
+        }
+        setBusy(true);
+        try
+        {
+            setCreated(await createPin({ label }));
+            setLabel("");
+        }
+        catch
+        {
+            toast.error("Could Not Create PIN", "Try again in a moment.");
+        }
+        setBusy(false);
     }
 
     async function copy(text: string, title: string): Promise<void>
@@ -50,7 +68,7 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
         }
     }
 
-    function revoke(code: string): void
+    async function revoke(code: string): Promise<void>
     {
         if (confirming !== code)
         {
@@ -58,8 +76,16 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
             window.setTimeout(() => setConfirming(current => (current === code ? null : current)), CONFIRM_MILLISECONDS);
             return;
         }
-        revokePin(code);
         setConfirming(null);
+        try
+        {
+            await revokePin({ code });
+        }
+        catch
+        {
+            toast.error("Could Not Revoke PIN", "Try again in a moment.");
+            return;
+        }
         if (created?.code === code)
         {
             setCreated(null);
@@ -110,7 +136,7 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
                             <motion.form
                                 key="form"
                                 className={styles.form}
-                                onSubmit={create}
+                                onSubmit={event => void create(event)}
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0, transition: { duration: 0.35, ease: EASE } }}
                                 exit={{ opacity: 0, y: -6, transition: { duration: 0.18 } }}
@@ -123,7 +149,7 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
                                     onChange={event => setLabel(event.target.value)}
                                     maxLength={60}
                                 />
-                                <Button type="submit" icon={<Key />}>Create PIN</Button>
+                                <Button type="submit" icon={<Key />} busy={busy}>Create PIN</Button>
                             </motion.form>
                         )}
             </AnimatePresence>
@@ -156,7 +182,7 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
                                                     type="button"
                                                     className={`${styles.revoke} ${confirming === pin.code ? styles.confirm : ""}`}
                                                     aria-label={confirming === pin.code ? `Confirm revoking PIN ${pin.code}` : `Revoke PIN ${pin.code}`}
-                                                    onClick={() => revoke(pin.code)}
+                                                    onClick={() => void revoke(pin.code)}
                                                 >
                                                     {confirming === pin.code ? <Check /> : <Close />}
                                                     <span>{confirming === pin.code ? "Revoke" : ""}</span>
