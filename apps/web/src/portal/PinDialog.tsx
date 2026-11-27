@@ -50,7 +50,7 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
         }
         catch
         {
-            toast.error("Could Not Create PIN", "Try again in a moment.");
+            toast.error("Could Not Create Code", "Try again in a moment.");
         }
         setBusy(false);
     }
@@ -83,14 +83,14 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
         }
         catch
         {
-            toast.error("Could Not Revoke PIN", "Try again in a moment.");
+            toast.error("Could Not Revoke Code", "Try again in a moment.");
             return;
         }
         if (created?.code === code)
         {
             setCreated(null);
         }
-        toast.success("PIN Revoked", "It can no longer be used to link.");
+        toast.success("Code Revoked", "It can no longer be used to link.");
     }
 
     const message = created ? inviteMessage(created, account?.name ?? "your clinician", fullDate(created.expiresAt)) : "";
@@ -98,7 +98,7 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
     return (
         <Dialog open={open} title="Link a New Patient" onClose={close}>
             <p className={styles.note}>
-                {`Create a PIN for each new patient. They enter it once when signing up in the HARA app, which links their account to you. A PIN stays valid until it is used, revoked, or ${VALID_DAYS} days pass.`}
+                {`Create a link code for each new patient. They enter it once when signing up in the HARA app, which links their account to you. A code stays valid until it is used, revoked, or ${VALID_DAYS} days pass.`}
             </p>
             <AnimatePresence mode="wait" initial={false}>
                 {created
@@ -126,10 +126,10 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
                                     {`${created.label || "Unnamed Patient"} · Valid until ${fullDate(created.expiresAt)}`}
                                 </p>
                                 <div className={styles.actions}>
-                                    <Button variant="ghost" icon={<Copy />} onClick={() => void copy(created.code, "PIN Copied")}>Copy PIN</Button>
+                                    <Button variant="ghost" icon={<Copy />} onClick={() => void copy(created.code, "Code Copied")}>Copy Code</Button>
                                     <Button icon={<Mail />} onClick={() => void copy(message, "Message Copied")}>Copy Message</Button>
                                 </div>
-                                <button type="button" className={styles.another} onClick={() => setCreated(null)}>Create Another PIN</button>
+                                <button type="button" className={styles.another} onClick={() => setCreated(null)}>Create Another Code</button>
                             </motion.div>
                         )
                     : (
@@ -149,14 +149,14 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
                                     onChange={event => setLabel(event.target.value)}
                                     maxLength={60}
                                 />
-                                <Button type="submit" icon={<Key />} busy={busy}>Create PIN</Button>
+                                <Button type="submit" icon={<Key />} busy={busy}>Create Code</Button>
                             </motion.form>
                         )}
             </AnimatePresence>
             <section className={styles.pending}>
-                <h3>Pending PINs</h3>
+                <h3>Pending Codes</h3>
                 {pending.length === 0
-                    ? <p className={styles.none}>No PINs are waiting to be used.</p>
+                    ? <p className={styles.none}>No codes are waiting to be used.</p>
                     : (
                             <ul>
                                 <AnimatePresence initial={false}>
@@ -175,13 +175,13 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
                                                     <strong>{pin.label || "Unnamed Patient"}</strong>
                                                     <small>{`Until ${fullDate(pin.expiresAt)}`}</small>
                                                 </span>
-                                                <button type="button" className={styles.icon} aria-label={`Copy PIN ${pin.code}`} onClick={() => void copy(pin.code, "PIN Copied")}>
+                                                <button type="button" className={styles.icon} aria-label={`Copy code ${pin.code}`} onClick={() => void copy(pin.code, "Code Copied")}>
                                                     <Copy />
                                                 </button>
                                                 <button
                                                     type="button"
                                                     className={`${styles.revoke} ${confirming === pin.code ? styles.confirm : ""}`}
-                                                    aria-label={confirming === pin.code ? `Confirm revoking PIN ${pin.code}` : `Revoke PIN ${pin.code}`}
+                                                    aria-label={confirming === pin.code ? `Confirm revoking code ${pin.code}` : `Revoke code ${pin.code}`}
                                                     onClick={() => void revoke(pin.code)}
                                                 >
                                                     {confirming === pin.code ? <Check /> : <Close />}

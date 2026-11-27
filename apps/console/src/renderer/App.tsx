@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { storedAccount, useLinkClinician, useProfile, useRegister, useSignOut } from "./Account";
 import { bridge } from "./Bridge";
 import DebugView from "./DebugView";
 import type { IDeviceStatus } from "../main/DeviceConnection";
@@ -83,7 +84,11 @@ export default function App()
             return next;
         });
     }, []);
-    const [patient, setPatient] = useState<string | null>(null);
+    const [patient, setPatient] = useState<string | null>(() => storedAccount()?.name ?? null);
+    const register = useRegister();
+    const linkClinician = useLinkClinician();
+    const profile = useProfile();
+    const signOut = useSignOut();
     const [calibrated, setCalibrated] = useState(false);
     const [linked, setLinked] = useState(false);
     const [calibratedAt, setCalibratedAt] = useState<Date | null>(null);
@@ -181,11 +186,17 @@ export default function App()
                 return (
                     <SignUp
                         onBack={showStart}
-                        onDone={(name, pin) =>
+                        onDone={async (details) =>
                         {
-                            setPatient(name);
-                            setLinked(pin !== "");
+                            const result = await register(details);
+                            if (typeof result === "string")
+                            {
+                                return result;
+                            }
+                            setPatient(result.name);
+                            setLinked(details.code !== "");
                             setView({ name: "calibration" });
+                            return null;
                         }}
                     />
                 );
@@ -221,12 +232,13 @@ export default function App()
                     <Settings
                         connected={device.connected}
                         firmware={device.firmware}
-                        linked={linked}
+                        linked={profile?.linked ?? linked}
                         onLink={() => setView({ name: "link" })}
                         onBack={goHome}
                         onRecalibrate={() => setView({ name: "calibration" })}
                         onSignOut={() =>
                         {
+                            void signOut();
                             setPatient(null);
                             setCalibrated(false);
                             setLinked(false);
@@ -239,15 +251,20 @@ export default function App()
                 return (
                     <Link
                         onBack={() => setView({ name: "settings" })}
-                        onLinked={() =>
+                        onLink={async (code) =>
                         {
-                            setLinked(true);
-                            setView({ name: "settings" });
+                            const message = await linkClinician(code);
+                            if (!message)
+                            {
+                                setLinked(true);
+                                setView({ name: "settings" });
+                            }
+                            return message;
                         }}
                     />
                 );
             case "progress":
-                return <Progress calibratedAt={calibratedAt} achieved={linked ? ["linked"] : []} onBack={goHome} />;
+                return <Progress calibratedAt={calibratedAt} achieved={profile?.linked ?? linked ? ["linked"] : []} onBack={goHome} />;
         }
     }
 

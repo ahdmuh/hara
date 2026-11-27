@@ -4,6 +4,7 @@ import "@fontsource-variable/figtree/index.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
+import Backend from "./Backend";
 import "./Theme.css";
 
 const root = document.getElementById("root");
@@ -14,6 +15,8 @@ if (!root)
 
 createRoot(root).render(
     <StrictMode>
-        <App />
+        <Backend>
+            <App />
+        </Backend>
     </StrictMode>,
 );

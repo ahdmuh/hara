@@ -2,7 +2,8 @@ import { AnimatePresence, motion } from "motion/react";
 import { useRef, useState } from "react";
 import { useIntent } from "../Intents";
 import { sounds } from "../Sounds";
-import { filterName, MAXIMUM_NAME, nameError } from "../Names";
+import { filterName, MAXIMUM_NAME, nameError, normalizeLinkCode } from "@hara/accounts";
+import type { IRegistration } from "../Account";
 import { eraseDigit, entryColumn, finishEntry, partialLabel, typeText, type IDateEntry } from "../DateEntry";
 import DateWheel, { DATE_COLUMNS, formatISO, stepDate, type DateColumn } from "../ui/DateWheel";
 import Hints, { type IHint } from "../ui/Hints";
@@ -19,7 +20,11 @@ const MAXIMUM_PASSWORD = 128;
 const FILTERS: Record<string, (value: string) => string> = {
     name: filterName,
     password: value => value.slice(0, MAXIMUM_PASSWORD),
-    pin: value => value.replace(/\D/g, "").slice(0, 6),
+    pin: (value) =>
+    {
+        const characters = value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
+        return characters.length > 4 ? `${characters.slice(0, 4)}-${characters.slice(4)}` : characters;
+    },
 };
 
 const STEPS = [
@@ -29,9 +34,9 @@ const STEPS = [
     {
         id: "pin",
         title: "Link Your Clinician",
-        note: "Optional. Enter the 6-digit PIN from your clinician to share your progress, or link one later in Settings.",
+        note: "Optional. Enter the code from your clinician to share your progress, or link one later in Settings.",
         type: "text",
-        label: "Clinician PIN",
+        label: "Clinician Code",
     },
 ] as const;
 
@@ -48,7 +53,7 @@ function problem(step: StepID, value: string): string
         case "password":
             return `Use at Least ${MINIMUM_PASSWORD} Characters`;
         case "pin":
-            return "Clinician PINs Have 6 Digits";
+            return "Clinician Codes Have 8 Letters and Numbers";
     }
 }
 
@@ -63,11 +68,17 @@ function isValid(step: StepID, value: string): boolean
         case "password":
             return value.length >= MINIMUM_PASSWORD;
         case "pin":
-            return value === "" || /^\d{6}$/.test(value);
+            return value === "" || normalizeLinkCode(value) !== null;
     }
 }
 
-export default function SignUp({ onDone, onBack }: { onDone: (name: string, pin: string) => void; onBack: () => void })
+interface ISignUpProps
+{
+    onDone: (details: IRegistration) => Promise<string | null>;
+    onBack: () => void;
+}
+
+export default function SignUp({ onDone, onBack }: ISignUpProps)
 {
     const [index, setIndexState] = useState(0);
     const [travel, setTravel] = useState(1);
@@ -77,6 +88,7 @@ export default function SignUp({ onDone, onBack }: { onDone: (name: string, pin:
         setTravel(next >= index ? 1 : -1);
         setIndexState(next);
     }
+    const [busy, setBusy] = useState(false);
     const [values, setValues] = useState<Record<StepID, string>>({ name: "", birthday: "", password: "", pin: "" });
     const [field, shakeField] = useShake<HTMLLabelElement>();
     const [wheel, shakeWheel] = useShake<HTMLDivElement>();
@@ -158,7 +170,17 @@ export default function SignUp({ onDone, onBack }: { onDone: (name: string, pin:
         }
         if (index === STEPS.length - 1)
         {
-            onDone(values.name.trim(), values.pin);
+            setBusy(true);
+            const details = { name: values.name.trim(), birthday: formatISO(latest.current.date), password: values.password, code: values.pin };
+            void onDone(details).then((message) =>
+            {
+                setBusy(false);
+                if (message)
+                {
+                    shakeField();
+                    notify(message);
+                }
+            });
             return;
         }
         setIndex(index + 1);
@@ -166,6 +188,10 @@ export default function SignUp({ onDone, onBack }: { onDone: (name: string, pin:
 
     useIntent((intent) =>
     {
+        if (busy)
+        {
+            return false;
+        }
         if (step.id === "birthday" && (intent === "up" || intent === "down"))
         {
             const before = latest.current.date;
@@ -201,9 +227,12 @@ export default function SignUp({ onDone, onBack }: { onDone: (name: string, pin:
     function change(raw: string): void
     {
         const filtered = FILTERS[step.id]?.(raw) ?? raw;
-        if (filtered.replace(/\s/g, "").length < raw.replace(/\s/g, "").length && filtered.length < MAXIMUM_PASSWORD)
+        const dropped = step.id === "pin"
+            ? /[^A-Za-z0-9\s-]/.test(raw)
+            : filtered.replace(/\s/g, "").length < raw.replace(/\s/g, "").length && filtered.length < MAXIMUM_PASSWORD;
+        if (dropped)
         {
-            notify(step.id === "pin" ? "Clinician PINs Only Use Digits" : "Names Use Letters, Spaces, Hyphens and Apostrophes");
+            notify(step.id === "pin" ? "Clinician Codes Use Letters and Numbers" : "Names Use Letters, Spaces, Hyphens and Apostrophes");
         }
         setValues({ ...values, [step.id]: filtered });
     }
@@ -270,8 +299,7 @@ export default function SignUp({ onDone, onBack }: { onDone: (name: string, pin:
                                         <input
                                             autoFocus
                                             type={step.type}
-                                            inputMode={step.id === "pin" ? "numeric" : undefined}
-                                            maxLength={step.id === "pin" ? 6 : step.id === "name" ? MAXIMUM_NAME : MAXIMUM_PASSWORD}
+                                            maxLength={step.id === "pin" ? 9 : step.id === "name" ? MAXIMUM_NAME : MAXIMUM_PASSWORD}
                                             autoComplete="off"
                                             value={value}
                                             onChange={event => change(event.target.value)}

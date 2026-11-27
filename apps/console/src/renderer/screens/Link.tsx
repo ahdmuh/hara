@@ -1,3 +1,4 @@
+import { normalizeLinkCode } from "@hara/accounts";
 import { useState } from "react";
 import { useIntent } from "../Intents";
 import Hints from "../ui/Hints";
@@ -7,22 +8,35 @@ import Wordmark from "../ui/Wordmark";
 import screen from "./Screen.module.css";
 import form from "./SignUp.module.css";
 
-export default function Link({ onLinked, onBack }: { onLinked: () => void; onBack: () => void })
+export default function Link({ onLink, onBack }: { onLink: (code: string) => Promise<string | null>; onBack: () => void })
 {
-    const [pin, setPin] = useState("");
+    const [code, setCode] = useState("");
     const [field, shakeField] = useShake<HTMLLabelElement>();
+
+    const [busy, setBusy] = useState(false);
 
     function link(): void
     {
-        if (/^\d{6}$/.test(pin))
+        if (busy)
         {
-            onLinked();
+            return;
         }
-        else
+        if (!normalizeLinkCode(code))
         {
             shakeField();
-            notify("Clinician PINs Have 6 Digits");
+            notify("Clinician Codes Have 8 Letters and Numbers");
+            return;
         }
+        setBusy(true);
+        void onLink(code).then((message) =>
+        {
+            setBusy(false);
+            if (message)
+            {
+                shakeField();
+                notify(message);
+            }
+        });
     }
 
     useIntent((intent) =>
@@ -56,25 +70,25 @@ export default function Link({ onLinked, onBack }: { onLinked: () => void; onBac
                 >
                     <div className={screen.heading}>
                         <h1>Link Your Clinician</h1>
-                        <p>Enter the 6-digit PIN from your clinician to share your progress.</p>
+                        <p>Enter the code from your clinician to share your progress.</p>
                     </div>
                     <label ref={field} className={form.field}>
-                        <span>Clinician PIN</span>
+                        <span>Clinician Code</span>
                         <input
                             autoFocus
                             type="text"
-                            inputMode="numeric"
-                            maxLength={6}
+                            maxLength={9}
                             autoComplete="off"
-                            value={pin}
+                            value={code}
                             onChange={(event) =>
                             {
-                                const digits = event.target.value.replace(/\D/g, "");
-                                if (digits.length < event.target.value.length)
+                                const raw = event.target.value;
+                                if (/[^A-Za-z0-9\s-]/.test(raw))
                                 {
-                                    notify("Clinician PINs Only Use Digits");
+                                    notify("Clinician Codes Use Letters and Numbers");
                                 }
-                                setPin(digits.slice(0, 6));
+                                const characters = raw.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
+                                setCode(characters.length > 4 ? `${characters.slice(0, 4)}-${characters.slice(4)}` : characters);
                             }}
                         />
                     </label>
