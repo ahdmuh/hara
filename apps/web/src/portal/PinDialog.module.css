@@ -28,7 +28,8 @@
 .pin span
 {
     font-family: var(--figure);
-    font-weight: 300;
+    font-weight: 900;
+    font-variation-settings: "ROND" 0;
     font-size: clamp(30px, 8vw, 44px);
     letter-spacing: 0.12em;
     color: var(--white);
@@ -111,10 +112,10 @@
 
 .code
 {
-    font-family: var(--figure);
+    font-family: var(--sans);
     user-select: none;
     -webkit-user-select: none;
-    font-weight: 650;
+    font-weight: 700;
     font-size: 15px;
     letter-spacing: 0.08em;
 }

@@ -4,21 +4,7 @@ import { EASE } from "../ui/Motion";
 import Reveal, { RevealItem } from "../ui/Reveal";
 import styles from "./About.module.css";
 import Apparatus from "./Apparatus";
-
-const STEPS = [
-    {
-        title: "Calibrate",
-        body: "A short calibration measures the range and strength of each finger and sets the safe limits every game stays within.",
-    },
-    {
-        title: "Play",
-        body: "Games turn repetitive exercises into play, and their difficulty scales to your capacity as you recover.",
-    },
-    {
-        title: "Track",
-        body: "Each session is saved and synced to your account, where your clinician follows your trends and milestones.",
-    },
-];
+import Loop from "./Loop";
 
 function Percent()
 {
@@ -70,15 +56,7 @@ export default function About()
                 </p>
             </Reveal>
             <Apparatus />
-            <Reveal as="ol" className={styles.steps} group>
-                {STEPS.map((step, index) => (
-                    <RevealItem as="li" key={step.title} className={styles.step}>
-                        <span className={styles.number}>{`0${index + 1}`}</span>
-                        <h3>{step.title}</h3>
-                        <p>{step.body}</p>
-                    </RevealItem>
-                ))}
-            </Reveal>
+            <Loop />
         </section>
     );
 }

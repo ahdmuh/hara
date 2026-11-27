@@ -58,7 +58,8 @@
     user-select: none;
     -webkit-user-select: none;
     font-size: 32px;
-    font-weight: 300;
+    font-weight: 900;
+    font-variation-settings: "ROND" 0;
     box-shadow: 0 12px 28px -12px var(--blue-glow);
 }
 
@@ -105,7 +106,8 @@
     user-select: none;
     -webkit-user-select: none;
     font-size: clamp(28px, 3vw, 40px);
-    font-weight: 300;
+    font-weight: 900;
+    font-variation-settings: "ROND" 0;
     line-height: 1;
 }
 
@@ -433,11 +435,11 @@
 
 .sliderHead b
 {
-    font-family: var(--figure);
+    font-family: var(--sans);
     user-select: none;
     -webkit-user-select: none;
     font-size: 20px;
-    font-weight: 650;
+    font-weight: 700;
     color: var(--blue);
 }
 

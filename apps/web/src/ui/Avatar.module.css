@@ -5,10 +5,10 @@
     place-items: center;
     border-radius: 30%;
     color: var(--white);
-    font-family: var(--figure);
+    font-family: var(--sans);
     user-select: none;
     -webkit-user-select: none;
-    font-weight: 650;
+    font-weight: 700;
     letter-spacing: 0.04em;
     box-shadow: 0 0 0 1px rgb(255 255 255 / 14%) inset;
 }

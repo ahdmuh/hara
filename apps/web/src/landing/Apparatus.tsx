@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { EASE } from "../ui/Motion";
 import Reveal, { RevealItem } from "../ui/Reveal";
 import styles from "./Apparatus.module.css";
+import Targets from "./Targets";
 
 type Part = "rails" | "cuffs" | "base" | "sensors" | "stop";
 
@@ -40,13 +41,6 @@ const RAILS = [
     { x: 296, y: 290, angle: -2, length: 236, travel: 104 },
     { x: 340, y: 296, angle: 12, length: 216, travel: 94 },
     { x: 380, y: 314, angle: 27, length: 176, travel: 74 },
-];
-
-const TARGETS = [
-    { sign: "≤", value: "100", unit: "ms", label: "Response Time" },
-    { sign: "≥", value: "100", unit: "Hz", label: "Readings per Second" },
-    { sign: "±", value: "5", unit: "%", label: "Position Accuracy" },
-    { sign: "±", value: "10", unit: "%", label: "Force Accuracy" },
 ];
 
 const MOTORS = [150, 225, 300, 375, 450];
@@ -175,21 +169,7 @@ export default function Apparatus()
                     ))}
                 </Reveal>
             </div>
-            <Reveal className={styles.targets}>
-                <h2>Design Targets</h2>
-                <ul>
-                    {TARGETS.map(target => (
-                        <li key={target.label}>
-                            <span className={styles.value}>
-                                <span className={styles.sign}>{target.sign}</span>
-                                {target.value}
-                                <small>{target.unit}</small>
-                            </span>
-                            <span className={styles.label}>{target.label}</span>
-                        </li>
-                    ))}
-                </ul>
-            </Reveal>
+            <Targets />
         </div>
     );
 }
