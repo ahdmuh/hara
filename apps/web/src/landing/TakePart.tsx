@@ -35,44 +35,46 @@ export default function TakePart()
                     <a className={styles.email} href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
                 </RevealItem>
             </Reveal>
-            <Reveal className={styles.session}>
-                <div className={styles.total}>
-                    <span className={styles.minutes}>60</span>
-                    <span>Minute Session</span>
-                </div>
-                <ol className={styles.path} aria-label="Session Plan">
-                    {SESSION.map((part, index) => (
-                        <li key={index} className={styles[part.kind]} style={{ flexGrow: part.minutes }}>
-                            <motion.span
-                                className={styles.segment}
-                                initial={{ scaleX: 0 }}
-                                whileInView={{ scaleX: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: 0.15 + index * 0.12, ease: EASE }}
-                            />
-                            <motion.span
-                                className={styles.node}
-                                initial={{ scale: 0 }}
-                                whileInView={{ scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.4, delay: 0.1 + index * 0.12, ease: EASE }}
-                            />
-                            <span className={styles.label}>
-                                {part.label}
-                                <small>{`${part.minutes} min`}</small>
-                            </span>
-                        </li>
-                    ))}
-                </ol>
-            </Reveal>
-            <Reveal as="ul" className={styles.facts} group>
-                <RevealItem as="li">18 years or older</RevealItem>
-                <RevealItem as="li">Stroke survivors preferred</RevealItem>
-                <RevealItem as="li">
-                    {"Sessions held at the "}
-                    <UCalgary className={styles.ucalgary} />
-                </RevealItem>
-            </Reveal>
+            <div className={styles.card}>
+                <Reveal className={styles.session}>
+                    <div className={styles.total}>
+                        <span className={styles.minutes}>60</span>
+                        <span>Minute Session</span>
+                    </div>
+                    <ol className={styles.path} aria-label="Session Plan">
+                        {SESSION.map((part, index) => (
+                            <li key={index} className={styles[part.kind]} style={{ flexGrow: part.minutes }}>
+                                <motion.span
+                                    className={styles.segment}
+                                    initial={{ scaleX: 0 }}
+                                    whileInView={{ scaleX: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.6, delay: 0.15 + index * 0.12, ease: EASE }}
+                                />
+                                <motion.span
+                                    className={styles.node}
+                                    initial={{ scale: 0 }}
+                                    whileInView={{ scale: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.4, delay: 0.1 + index * 0.12, ease: EASE }}
+                                />
+                                <span className={styles.label}>
+                                    {part.label}
+                                    <small>{`${part.minutes} min`}</small>
+                                </span>
+                            </li>
+                        ))}
+                    </ol>
+                </Reveal>
+                <Reveal as="ul" className={styles.facts} group>
+                    <RevealItem as="li">18 years or older</RevealItem>
+                    <RevealItem as="li">Stroke survivors preferred</RevealItem>
+                    <RevealItem as="li">
+                        {"Sessions held at the "}
+                        <UCalgary className={styles.ucalgary} />
+                    </RevealItem>
+                </Reveal>
+            </div>
         </section>
     );
 }

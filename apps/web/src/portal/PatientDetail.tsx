@@ -18,7 +18,7 @@ import MilestoneBadge from "./MilestoneBadge";
 import { FINGER_NAMES, GAME_INFO, GAMES, MILESTONE_TITLES, type Game } from "./Games";
 import styles from "./PatientDetail.module.css";
 
-const FINGER_COLORS = ["#0095db", "#16161a", "#7cc8ee", "#85858f", "#00507a"];
+const FINGER_COLORS = ["#2fa8e6", "#16161a", "#7cc8ee", "#85858f", "#00507a"];
 
 type IPatient = NonNullable<FunctionReturnType<typeof api.Clinician.patient>>;
 const HISTORY_STEP = 10;
