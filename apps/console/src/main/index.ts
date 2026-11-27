@@ -1,8 +1,10 @@
 import { join } from "node:path";
+import { DatabaseSync } from "node:sqlite";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { CHANNELS } from "../shared/IBridge";
 import { DeviceConnection } from "./DeviceConnection";
 import { SerialPortProvider } from "./SerialPortProvider";
+import { SessionStore } from "./SessionStore";
 
 const device = new DeviceConnection(new SerialPortProvider(), {
     scanMilliseconds: 1000,
@@ -10,6 +12,17 @@ const device = new DeviceConnection(new SerialPortProvider(), {
     silenceMilliseconds: 1000,
     devicePath: process.env.HARA_DEVICE_PATH ?? null,
 });
+
+let database: DatabaseSync | null = null;
+let sessions: SessionStore | null = null;
+
+function openSessions(): void
+{
+    database = new DatabaseSync(join(app.getPath("userData"), "hara.sqlite"));
+    database.exec("PRAGMA journal_mode = WAL; PRAGMA synchronous = FULL;");
+    sessions = new SessionStore(database);
+    sessions.recoverInterrupted();
+}
 
 function broadcast(channel: string, payload: unknown): void
 {
@@ -51,6 +64,7 @@ device.onMessage(message => broadcast(CHANNELS.deviceMessage, message));
 
 void app.whenReady().then(() =>
 {
+    openSessions();
     createWindow();
     device.start();
     app.on("activate", () =>
@@ -70,4 +84,10 @@ app.on("window-all-closed", () =>
     }
 });
 
-app.on("before-quit", () => device.stop());
+app.on("before-quit", () =>
+{
+    device.stop();
+    sessions = null;
+    database?.close();
+    database = null;
+});
