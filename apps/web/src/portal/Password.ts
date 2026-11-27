@@ -32,7 +32,7 @@ export const PASSWORD_RULES: IPasswordRule[] = [
     },
     {
         id: "personal",
-        label: "Not your email or a common word",
+        label: "No email or common words",
         passes: (password, email) =>
         {
             const lower = password.toLowerCase();
