@@ -1,7 +1,7 @@
 import calm from "./assets/audio/calming-yoga.mp3";
 import jazz from "./assets/audio/rainy-night-jazz.mp3";
 
-const MAXIMUM_LEVEL = 0.1;
+const MAXIMUM_LEVEL = 0.05;
 const FADE_SECONDS = 1.6;
 const INTRO_SECONDS = 4.5;
 const THEME_SECONDS = 2.5;
