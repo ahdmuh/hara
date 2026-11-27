@@ -105,11 +105,6 @@ export default function Header()
                                     <a href={link.href} onClick={() => setOpen(false)}>{link.label}</a>
                                 </motion.li>
                             ))}
-                            <motion.li variants={ITEM}>
-                                <LinkButton to={portalHref("/login")} variant="dark" icon={<Login />} className={styles.sheetLogin}>
-                                    Portal
-                                </LinkButton>
-                            </motion.li>
                         </motion.ul>
                     </motion.nav>
                 )}
