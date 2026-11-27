@@ -42,7 +42,6 @@ export default defineSchema({
     patients: defineTable({
         userID: v.id("users"),
         clinicianID: v.optional(v.id("users")),
-        handle: v.optional(v.string()),
         birthday: v.string(),
         targets: v.optional(targets),
     })
