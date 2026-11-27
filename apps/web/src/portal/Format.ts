@@ -1,5 +1,3 @@
-import { now } from "./MockData";
-
 const DAY = 86_400_000;
 const RELATIVE = new Intl.RelativeTimeFormat("en-CA", { numeric: "auto" });
 const DATE = new Intl.DateTimeFormat("en-CA", { month: "short", day: "numeric", year: "numeric" });
@@ -11,7 +9,7 @@ export function relative(date: number | undefined): string
     {
         return "Never";
     }
-    const days = Math.round((date - now()) / DAY);
+    const days = Math.round((date - Date.now()) / DAY);
     if (days === 0)
     {
         return "Today";
@@ -31,7 +29,7 @@ export function fullDate(date: number): string
 
 export function daysSince(date: number | undefined): number
 {
-    return date === undefined ? Infinity : Math.floor((now() - date) / DAY);
+    return date === undefined ? Infinity : Math.floor((Date.now() - date) / DAY);
 }
 
 export function initials(name: string): string

@@ -1,5 +1,5 @@
 import { useId, type ReactNode } from "react";
-import type { MilestoneKind } from "./MockData";
+import type { MilestoneKind } from "./Games";
 
 interface IStyle
 {

@@ -31,10 +31,10 @@ describe("invitation", () =>
 
 describe("passwordReset", () =>
 {
-    test("links to the reset url under a security subject", () =>
+    test("carries the temporary password under a security subject", () =>
     {
-        const email = passwordReset("Jordan Lee", "https://portal.projecthara.ca/reset?token=abc");
+        const email = passwordReset("Jordan Lee", "jordan@clinic.example", "Temp-Pass-456");
         expect(email.subject).toBe("Security: Password Reset");
-        expect(email.html).toContain("href=\"https://portal.projecthara.ca/reset?token=abc\"");
+        expect(email.text).toContain("Temp-Pass-456");
     });
 });

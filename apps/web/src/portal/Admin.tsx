@@ -1,5 +1,9 @@
+import { isEmail, normalizeEmail } from "@hara/accounts";
+import { useAction, useQuery } from "convex/react";
+import type { FunctionReturnType } from "convex/server";
 import { AnimatePresence, motion } from "motion/react";
 import { useDeferredValue, useMemo, useState, type FormEvent } from "react";
+import { api } from "../../../../convex/_generated/api";
 import Avatar from "../ui/Avatar";
 import Button from "../ui/Button";
 import Dialog from "../ui/Dialog";
@@ -9,57 +13,27 @@ import { EASE } from "../ui/Motion";
 import { useToast } from "../ui/Toast";
 import styles from "./Admin.module.css";
 import { fullDate, relative } from "./Format";
-import { now } from "./MockData";
 import Shell from "./Shell";
 
-type Status = "active" | "invited";
+type IClinician = NonNullable<FunctionReturnType<typeof api.Admin.clinicians>>[number];
 
-interface IClinician
-{
-    id: string;
-    name: string;
-    email: string;
-    status: Status;
-    addedAt: number;
-    lastActiveAt?: number;
-}
-
-const DAY = 86_400_000;
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const SEED: [string, Status, number, number?][] = [
-    ["Dr. Amara Okafor", "active", 120, 1],
-    ["Dr. Daniel Chen", "active", 96, 3],
-    ["Grace Moreau", "active", 88, 0],
-    ["Dr. Hiro Tanaka", "active", 61, 9],
-    ["Priya Kaur", "invited", 4],
-    ["Samuel Fischer", "active", 40, 2],
-    ["Dr. Elena Vargas", "invited", 1],
-];
-
-function seed(): IClinician[]
-{
-    return SEED.map(([name, status, addedDaysAgo, activeDaysAgo], index) => ({
-        id: `C${100 + index}`,
-        name,
-        email: `${name.replace(/^Dr\.\s+/, "").toLowerCase().replace(/\s+/g, ".")}@clinic.example`,
-        status,
-        addedAt: now() - addedDaysAgo * DAY,
-        lastActiveAt: activeDaysAgo === undefined ? undefined : now() - activeDaysAgo * DAY,
-    }));
-}
-
-function wait(): Promise<void>
-{
-    return new Promise(resolve => window.setTimeout(resolve, 600));
-}
+const FAILURES: Record<string, [string, string]> = {
+    EMAIL_TAKEN: ["Clinician Already Added", "That email already has an account."],
+    INVALID: ["Check the Details", "Enter a full name and a valid email."],
+    EMAIL_FAILED: ["Email Not Sent", "The account is ready, but the email failed. Use Resend Invitation."],
+    FORBIDDEN: ["Not Allowed", "Sign in again and retry."],
+    NOT_FOUND: ["Clinician Not Found", "Refresh the page and try again."],
+};
 
 type Pending = { kind: "reset" | "resend"; clinician: IClinician } | null;
 
 function Clinicians({ inviting, setInviting }: { inviting: boolean; setInviting: (open: boolean) => void })
 {
     const toast = useToast();
-    const [clinicians, setClinicians] = useState(seed);
+    const data = useQuery(api.Admin.clinicians);
+    const clinicians = useMemo(() => data ?? [], [data]);
+    const addClinician = useAction(api.Admin.addClinician);
+    const resetClinician = useAction(api.Admin.resetClinician);
     const [query, setQuery] = useState("");
     const deferred = useDeferredValue(query);
     const [pending, setPending] = useState<Pending>(null);
@@ -81,46 +55,84 @@ function Clinicians({ inviting, setInviting }: { inviting: boolean; setInviting:
         setInvalid([]);
     }
 
+    function failure(error: string): void
+    {
+        const [title, message] = FAILURES[error] ?? ["Something Went Wrong", "Try again in a moment."];
+        toast.error(title, message);
+    }
+
     async function invite(event: FormEvent): Promise<void>
     {
         event.preventDefault();
+        if (busy)
+        {
+            return;
+        }
         const name = form.name.trim();
-        const email = form.email.trim().toLowerCase();
-        const problems = [name.length < 2 ? "name" : "", EMAIL_PATTERN.test(email) ? "" : "email"].filter(Boolean);
-        if (clinicians.some(clinician => clinician.email === email))
-        {
-            problems.push("email");
-            toast.error("Clinician Already Added", "That email already has an account.");
-        }
-        else if (problems.length)
-        {
-            toast.error("Check the Details", "Enter a full name and a valid email.");
-        }
+        const email = normalizeEmail(form.email);
+        const problems = [name.length < 2 ? "name" : "", isEmail(email) ? "" : "email"].filter(Boolean);
         if (problems.length)
         {
+            toast.error("Check the Details", "Enter a full name and a valid email.");
             setInvalid(problems);
             setAttempt(value => value + 1);
             return;
         }
         setBusy(true);
-        await wait();
+        try
+        {
+            const result = await addClinician({ name, email });
+            if (result.status === "complete")
+            {
+                toast.success("Invitation Sent", `${email} will receive a temporary password.`);
+                closeInvite();
+            }
+            else
+            {
+                failure(result.error);
+                if (result.error === "EMAIL_TAKEN")
+                {
+                    setInvalid(["email"]);
+                    setAttempt(value => value + 1);
+                }
+                if (result.error === "EMAIL_FAILED")
+                {
+                    closeInvite();
+                }
+            }
+        }
+        catch
+        {
+            failure("");
+        }
         setBusy(false);
-        setClinicians(current => [{ id: `C${100 + current.length}`, name, email, status: "invited", addedAt: Date.now() }, ...current]);
-        toast.success("Invitation Sent", `${email} will receive a temporary password.`);
-        closeInvite();
     }
 
     async function confirm(): Promise<void>
     {
-        if (!pending)
+        if (!pending || busy)
         {
             return;
         }
         setBusy(true);
-        await wait();
+        try
+        {
+            const result = await resetClinician({ userID: pending.clinician.id });
+            if (result.status === "complete")
+            {
+                toast.success(pending.kind === "reset" ? "Reset Email Sent" : "Invitation Sent Again", pending.clinician.email);
+                setPending(null);
+            }
+            else
+            {
+                failure(result.error);
+            }
+        }
+        catch
+        {
+            failure("");
+        }
         setBusy(false);
-        toast.success(pending.kind === "reset" ? "Reset Email Sent" : "Invitation Sent Again", pending.clinician.email);
-        setPending(null);
     }
 
     return (
@@ -128,12 +140,12 @@ function Clinicians({ inviting, setInviting }: { inviting: boolean; setInviting:
             <div className={styles.head}>
                 <h1>
                     Clinicians
-                    <span className={styles.count}>{clinicians.length}</span>
+                    <span className={styles.count}>{data === undefined ? "" : clinicians.length}</span>
                 </h1>
                 <div className={styles.tools}>
                     <label className={styles.search}>
                         <Search />
-                        <input type="search" placeholder="Search by name or email" value={query} onChange={event => setQuery(event.target.value)} aria-label="Search Clinicians" />
+                        <input type="search" placeholder="Search clinicians" value={query} onChange={event => setQuery(event.target.value)} aria-label="Search Clinicians" />
                     </label>
                     <Button icon={<UserPlus />} onClick={() => setInviting(true)}>Add Clinician</Button>
                 </div>
@@ -181,7 +193,9 @@ function Clinicians({ inviting, setInviting }: { inviting: boolean; setInviting:
                     ))}
                 </AnimatePresence>
             </ul>
-            {visible.length === 0 && <p className={styles.empty}>No clinicians match your search.</p>}
+            {data !== undefined && visible.length === 0 && (
+                <p className={styles.empty}>{clinicians.length === 0 ? "No clinicians yet. Add your first one to send them an invitation." : "No clinicians match your search."}</p>
+            )}
             <Dialog open={inviting} title="Add Clinician" onClose={closeInvite}>
                 <form className={styles.form} onSubmit={invite} noValidate>
                     <p className={styles.note}>They receive an email with a temporary password and set their own when they first sign in.</p>
@@ -223,8 +237,8 @@ function Clinicians({ inviting, setInviting }: { inviting: boolean; setInviting:
             <Dialog open={pending !== null} title={pending?.kind === "reset" ? "Send Password Reset" : "Resend Invitation"} onClose={() => setPending(null)}>
                 <p className={styles.note}>
                     {pending?.kind === "reset"
-                        ? `${pending.clinician.name} will get an email with a link to choose a new password.`
-                        : `${pending?.clinician.name ?? ""} will get a new temporary password, and the old one stops working.`}
+                        ? `${pending.clinician.name} will get a temporary password by email and be signed out everywhere until they choose a new one.`
+                        : `${pending?.clinician.name ?? ""} will get a new invitation with a fresh temporary password, and the old one stops working.`}
                 </p>
                 <div className={styles.actions}>
                     <Button variant="ghost" onClick={() => setPending(null)}>Cancel</Button>
@@ -240,7 +254,7 @@ export default function Admin()
     const [inviting, setInviting] = useState(false);
     return (
         <Shell
-            role="admin"
+            role="maintainer"
             home="/admin"
             page="/admin"
             menu={close => (

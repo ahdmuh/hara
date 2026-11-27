@@ -1,11 +1,10 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { navigate } from "../Router";
 import Avatar from "../ui/Avatar";
 import Button from "../ui/Button";
 import { ChevronDown, Logout } from "../ui/Icons";
 import { EASE, SPRING } from "../ui/Motion";
-import { signOut, type IAccount } from "./Auth";
+import { useSignOut, type IAccount } from "./Auth";
 import styles from "./UserMenu.module.css";
 
 interface IUserMenuProps
@@ -17,6 +16,7 @@ interface IUserMenuProps
 export default function UserMenu({ account, children }: IUserMenuProps)
 {
     const [open, setOpen] = useState(false);
+    const signOut = useSignOut();
     const root = useRef<HTMLDivElement>(null);
 
     useEffect(() =>
@@ -87,11 +87,7 @@ export default function UserMenu({ account, children }: IUserMenuProps)
                                 variant="light"
                                 icon={<Logout />}
                                 role="menuitem"
-                                onClick={() =>
-                                {
-                                    signOut();
-                                    navigate("/login", { replace: true });
-                                }}
+                                onClick={() => void signOut()}
                             >
                                 Sign Out
                             </Button>

@@ -56,7 +56,7 @@ export default defineConfig(
                 { selector: "typeParameter", format: ["PascalCase"], prefix: ["T"] },
                 { selector: "enumMember", format: ["PascalCase"] },
                 { selector: ["objectLiteralProperty", "objectLiteralMethod", "typeProperty"], format: null, custom: LOWERCASE_ID },
-                { selector: "objectLiteralProperty", filter: { regex: "^messageId$", match: true }, format: null },
+                { selector: "objectLiteralProperty", filter: { regex: "^(messageId|userId)$", match: true }, format: null },
             ],
         },
     },

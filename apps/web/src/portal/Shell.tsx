@@ -18,11 +18,15 @@ interface IShellProps
 
 export default function Shell({ role, home, page, menu, children }: IShellProps)
 {
-    const account = useAccount();
-    const allowed = account?.role === role;
+    const { loading, account } = useAccount();
+    const allowed = account?.role === role && !account.passwordChangeRequired;
 
     useEffect(() =>
     {
+        if (loading)
+        {
+            return;
+        }
         if (!account)
         {
             navigate("/login", { replace: true });
@@ -31,9 +35,9 @@ export default function Shell({ role, home, page, menu, children }: IShellProps)
         {
             navigate(homeFor(account), { replace: true });
         }
-    }, [account, allowed]);
+    }, [loading, account, allowed]);
 
-    if (!account || !allowed)
+    if (loading || !account || !allowed)
     {
         return null;
     }
