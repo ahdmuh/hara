@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { validateCalibration, type HandCalibration, type IFingerCalibration } from "./Calibration";
 import { FINGERS } from "./Hand";
-import { normalizeForce, normalizeHand, normalizePosition } from "./Normalize";
+import { denormalizeFinger, normalizeFinger, normalizeForce, normalizeHand, normalizePosition } from "./Normalize";
 
 const CALIBRATION: IFingerCalibration = { open: 100, relaxed: 400, fist: 500, forceZero: 20, forceMaximum: 220 };
 const INVERTED: IFingerCalibration = { ...CALIBRATION, open: 500, relaxed: 200, fist: 100 };
@@ -76,5 +76,14 @@ describe("validateCalibration", () =>
     ])("rejects %s", (_, calibration) =>
     {
         expect(() => validateCalibration(calibration)).toThrow(RangeError);
+    });
+
+    test("denormalizing a normalized reading returns the raw reading", () =>
+    {
+        const calibration = { open: 100, relaxed: 500, fist: 900, forceZero: 10, forceMaximum: 810 };
+        for (const raw of [{ position: 100, force: 10 }, { position: 300, force: 410 }, { position: 750, force: 810 }])
+        {
+            expect(denormalizeFinger(normalizeFinger(raw, calibration), calibration)).toEqual(raw);
+        }
     });
 });

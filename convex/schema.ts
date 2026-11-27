@@ -7,6 +7,7 @@ const fingerCalibration = v.object({
     fist: v.number(),
     forceZero: v.number(),
     forceMaximum: v.number(),
+    tapRate: v.optional(v.number()),
 });
 
 export const role = v.union(v.literal("patient"), v.literal("clinician"), v.literal("maintainer"));

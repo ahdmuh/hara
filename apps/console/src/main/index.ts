@@ -1,6 +1,7 @@
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { app, BrowserWindow, ipcMain, Menu } from "electron";
+import { FINGERS, validateCalibration, type HandCalibration } from "@hara/input";
 import { CHANNELS } from "../shared/IBridge";
 import { DeviceConnection } from "./DeviceConnection";
 import { lockDown, nativeMenu } from "./NativeShell";
@@ -70,6 +71,30 @@ function createWindow(): void
 
 ipcMain.handle(CHANNELS.version, () => app.getVersion());
 ipcMain.handle(CHANNELS.deviceStatus, () => device.currentStatus);
+
+function owner(value: unknown): string
+{
+    if (typeof value !== "string" || value.length === 0 || value.length > 254)
+    {
+        throw new Error("Invalid owner.");
+    }
+    return value;
+}
+
+ipcMain.handle(CHANNELS.saveCalibration, (_, account: unknown, fingers: HandCalibration) =>
+{
+    FINGERS.forEach(finger => validateCalibration(fingers[finger]));
+    return sessions?.saveCalibration(owner(account), fingers) ?? "";
+});
+ipcMain.handle(CHANNELS.latestCalibration, (_, account: unknown) => sessions?.latestCalibration(owner(account)) ?? null);
+ipcMain.handle(CHANNELS.unsynced, (_, account: unknown) => sessions?.unsynced(owner(account)) ?? { sessions: [], calibrations: [], milestones: [] });
+ipcMain.handle(CHANNELS.markSynced, (_, table: unknown, ids: unknown) =>
+{
+    if ((table === "sessions" || table === "calibrations" || table === "milestones") && Array.isArray(ids) && ids.every(id => typeof id === "string"))
+    {
+        sessions?.markSynced(table, ids);
+    }
+});
 device.onStatus(status => broadcast(CHANNELS.deviceStatus, status));
 device.onMessage(message => broadcast(CHANNELS.deviceMessage, message));
 

@@ -1,7 +1,7 @@
 import { useEffect, useEffectEvent, useSyncExternalStore } from "react";
 import type { Finger, IInputSource } from "@hara/input";
 import { sounds, type Sound } from "./Sounds";
-import { TapDetector } from "./TapDetector";
+import { TapDetector, type ITapThresholds } from "./TapDetector";
 
 export type Intent = "previous" | "next" | "up" | "down" | "select" | "back";
 
@@ -101,7 +101,7 @@ function canErase(input: HTMLInputElement): boolean
     return input.value.length > 0 && (start > 0 || end > start);
 }
 
-export function startIntents(target: Window, source: IInputSource): () => void
+export function startIntents(target: Window, source: IInputSource, thresholds: ITapThresholds): () => void
 {
     const onKeyDown = (event: KeyboardEvent) =>
     {
@@ -126,7 +126,7 @@ export function startIntents(target: Window, source: IInputSource): () => void
         setMode("keyboard");
         emitIntent(intent);
     };
-    const detector = new TapDetector();
+    const detector = new TapDetector(thresholds);
     const unsubscribe = source.subscribe((frame) =>
     {
         const taps = detector.update(frame);

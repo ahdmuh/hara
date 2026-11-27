@@ -1,4 +1,5 @@
-import { FINGERS, type IHandFrame } from "@hara/input";
+import { CalibrationRecorder, FINGERS, type Finger, type HandCalibration, type IHandFrame, type IRawFinger } from "@hara/input";
+import type { IRawSource } from "../DeviceSource";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { useInputSource } from "../InputContext";
@@ -31,9 +32,16 @@ const STEPS: { id: HandAction; title: string; note: string; check?: StepCheck }[
     { id: "tap", title: "Tap Quickly", note: `Tap your fingers as fast as you can, ${TAP_GOAL} taps in total.` },
 ];
 
-export default function Calibration({ onDone }: { onDone: () => void })
+interface ICalibrationProps
+{
+    raw: IRawSource;
+    onDone: (calibration: HandCalibration | null) => void;
+}
+
+export default function Calibration({ raw, onDone }: ICalibrationProps)
 {
     const source = useInputSource();
+    const [recorder] = useState(() => new CalibrationRecorder());
     const [index, setIndex] = useState(0);
     const bars = useRef<(HTMLSpanElement | null)[]>([]);
     const ring = useRef<HTMLSpanElement>(null);
@@ -48,7 +56,7 @@ export default function Calibration({ onDone }: { onDone: () => void })
         }
         if (finished)
         {
-            onDone();
+            onDone(recorder.result());
         }
         else
         {
@@ -67,8 +75,14 @@ export default function Calibration({ onDone }: { onDone: () => void })
         let taps = 0;
         let previous = 0;
         let complete = false;
+        let latest: Record<Finger, IRawFinger> | null = null;
+        let tapStart = 0;
         const detector = new TapDetector();
-        return source.subscribe((frame) =>
+        const stopRaw = raw.subscribe((reading) =>
+        {
+            latest = reading;
+        });
+        const stopFrames = source.subscribe((frame) =>
         {
             FINGERS.forEach((finger, position) =>
             {
@@ -84,12 +98,27 @@ export default function Calibration({ onDone }: { onDone: () => void })
             previous = frame.timestamp;
             if (step.check)
             {
-                progress = step.check(frame) ? progress + seconds / HOLD_SECONDS : Math.max(0, progress - seconds);
+                const holding = step.check(frame);
+                if (holding && latest && step.id !== "tap" && !complete)
+                {
+                    recorder.record(step.id, latest);
+                }
+                progress = holding ? progress + seconds / HOLD_SECONDS : Math.max(0, progress - seconds);
             }
             else
             {
-                taps += detector.update(frame).length;
+                const tapped = detector.update(frame);
+                if (tapped.length && !tapStart)
+                {
+                    tapStart = frame.timestamp;
+                }
+                tapped.forEach(finger => recorder.tap(finger));
+                taps += tapped.length;
                 progress = taps / TAP_GOAL;
+                if (progress >= 1 && !complete)
+                {
+                    recorder.tapDuration(Math.max(0.5, (frame.timestamp - tapStart) / 1000));
+                }
             }
             progress = Math.min(1, progress);
             if (ring.current)
@@ -102,7 +131,12 @@ export default function Calibration({ onDone }: { onDone: () => void })
                 window.setTimeout(() => setIndex(current => current + 1), 500);
             }
         });
-    }, [source, step]);
+        return () =>
+        {
+            stopRaw();
+            stopFrames();
+        };
+    }, [source, raw, recorder, step]);
 
     return (
         <div className={screen.screen}>

@@ -35,3 +35,10 @@ export function normalizeHand(timestamp: number, raw: Record<Finger, IRawFinger>
     const fingers = Object.fromEntries(FINGERS.map(finger => [finger, normalizeFinger(raw[finger], calibration[finger])]));
     return { timestamp, fingers: fingers as Record<Finger, IFingerState> };
 }
+
+export function denormalizeFinger(state: IFingerState, calibration: IFingerCalibration): IRawFinger
+{
+    const { open, relaxed, fist, forceZero, forceMaximum } = calibration;
+    const position = state.position >= 0 ? relaxed + state.position * (fist - relaxed) : relaxed + -state.position * (open - relaxed);
+    return { position, force: forceZero + state.force * (forceMaximum - forceZero) };
+}
