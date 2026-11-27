@@ -19,7 +19,8 @@
     font-size: clamp(48px, 13vw, 176px);
     line-height: 0.8;
     color: var(--white);
-    text-shadow: var(--wordmark-glow);
+    -webkit-text-stroke: var(--wordmark-stroke);
+    paint-order: stroke fill;
 }
 
 .row

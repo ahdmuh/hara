@@ -47,7 +47,8 @@
 {
     font-size: clamp(52px, 7.6vw, 124px);
     color: var(--white);
-    text-shadow: var(--wordmark-glow);
+    -webkit-text-stroke: var(--wordmark-stroke);
+    paint-order: stroke fill;
 }
 
 .portal
