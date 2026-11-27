@@ -20,10 +20,13 @@ export interface ISession
     fingers: number[];
 }
 
+export type MilestoneKind = "linked" | "first" | "sessions10" | "sessions25" | "sessions50" | "difficulty" | "range";
+
 export interface IMilestone
 {
     date: number;
     title: string;
+    kind: MilestoneKind;
 }
 
 export interface ICalibration
@@ -162,26 +165,26 @@ function buildPatient(index: number): IPatient
         });
         day -= 1 + Math.floor(next() * 3);
     }
-    const milestones: IMilestone[] = [{ date: linkedAt, title: "Linked to Clinician" }];
+    const milestones: IMilestone[] = [{ date: linkedAt, title: "Linked to Clinician", kind: "linked" }];
     if (sessions[0])
     {
-        milestones.push({ date: sessions[0].date, title: "First Session" });
+        milestones.push({ date: sessions[0].date, title: "First Session", kind: "first" });
     }
-    [10, 25, 50].forEach((count) =>
+    ([10, 25, 50] as const).forEach((count) =>
     {
         const session = sessions[count - 1];
         if (session)
         {
-            milestones.push({ date: session.date, title: `${count} Sessions` });
+            milestones.push({ date: session.date, title: `${count} Sessions`, kind: `sessions${count}` });
         }
     });
     sessions.filter(session => session.game === "speed" && session.score > 1500).slice(0, 1).forEach((session) =>
     {
-        milestones.push({ date: session.date, title: "Unlocked Medium Difficulty" });
+        milestones.push({ date: session.date, title: "Unlocked Medium Difficulty", kind: "difficulty" });
     });
     sessions.filter(session => session.game === "range" && Math.min(...session.fingers) > 60).slice(0, 1).forEach((session) =>
     {
-        milestones.push({ date: session.date, title: "Range of Motion Above 60%" });
+        milestones.push({ date: session.date, title: "Range of Motion Above 60%", kind: "range" });
     });
     milestones.sort((first, second) => second.date - first.date);
     const calibrations: ICalibration[] = [];
