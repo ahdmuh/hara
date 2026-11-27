@@ -20,13 +20,6 @@ const STEPS = [
     },
 ];
 
-const TARGETS = [
-    { sign: "≤", value: "100", unit: "ms", label: "Response Time" },
-    { sign: "≥", value: "100", unit: "Hz", label: "Readings per Second" },
-    { sign: "±", value: "5", unit: "%", label: "Position Accuracy" },
-    { sign: "±", value: "10", unit: "%", label: "Force Accuracy" },
-];
-
 function Percent()
 {
     const ref = useRef<HTMLSpanElement>(null);
@@ -85,21 +78,6 @@ export default function About()
                         <p>{step.body}</p>
                     </RevealItem>
                 ))}
-            </Reveal>
-            <Reveal className={styles.targets}>
-                <h2>Design Targets</h2>
-                <ul>
-                    {TARGETS.map(target => (
-                        <li key={target.label}>
-                            <span className={styles.value}>
-                                <span className={styles.sign}>{target.sign}</span>
-                                {target.value}
-                                <small>{target.unit}</small>
-                            </span>
-                            <span className={styles.label}>{target.label}</span>
-                        </li>
-                    ))}
-                </ul>
             </Reveal>
         </section>
     );

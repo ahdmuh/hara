@@ -19,6 +19,7 @@
     display: flex;
     align-items: flex-start;
     font-family: var(--display);
+    font-weight: 600;
     font-size: clamp(88px, 13vw, 184px);
     line-height: 0.9;
     letter-spacing: -0.02em;
@@ -99,6 +100,7 @@
 .number
 {
     font-family: var(--display);
+    font-weight: 600;
     font-size: 15px;
     color: var(--blue);
 }
@@ -114,73 +116,6 @@
     color: var(--graphite);
 }
 
-.targets
-{
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: clamp(24px, 4vw, 64px);
-    padding: clamp(28px, 4vw, 48px);
-    border-radius: var(--radius-large);
-    background: var(--ink);
-    color: var(--white);
-    box-shadow: 0 0 0 1px rgb(255 255 255 / 6%) inset, 0 30px 60px -30px rgb(22 22 26 / 60%);
-}
-
-.targets h2
-{
-    font-size: clamp(26px, 2.6vw, 34px);
-}
-
-.targets ul
-{
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 16px;
-}
-
-.targets li
-{
-    display: grid;
-    gap: 10px;
-    padding-left: 18px;
-    border-left: 1px solid rgb(255 255 255 / 12%);
-}
-
-.value
-{
-    display: flex;
-    align-items: baseline;
-    font-family: var(--display);
-    font-size: clamp(28px, 3vw, 42px);
-    line-height: 1;
-    white-space: nowrap;
-}
-
-.sign
-{
-    margin-right: 6px;
-    font-family: var(--sans);
-    font-size: 0.6em;
-    font-weight: 700;
-    color: rgb(255 255 255 / 55%);
-}
-
-.value small
-{
-    margin-left: 6px;
-    font-family: var(--sans);
-    font-size: 0.45em;
-    font-weight: 700;
-    color: var(--blue);
-}
-
-.label
-{
-    font-size: 14px;
-    font-weight: 600;
-    color: rgb(255 255 255 / 60%);
-}
 
 @media (max-width: 960px)
 {
@@ -190,16 +125,6 @@
         gap: 32px;
     }
 
-    .targets
-    {
-        grid-template-columns: 1fr;
-    }
-
-    .targets ul
-    {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        row-gap: 28px;
-    }
 }
 
 @media (max-width: 640px)

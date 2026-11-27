@@ -45,6 +45,7 @@
     background: var(--ink);
     color: var(--white);
     font-family: var(--display);
+    font-weight: 600;
     font-size: 15px;
     letter-spacing: 0.04em;
     transition: background-color 0.5s var(--ease), box-shadow 0.5s var(--ease);
