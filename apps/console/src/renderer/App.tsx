@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { storedAccount, useLinkClinician, useProfile, useRegister, useSignOut } from "./Account";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { rememberName, storedAccount, useLinkClinician, useProfile, useRegister, useSignIn, useSignOut } from "./Account";
 import { bridge } from "./Bridge";
 import DebugView from "./DebugView";
 import type { IDeviceStatus } from "../main/DeviceConnection";
@@ -14,6 +14,8 @@ import { sounds } from "./Sounds";
 import Calibration from "./screens/Calibration";
 import Home, { type DockID } from "./screens/Home";
 import Link from "./screens/Link";
+import SignIn from "./screens/SignIn";
+import Welcome from "./screens/Welcome";
 import Play from "./screens/Play";
 import Progress from "./screens/Progress";
 import Settings from "./screens/Settings";
@@ -27,13 +29,15 @@ const INPUT = import.meta.env.VITE_INPUT ?? (import.meta.env.DEV ? "keyboard" : 
 
 const DEPTH: Record<string, number> = {
     start: 0,
-    signUp: 1,
-    calibration: 2,
-    home: 3,
-    settings: 4,
-    progress: 4,
-    link: 5,
-    play: 5,
+    welcome: 1,
+    signUp: 2,
+    signIn: 2,
+    calibration: 4,
+    home: 5,
+    settings: 6,
+    progress: 6,
+    link: 7,
+    play: 6,
 };
 
 function travelBetween(from: string, to: string): ITravel
@@ -63,7 +67,9 @@ function travelBetween(from: string, to: string): ITravel
 
 type View =
     | { name: "start" }
+    | { name: "welcome" }
     | { name: "signUp" }
+    | { name: "signIn" }
     | { name: "calibration" }
     | { name: "home" }
     | { name: "play"; game: IGame }
@@ -75,6 +81,7 @@ export default function App()
 {
     const [view, setViewState] = useState<View>({ name: "start" });
     const [travel, setTravel] = useState<ITravel>({ x: 1, mode: "slide" });
+    const arrival = useRef<string>("start");
 
     const setView = useCallback((next: View) =>
     {
@@ -86,6 +93,7 @@ export default function App()
     }, []);
     const [patient, setPatient] = useState<string | null>(() => storedAccount()?.name ?? null);
     const register = useRegister();
+    const signIn = useSignIn();
     const linkClinician = useLinkClinician();
     const profile = useProfile();
     const signOut = useSignOut();
@@ -110,6 +118,14 @@ export default function App()
 
     useEffect(() =>
     {
+        if (profile?.name)
+        {
+            rememberName(profile.name);
+        }
+    }, [profile?.name]);
+
+    useEffect(() =>
+    {
         void document.fonts.ready.then(() => setReady(true));
     }, []);
 
@@ -125,6 +141,11 @@ export default function App()
         {
             sounds.play("open");
         }
+        if (view.name === "home" && arrival.current !== "settings" && arrival.current !== "progress")
+        {
+            sounds.play("welcome");
+        }
+        arrival.current = view.name;
         if (!ready || view.name === "play")
         {
             music.pause();
@@ -161,9 +182,9 @@ export default function App()
 
     function begin(): void
     {
-        if (!patient)
+        if (patient === null)
         {
-            setView({ name: "signUp" });
+            setView({ name: "welcome" });
         }
         else
         {
@@ -182,10 +203,29 @@ export default function App()
         {
             case "start":
                 return <Start connected={device.connected} version={version} returning={patient !== null} onStart={begin} />;
+            case "welcome":
+                return <Welcome onBack={showStart} onChoose={choice => setView(choice === "create" ? { name: "signUp" } : { name: "signIn" })} />;
+            case "signIn":
+                return (
+                    <SignIn
+                        onBack={() => setView({ name: "welcome" })}
+                        onDone={async (id, password) =>
+                        {
+                            const result = await signIn(id, password);
+                            if (typeof result === "string")
+                            {
+                                return result;
+                            }
+                            setPatient(result.name);
+                            setView({ name: "calibration" });
+                            return null;
+                        }}
+                    />
+                );
             case "signUp":
                 return (
                     <SignUp
-                        onBack={showStart}
+                        onBack={() => setView({ name: "welcome" })}
                         onDone={async (details) =>
                         {
                             const result = await register(details);
@@ -214,7 +254,7 @@ export default function App()
             case "home":
                 return (
                     <Home
-                        name={patient ?? ""}
+                        name={profile?.name ?? patient ?? ""}
                         connected={device.connected}
                         initial={lastGame}
                         onPlay={(game, index) =>
@@ -233,6 +273,7 @@ export default function App()
                         connected={device.connected}
                         firmware={device.firmware}
                         linked={profile?.linked ?? linked}
+                        email={profile?.email ?? null}
                         onLink={() => setView({ name: "link" })}
                         onBack={goHome}
                         onRecalibrate={() => setView({ name: "calibration" })}
@@ -264,7 +305,7 @@ export default function App()
                     />
                 );
             case "progress":
-                return <Progress calibratedAt={calibratedAt} achieved={profile?.linked ?? linked ? ["linked"] : []} onBack={goHome} />;
+                return <Progress calibratedAt={calibratedAt} achieved={profile?.milestones ?? (linked ? ["linked"] : [])} onBack={goHome} />;
         }
     }
 

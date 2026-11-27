@@ -1,0 +1,72 @@
+.tour
+{
+    position: fixed;
+    z-index: 80;
+    inset: 0;
+}
+
+.spotlight
+{
+    position: absolute;
+    border-radius: 1.6rem;
+    box-shadow: 0 0 0 0.2rem var(--blue), 0 0 2rem -0.2rem var(--blue-glow), 0 0 0 200vmax rgb(22 22 26 / 42%);
+    pointer-events: none;
+}
+
+.card
+{
+    position: absolute;
+    display: grid;
+    gap: 1rem;
+    padding: 1.3rem 1.4rem 1.1rem;
+    border-radius: 1.4rem;
+    background: var(--white);
+    box-shadow: var(--shadow-lift), 0 0 0 1px var(--line) inset;
+}
+
+.card strong
+{
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 1.2rem;
+    font-weight: 750;
+}
+
+.card p
+{
+    font-size: 0.95rem;
+    color: var(--graphite);
+}
+
+.footer
+{
+    display: grid;
+    gap: 0.8rem;
+    justify-items: start;
+}
+
+.footer ul
+{
+    justify-content: start;
+}
+
+.dots
+{
+    display: flex;
+    gap: 0.35rem;
+}
+
+.dots li
+{
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 1rem;
+    background: var(--fog);
+    transition: width 0.4s var(--ease), background-color 0.4s var(--ease);
+}
+
+.dots .on
+{
+    width: 1.4rem;
+    background: var(--blue);
+}

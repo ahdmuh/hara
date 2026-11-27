@@ -1,0 +1,71 @@
+.stage
+{
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    gap: 2.4rem;
+}
+
+.stage h1
+{
+    font-size: 2.6rem;
+}
+
+.choices
+{
+    display: grid;
+    grid-template-columns: repeat(2, 16rem);
+    gap: 1.4rem;
+}
+
+.choice
+{
+    position: relative;
+    display: grid;
+    justify-items: center;
+    gap: 1.1rem;
+    width: 100%;
+    padding: 2.4rem 1.4rem 2rem;
+    border: 0;
+    border-radius: 1.8rem;
+    background: var(--white);
+    box-shadow: var(--shadow-soft), 0 0 0 1px var(--line) inset;
+    color: var(--graphite);
+    transition: color 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+.current
+{
+    color: var(--ink);
+    box-shadow: var(--shadow-lift), 0 0 0 1px var(--line) inset;
+}
+
+.icon
+{
+    display: grid;
+    place-items: center;
+    width: 4.2rem;
+    height: 4.2rem;
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--steel);
+    transition: background-color 0.35s var(--ease), color 0.35s var(--ease);
+}
+
+.icon svg
+{
+    width: 2rem;
+    height: 2rem;
+}
+
+.current .icon
+{
+    background: var(--blue-soft);
+    color: var(--blue);
+}
+
+.label
+{
+    font-size: 1.2rem;
+    font-weight: 750;
+}

@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useRef, useState } from "react";
 import { useIntent } from "../Intents";
 import { sounds } from "../Sounds";
-import { filterName, MAXIMUM_NAME, nameError, normalizeLinkCode } from "@hara/accounts";
+import { filterName, isEmail, MAXIMUM_NAME, nameError, normalizeEmail, normalizeLinkCode } from "@hara/accounts";
 import type { IRegistration } from "../Account";
 import { eraseDigit, entryColumn, finishEntry, partialLabel, typeText, type IDateEntry } from "../DateEntry";
 import DateWheel, { DATE_COLUMNS, formatISO, stepDate, type DateColumn } from "../ui/DateWheel";
@@ -20,6 +20,7 @@ const MAXIMUM_PASSWORD = 128;
 const FILTERS: Record<string, (value: string) => string> = {
     name: filterName,
     password: value => value.slice(0, MAXIMUM_PASSWORD),
+    email: value => value.replace(/\s/g, "").slice(0, 254),
     pin: (value) =>
     {
         const characters = value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
@@ -29,6 +30,7 @@ const FILTERS: Record<string, (value: string) => string> = {
 
 const STEPS = [
     { id: "name", title: "What Is Your Name?", note: "", type: "text", label: "Full Name" },
+    { id: "email", title: "What Is Your Email?", note: "You'll use it to sign in on another console.", type: "email", label: "Email" },
     { id: "birthday", title: "When Is Your Birthday?", note: "", type: "text", label: "Birthday" },
     { id: "password", title: "Choose a Password", note: `At least ${MINIMUM_PASSWORD} characters.`, type: "password", label: "Password" },
     {
@@ -48,6 +50,8 @@ function problem(step: StepID, value: string): string
     {
         case "name":
             return nameError(value) ?? "";
+        case "email":
+            return "Enter a Valid Email";
         case "birthday":
             return "Finish Entering Your Birthday";
         case "password":
@@ -63,6 +67,8 @@ function isValid(step: StepID, value: string): boolean
     {
         case "name":
             return nameError(value) === null;
+        case "email":
+            return isEmail(normalizeEmail(value));
         case "birthday":
             return /^\d{4}-\d{2}-\d{2}$/.test(value);
         case "password":
@@ -89,7 +95,7 @@ export default function SignUp({ onDone, onBack }: ISignUpProps)
         setIndexState(next);
     }
     const [busy, setBusy] = useState(false);
-    const [values, setValues] = useState<Record<StepID, string>>({ name: "", birthday: "", password: "", pin: "" });
+    const [values, setValues] = useState<Record<StepID, string>>({ name: "", email: "", birthday: "", password: "", pin: "" });
     const [field, shakeField] = useShake<HTMLLabelElement>();
     const [wheel, shakeWheel] = useShake<HTMLDivElement>();
     const [entry, setEntry] = useState<IDateEntry>({ digits: "", date: { year: 1960, month: 1, day: 1 } });
@@ -171,7 +177,13 @@ export default function SignUp({ onDone, onBack }: ISignUpProps)
         if (index === STEPS.length - 1)
         {
             setBusy(true);
-            const details = { name: values.name.trim(), birthday: formatISO(latest.current.date), password: values.password, code: values.pin };
+            const details = {
+                name: values.name.trim(),
+                email: normalizeEmail(values.email),
+                birthday: formatISO(latest.current.date),
+                password: values.password,
+                code: values.pin,
+            };
             void onDone(details).then((message) =>
             {
                 setBusy(false);
@@ -299,7 +311,7 @@ export default function SignUp({ onDone, onBack }: ISignUpProps)
                                         <input
                                             autoFocus
                                             type={step.type}
-                                            maxLength={step.id === "pin" ? 9 : step.id === "name" ? MAXIMUM_NAME : MAXIMUM_PASSWORD}
+                                            maxLength={step.id === "pin" ? 9 : step.id === "name" ? MAXIMUM_NAME : step.id === "email" ? 254 : MAXIMUM_PASSWORD}
                                             autoComplete="off"
                                             value={value}
                                             onChange={event => change(event.target.value)}

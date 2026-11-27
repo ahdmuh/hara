@@ -43,7 +43,7 @@ describe("linking a clinician", () =>
     {
         const { clinicianID, userID, patientID } = await setup("HK7PM2QX");
 
-        await world.withIdentity({ subject: userID }).mutation(api.Patients.linkClinician, { code: "hk7p-m2qx" });
+        await world.withIdentity({ subject: userID }).action(api.Patients.linkClinician, { code: "hk7p-m2qx" });
 
         const state = await world.run(async context => ({
             patient: await context.db.get(patientID),
@@ -53,7 +53,7 @@ describe("linking a clinician", () =>
         expect(state.patient?.clinicianID).toBe(clinicianID);
         expect(state.pins[0]?.status).toBe("used");
         expect(state.milestones.map(milestone => milestone.kind)).toEqual(["linked"]);
-        expect(await world.withIdentity({ subject: userID }).query(api.Patients.profile, {})).toEqual({ name: "Avery Morgan", linked: true });
+        expect(await world.withIdentity({ subject: userID }).query(api.Patients.profile, {})).toEqual({ name: "Avery Morgan", linked: true, email: null, milestones: ["linked"] });
     });
 
     test("an unknown, malformed or expired code is refused", async () =>
@@ -61,9 +61,9 @@ describe("linking a clinician", () =>
         const { userID } = await setup("HK7PM2QX", -DAY);
         const patient = world.withIdentity({ subject: userID });
 
-        await expect(patient.mutation(api.Patients.linkClinician, { code: "HK7P-M2QX" })).rejects.toThrow();
-        await expect(patient.mutation(api.Patients.linkClinician, { code: "ZZZZ-ZZZZ" })).rejects.toThrow();
-        await expect(patient.mutation(api.Patients.linkClinician, { code: "123" })).rejects.toThrow();
+        await expect(patient.action(api.Patients.linkClinician, { code: "HK7P-M2QX" })).rejects.toThrow();
+        await expect(patient.action(api.Patients.linkClinician, { code: "ZZZZ-ZZZZ" })).rejects.toThrow();
+        await expect(patient.action(api.Patients.linkClinician, { code: "123" })).rejects.toThrow();
     });
 
     test("a code works only once and a linked patient cannot link again", async () =>
@@ -71,15 +71,30 @@ describe("linking a clinician", () =>
         const { userID } = await setup("HK7PM2QX");
         const patient = world.withIdentity({ subject: userID });
 
-        await patient.mutation(api.Patients.linkClinician, { code: "HK7PM2QX" });
+        await patient.action(api.Patients.linkClinician, { code: "HK7PM2QX" });
 
-        await expect(patient.mutation(api.Patients.linkClinician, { code: "HK7PM2QX" })).rejects.toThrow();
+        await expect(patient.action(api.Patients.linkClinician, { code: "HK7PM2QX" })).rejects.toThrow();
+    });
+
+    test("code guesses are limited per patient even when they fail", async () =>
+    {
+        const { userID } = await setup("HK7PM2QX");
+        const patient = world.withIdentity({ subject: userID });
+
+        for (let attempt = 0; attempt < 8; attempt++)
+        {
+            await expect(patient.action(api.Patients.linkClinician, { code: "ZZZZ-ZZZZ" })).rejects.toThrow();
+        }
+
+        await expect(patient.action(api.Patients.linkClinician, { code: "HK7PM2QX" })).rejects.toThrow("RATE_LIMITED");
+        const pins = await world.run(async context => await context.db.query("linkPins").collect());
+        expect(pins[0]?.status).toBe("pending");
     });
 
     test("only patients can link", async () =>
     {
         const { clinicianID } = await setup("HK7PM2QX");
 
-        await expect(world.withIdentity({ subject: clinicianID }).mutation(api.Patients.linkClinician, { code: "HK7PM2QX" })).rejects.toThrow();
+        await expect(world.withIdentity({ subject: clinicianID }).action(api.Patients.linkClinician, { code: "HK7PM2QX" })).rejects.toThrow();
     });
 });

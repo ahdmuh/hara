@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GAMES, type IGame } from "../Games";
 import { useIntent } from "../Intents";
 import { sounds } from "../Sounds";
@@ -11,6 +11,7 @@ import Rolling from "../ui/Rolling";
 import { SettingsCog, Trophy } from "../ui/Icons";
 import { DOCK as DOCK_MOTION, EASE, SPRING } from "../ui/Motion";
 import Status from "../ui/Status";
+import Tour, { type ITourStep } from "../ui/Tour";
 import Wordmark from "../ui/Wordmark";
 import styles from "./Home.module.css";
 
@@ -22,6 +23,15 @@ const DOCK = [
 ] as const;
 
 export type DockID = typeof DOCK[number]["id"];
+
+const TOUR: ITourStep[] = [
+    { target: "games", title: "Your Games", body: "Move between the cartridges and select one to play." },
+    { target: "settings", title: "Settings", body: "Recalibrate, link your clinician, adjust the volume or sign out." },
+    { target: "progress", title: "Progress", body: "Follow each measure over time and collect milestones." },
+    { target: "device", title: "Your Device", body: "Shows whether your device is connected and ready." },
+];
+
+const TOUR_KEY = "hara.tour";
 
 interface IHomeProps
 {
@@ -43,6 +53,23 @@ export default function Home({ name, connected, initial, onPlay, onOpen }: IHome
     const now = useNow();
     const selected = GAMES[game] ?? GAMES[0];
     const [inserting, setInserting] = useState(false);
+    const [touring, setTouring] = useState(false);
+
+    useEffect(() =>
+    {
+        if (window.localStorage.getItem(TOUR_KEY))
+        {
+            return;
+        }
+        const timer = window.setTimeout(() => setTouring(true), 1400);
+        return () => window.clearTimeout(timer);
+    }, []);
+
+    function finishTour(): void
+    {
+        window.localStorage.setItem(TOUR_KEY, "done");
+        setTouring(false);
+    }
 
     function insert(): void
     {
@@ -102,8 +129,8 @@ export default function Home({ name, connected, initial, onPlay, onOpen }: IHome
             <header className={styles.top}>
                 <Wordmark className={styles.brand} />
                 <div className={styles.meta}>
-                    <span className={styles.greeting}>{`Hi, ${firstName(name)}`}</span>
-                    <Status connected={connected} />
+                    <span className={styles.greeting}>{firstName(name) ? `Hi, ${firstName(name)}` : "Welcome Back"}</span>
+                    <span data-tour="device"><Status connected={connected} /></span>
                 </div>
             </header>
             <section className={styles.stage} aria-label="Games">
@@ -124,6 +151,7 @@ export default function Home({ name, connected, initial, onPlay, onOpen }: IHome
                     </AnimatePresence>
                 </div>
                 <motion.div
+                    data-tour="games"
                     className={styles.row}
                     initial={false}
                     animate={{ x: `${(1 - game) * STEP_REM}rem` }}
@@ -167,6 +195,7 @@ export default function Home({ name, connected, initial, onPlay, onOpen }: IHome
                         <motion.button
                             key={entry.id}
                             type="button"
+                            data-tour={entry.id}
                             className={`${styles.round} ${styles[entry.id]} ${active ? styles.active : ""}`}
                             animate={{ scale: active ? 1.08 : 1 }}
                             transition={SPRING}
@@ -192,6 +221,9 @@ export default function Home({ name, connected, initial, onPlay, onOpen }: IHome
                     />
                 </div>
             </motion.footer>
+            <AnimatePresence>
+                {touring && <Tour steps={TOUR} onDone={finishTour} />}
+            </AnimatePresence>
         </div>
     );
 }
