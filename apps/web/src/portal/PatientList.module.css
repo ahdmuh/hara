@@ -27,7 +27,7 @@
     user-select: none;
     -webkit-user-select: none;
     font-size: 0.6em;
-    font-weight: 600;
+    font-weight: 400;
     color: var(--blue);
 }
 
@@ -48,7 +48,7 @@
 
 .search:focus-within
 {
-    box-shadow: 0 0 0 1px var(--blue) inset, 0 0 0 4px rgb(47 168 230 / 9%);
+    box-shadow: 0 0 0 1px var(--blue) inset, 0 0 0 4px rgb(10 132 255 / 9%);
 }
 
 .search > svg

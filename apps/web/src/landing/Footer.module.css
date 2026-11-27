@@ -16,7 +16,7 @@
 
 .mark
 {
-    font-size: clamp(64px, 30vw, 436px);
+    font-size: clamp(64px, 26vw, 380px);
     line-height: 0.8;
     color: var(--white);
     text-shadow: 0 0 28px rgb(255 255 255 / 14%);

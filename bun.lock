@@ -47,7 +47,7 @@
       "dependencies": {
         "@convex-dev/auth": "2.1.0",
         "@fontsource-variable/figtree": "5.3.0",
-        "@fontsource/m-plus-rounded-1c": "5.3.0",
+        "@fontsource/righteous": "5.3.0",
         "@hara/accounts": "workspace:*",
         "convex": "1.51.0",
         "motion": "14.14.0",
@@ -200,7 +200,7 @@
 
     "@fontsource-variable/figtree": ["@fontsource-variable/figtree@5.3.0", "", {}, "sha512-VRVodD7OiG7apQwE8/2fMjaqpY/a0qRJqL5HtYj8CKIVps+9amaFcdfKmDIf7iqYQx6iPLlArVXAfKeIZmVcNQ=="],
 
-    "@fontsource/m-plus-rounded-1c": ["@fontsource/m-plus-rounded-1c@5.3.0", "", {}, "sha512-eB/JxJBRXLdfTsBDElsAZDMtHXM58Hf1tKkHoDVZAaUN7a+qYfwNKh4Q2f7Fk9YNg4xPFjTwooVlQyqbhi8CWQ=="],
+    "@fontsource/righteous": ["@fontsource/righteous@5.3.0", "", {}, "sha512-xr3w0E1jtc7xoXLfgJrcaKqWjvh5XiAAthVLrl9v9HKC7TfwMy3nARytetfi2GIgo51+aWsEJ51Uyd3XEXbj/A=="],
 
     "@hara/accounts": ["@hara/accounts@workspace:packages/accounts"],
 

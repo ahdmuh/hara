@@ -8,10 +8,10 @@
     --graphite: #3b3b43;
     --ink: #16161a;
     --void: #050506;
-    --blue: #2fa8e6;
-    --blue-deep: #1b8fcd;
-    --blue-soft: #e7f5fd;
-    --blue-glow: rgb(47 168 230 / 32%);
+    --blue: #0a84ff;
+    --blue-deep: #0066d6;
+    --blue-soft: #e8f2ff;
+    --blue-glow: rgb(10 132 255 / 32%);
     --rise: #1f9d55;
     --fall: #d64545;
     --danger: #e5484d;
@@ -19,7 +19,7 @@
     --danger-soft: #fdeded;
     --line: rgb(22 22 26 / 9%);
     --line-strong: rgb(22 22 26 / 16%);
-    --display: "M PLUS Rounded 1c", var(--sans);
+    --display: "Righteous", var(--sans);
     --sans: "Figtree Variable", system-ui, sans-serif;
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
     --radius-small: 12px;
