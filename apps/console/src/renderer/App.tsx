@@ -363,7 +363,7 @@ export default function App()
             <main style={{ position: "relative", height: "100%" }}>
                 <div className="titleBar" aria-hidden="true" />
                 {ready && <Backdrop />}
-                <AnimatePresence mode="wait" initial={false} custom={travel}>
+                <AnimatePresence mode={travel.mode === "dive" || travel.mode === "surface" ? "sync" : "wait"} initial={false} custom={travel}>
                     <motion.div
                         key={view.name}
                         style={{ position: "absolute", inset: 0, willChange: "transform, opacity" }}
