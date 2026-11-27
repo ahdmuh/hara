@@ -64,7 +64,7 @@ export default function Targets()
     return (
         <Reveal className={styles.targets} group>
             <RevealItem as="header" className={styles.head}>
-                <h3>By the Numbers</h3>
+                <h3>Targets</h3>
             </RevealItem>
             <ul className={styles.list}>
                 {TARGETS.map(target => (
