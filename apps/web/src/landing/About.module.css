@@ -10,7 +10,7 @@
 {
     display: grid;
     grid-template-columns: auto 1fr;
-    align-items: end;
+    align-items: center;
     gap: clamp(20px, 4vw, 56px);
 }
 
@@ -19,6 +19,8 @@
     display: flex;
     align-items: flex-start;
     font-family: var(--display);
+    user-select: none;
+    -webkit-user-select: none;
     font-weight: 800;
     font-size: clamp(88px, 13vw, 184px);
     line-height: 0.9;
@@ -100,6 +102,8 @@
 .number
 {
     font-family: var(--display);
+    user-select: none;
+    -webkit-user-select: none;
     font-weight: 800;
     font-size: 15px;
     color: var(--blue);

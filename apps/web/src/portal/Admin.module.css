@@ -24,6 +24,8 @@
 .count
 {
     font-family: var(--display);
+    user-select: none;
+    -webkit-user-select: none;
     font-weight: 800;
     font-size: 0.5em;
     color: var(--blue);
@@ -53,7 +55,7 @@
 
 .search:focus-within
 {
-    box-shadow: 0 0 0 1px var(--blue) inset, 0 0 0 4px rgb(0 149 219 / 9%);
+    box-shadow: 0 0 0 1px var(--blue) inset, 0 0 0 4px rgb(47 168 230 / 9%);
 }
 
 .search svg

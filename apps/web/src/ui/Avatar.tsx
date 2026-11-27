@@ -1,6 +1,6 @@
 import styles from "./Avatar.module.css";
 
-const COLORS = ["#0095db", "#1f9d55", "#e07a1f", "#c2410c", "#7c3aed", "#0f766e", "#be185d", "#4b5563", "#2563eb", "#a16207"];
+const COLORS = ["#2fa8e6", "#1f9d55", "#e07a1f", "#c2410c", "#7c3aed", "#0f766e", "#be185d", "#4b5563", "#2563eb", "#a16207"];
 
 export function initialsOf(name: string): string
 {
@@ -10,7 +10,7 @@ export function initialsOf(name: string): string
 export function colorFor(initials: string): string
 {
     const hash = [...initials].reduce((total, character) => (total * 31 + character.charCodeAt(0)) >>> 0, 7);
-    return COLORS[hash % COLORS.length] ?? COLORS[0] ?? "#0095db";
+    return COLORS[hash % COLORS.length] ?? COLORS[0] ?? "#2fa8e6";
 }
 
 interface IAvatarProps

@@ -55,6 +55,8 @@
     background: var(--blue);
     color: var(--white);
     font-family: var(--display);
+    user-select: none;
+    -webkit-user-select: none;
     font-size: 32px;
     font-weight: 600;
     box-shadow: 0 12px 28px -12px var(--blue-glow);
@@ -100,6 +102,8 @@
 .statValue
 {
     font-family: var(--display);
+    user-select: none;
+    -webkit-user-select: none;
     font-size: clamp(28px, 3vw, 40px);
     font-weight: 600;
     line-height: 1;
@@ -430,6 +434,8 @@
 .sliderHead b
 {
     font-family: var(--display);
+    user-select: none;
+    -webkit-user-select: none;
     font-size: 20px;
     font-weight: 600;
     color: var(--blue);
@@ -475,7 +481,7 @@
 
 .slider input:focus-visible::-webkit-slider-thumb
 {
-    box-shadow: 0 0 0 2px var(--blue), 0 0 0 6px rgb(0 149 219 / 18%);
+    box-shadow: 0 0 0 2px var(--blue), 0 0 0 6px rgb(47 168 230 / 18%);
 }
 
 .dialogActions

@@ -56,7 +56,13 @@
     grid-template-columns: auto 1fr;
     align-items: center;
     gap: clamp(24px, 5vw, 72px);
-    padding: clamp(24px, 4vw, 44px) clamp(24px, 4vw, 48px) clamp(12px, 2vw, 20px);
+}
+
+.card
+{
+    display: grid;
+    gap: clamp(20px, 3vw, 32px);
+    padding: clamp(24px, 4vw, 44px) clamp(24px, 4vw, 48px);
     border-radius: var(--radius-large);
     background: var(--white);
     box-shadow: var(--shadow-soft);
@@ -74,6 +80,8 @@
 .minutes
 {
     font-family: var(--display);
+    user-select: none;
+    -webkit-user-select: none;
     font-weight: 800;
     font-size: clamp(56px, 7vw, 88px);
     line-height: 1;
@@ -84,7 +92,7 @@
 {
     display: flex;
     margin: 0;
-    padding: 0 0 52px;
+    padding: 0 0 44px;
     list-style: none;
 }
 
@@ -172,9 +180,9 @@
     display: flex;
     flex-wrap: wrap;
     margin: 0;
-    padding: 24px 0 0;
+    padding: clamp(18px, 2.4vw, 26px) 0 0;
     list-style: none;
-    border-top: 1px solid var(--line-strong);
+    border-top: 1px solid var(--line);
 }
 
 .facts li
