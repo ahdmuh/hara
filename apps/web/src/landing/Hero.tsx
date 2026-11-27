@@ -41,7 +41,7 @@ export default function Hero()
                     />
                 </motion.div>
                 <motion.div className={styles.title} style={{ y: wordY, opacity: fade }}>
-                    <h1 className={styles.wordmark}>
+                    <h1 id="hero-title" className={styles.wordmark}>
                         <Wordmark animate delay={0.4} />
                     </h1>
                     <motion.p
