@@ -10,6 +10,7 @@ export { ChevronUp } from "pixelarticons/react/ChevronUp.js";
 export { Clock } from "pixelarticons/react/Clock.js";
 export { Close } from "pixelarticons/react/Close.js";
 export { Copy } from "pixelarticons/react/Copy.js";
+export { ExternalLink } from "pixelarticons/react/ExternalLink.js";
 export { Eye } from "pixelarticons/react/Eye.js";
 export { EyeOff } from "pixelarticons/react/EyeOff.js";
 export { Key } from "pixelarticons/react/Key.js";

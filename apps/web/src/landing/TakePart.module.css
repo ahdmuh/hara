@@ -1,10 +1,18 @@
 .section
 {
-    display: grid;
-    gap: clamp(48px, 7vw, 88px);
     width: min(var(--content), calc(100% - 2 * var(--gutter)));
     margin: 0 auto;
     padding-top: clamp(96px, 14vw, 180px);
+}
+
+.pamphlet
+{
+    display: grid;
+    gap: clamp(32px, 4.5vw, 56px);
+    padding: clamp(28px, 5vw, 64px);
+    border-radius: var(--radius-large);
+    background: var(--white);
+    box-shadow: var(--shadow-soft);
 }
 
 .intro
@@ -56,17 +64,10 @@
     grid-template-columns: auto 1fr;
     align-items: center;
     gap: clamp(24px, 5vw, 72px);
+    padding-top: clamp(28px, 4vw, 44px);
+    border-top: 1px solid var(--line);
 }
 
-.card
-{
-    display: grid;
-    gap: clamp(20px, 3vw, 32px);
-    padding: clamp(24px, 4vw, 44px) clamp(24px, 4vw, 48px);
-    border-radius: var(--radius-large);
-    background: var(--white);
-    box-shadow: var(--shadow-soft);
-}
 
 .total
 {
@@ -79,10 +80,10 @@
 
 .minutes
 {
-    font-family: var(--display);
+    font-family: var(--figure);
     user-select: none;
     -webkit-user-select: none;
-    font-weight: 400;
+    font-weight: 800;
     font-size: clamp(56px, 7vw, 88px);
     line-height: 1;
     color: var(--ink);
