@@ -19,7 +19,7 @@
     display: flex;
     align-items: flex-start;
     font-family: var(--display);
-    font-weight: 600;
+    font-weight: 800;
     font-size: clamp(88px, 13vw, 184px);
     line-height: 0.9;
     letter-spacing: -0.02em;
@@ -100,7 +100,7 @@
 .number
 {
     font-family: var(--display);
-    font-weight: 600;
+    font-weight: 800;
     font-size: 15px;
     color: var(--blue);
 }

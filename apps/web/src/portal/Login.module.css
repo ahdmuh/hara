@@ -38,7 +38,7 @@
 {
     position: relative;
     margin-bottom: 30%;
-    font-size: clamp(44px, 6.4vw, 104px);
+    font-size: clamp(52px, 7.6vw, 124px);
     color: var(--white);
     text-shadow: 0 0 28px rgb(255 255 255 / 14%);
 }
@@ -161,7 +161,7 @@
     .wordmark
     {
         margin-bottom: 18%;
-        font-size: 12vw;
+        font-size: 16vw;
     }
 
     .panel
