@@ -1,8 +1,10 @@
-import track from "./assets/audio/rainy-night-jazz.mp3";
+import calm from "./assets/audio/calming-yoga.mp3";
+import jazz from "./assets/audio/rainy-night-jazz.mp3";
 
 const MAXIMUM_LEVEL = 0.1;
 const FADE_SECONDS = 1.6;
 const INTRO_SECONDS = 4.5;
+const THEME_SECONDS = 2.5;
 const CROSSFADE_SECONDS = 4;
 const TICK_MILLISECONDS = 50;
 const VOLUME_KEY = "hara.volume";
@@ -27,7 +29,22 @@ interface IDeck
     fade: number;
 }
 
-export class Music
+export type Theme = "onboarding" | "home";
+
+interface ITrack
+{
+    source: string;
+    gain: number;
+    head: number;
+    tail: number;
+}
+
+const THEMES: Record<Theme, ITrack> = {
+    onboarding: { source: calm, gain: 4.2, head: 0.7, tail: 1.6 },
+    home: { source: jazz, gain: 1, head: 0, tail: 0 },
+};
+
+class LoopPlayer
 {
     private decks: IDeck[] = [];
     private current = 0;
@@ -38,6 +55,10 @@ export class Music
     private playing = false;
     private fadeSeconds = INTRO_SECONDS;
 
+    constructor(private readonly track: ITrack)
+    {
+    }
+
     setVolume(level: number): void
     {
         this.volume = Math.min(1, Math.max(0, level));
@@ -47,9 +68,13 @@ export class Music
         }
     }
 
-    play(): void
+    play(fadeSeconds?: number): void
     {
         this.ensure();
+        if (fadeSeconds)
+        {
+            this.fadeSeconds = fadeSeconds;
+        }
         if (this.playing)
         {
             return;
@@ -67,12 +92,13 @@ export class Music
         this.timer = window.setInterval(() => this.tick(), TICK_MILLISECONDS);
     }
 
-    pause(): void
+    pause(fadeSeconds = FADE_SECONDS): void
     {
         if (!this.playing)
         {
             return;
         }
+        this.fadeSeconds = fadeSeconds;
         this.playing = false;
         this.target = 0;
     }
@@ -93,7 +119,7 @@ export class Music
         }
         this.decks = [0, 1].map(() =>
         {
-            const element = new Audio(track);
+            const element = new Audio(this.track.source);
             element.preload = "auto";
             element.volume = 0;
             return { element, fade: 0 };
@@ -121,9 +147,10 @@ export class Music
             return;
         }
         const duration = active.element.duration;
-        if (this.playing && Number.isFinite(duration) && active.element.currentTime >= duration - CROSSFADE_SECONDS && other.fade === 0)
+        const fadeAt = duration - this.track.tail - CROSSFADE_SECONDS;
+        if (this.playing && Number.isFinite(duration) && active.element.currentTime >= fadeAt && other.fade === 0)
         {
-            other.element.currentTime = 0;
+            other.element.currentTime = this.track.head;
             other.fade = 0.0001;
             void other.element.play().catch(() => undefined);
         }
@@ -140,13 +167,72 @@ export class Music
         }
         this.decks.forEach((deck) =>
         {
-            deck.element.volume = Math.min(1, this.level * deck.fade);
+            deck.element.volume = Math.min(1, this.level * this.track.gain * deck.fade);
         });
         if (!this.playing && this.level === 0)
         {
             this.decks.forEach(deck => deck.element.pause());
             window.clearInterval(this.timer);
         }
+    }
+}
+
+export class Music
+{
+    private readonly players = new Map<Theme, LoopPlayer>();
+    private theme: Theme = "onboarding";
+    private active = false;
+    private volume = DEFAULT_VOLUME / VOLUME_STEPS;
+
+    setVolume(level: number): void
+    {
+        this.volume = level;
+        this.players.forEach(player => player.setVolume(level));
+    }
+
+    setTheme(theme: Theme): void
+    {
+        if (theme === this.theme)
+        {
+            return;
+        }
+        const previous = this.theme;
+        this.theme = theme;
+        if (this.active)
+        {
+            this.player(previous).pause(THEME_SECONDS);
+            this.player(theme).play(THEME_SECONDS);
+        }
+    }
+
+    play(): void
+    {
+        this.active = true;
+        this.player(this.theme).play();
+    }
+
+    pause(): void
+    {
+        this.active = false;
+        this.players.forEach(player => player.pause());
+    }
+
+    close(): void
+    {
+        this.players.forEach(player => player.close());
+        this.players.clear();
+    }
+
+    private player(theme: Theme): LoopPlayer
+    {
+        let player = this.players.get(theme);
+        if (!player)
+        {
+            player = new LoopPlayer(THEMES[theme]);
+            player.setVolume(this.volume);
+            this.players.set(theme, player);
+        }
+        return player;
     }
 }
 
