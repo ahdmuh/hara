@@ -82,15 +82,12 @@
     }
 }
 
-@media (hover: hover) and (pointer: fine)
+:global(.mouse) .word:hover
 {
-    .word:hover
-    {
-        color: var(--steel);
-    }
+    color: var(--steel);
+}
 
-    .current:hover
-    {
-        color: var(--ink);
-    }
+:global(.mouse) .current:hover
+{
+    color: var(--ink);
 }

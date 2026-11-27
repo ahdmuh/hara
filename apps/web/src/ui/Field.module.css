@@ -88,22 +88,19 @@
     transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
 }
 
-@media (hover: hover) and (pointer: fine)
+:global(.mouse) .control:hover
 {
-    .control:hover
-    {
-        box-shadow: 0 0 0 1px rgb(22 22 26 / 28%) inset, 0 1px 2px rgb(22 22 26 / 4%);
-    }
+    box-shadow: 0 0 0 1px rgb(22 22 26 / 28%) inset, 0 1px 2px rgb(22 22 26 / 4%);
+}
 
-    .invalid .control:hover
-    {
-        background: #fffafa;
-        box-shadow: 0 0 0 1px var(--danger) inset, 0 0 0 4px rgb(229 72 77 / 9%);
-    }
+:global(.mouse) .invalid .control:hover
+{
+    background: #fffafa;
+    box-shadow: 0 0 0 1px var(--danger) inset, 0 0 0 4px rgb(229 72 77 / 9%);
+}
 
-    .reveal:hover
-    {
-        background: var(--mist);
-        color: var(--ink);
-    }
+:global(.mouse) .reveal:hover
+{
+    background: var(--mist);
+    color: var(--ink);
 }

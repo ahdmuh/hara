@@ -30,8 +30,29 @@
     gap: clamp(24px, 5vw, 72px);
 }
 
+.figure
+{
+    position: relative;
+}
+
+.shadows
+{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.shade
+{
+    fill: var(--white);
+}
+
 .diagram
 {
+    position: relative;
+    display: block;
     width: 100%;
     height: auto;
     overflow: visible;
@@ -65,18 +86,35 @@
 .motor
 {
     fill: url(#haraMotor);
-    transition: fill 0.5s var(--ease);
+}
+
+.motorOn,
+.cuffOn
+{
+    opacity: 0;
+    transition: opacity 0.6s var(--ease);
+}
+
+.motorOn
+{
+    fill: url(#haraCuffOn);
+}
+
+.cuffOn
+{
+    fill: url(#haraCuffOn);
+}
+
+.on .motorOn,
+.on .cuffOn
+{
+    opacity: 1;
 }
 
 .spindle
 {
     fill: rgb(255 255 255 / 70%);
-    transition: fill 0.5s var(--ease);
-}
-
-.on .motor
-{
-    fill: url(#haraCuffOn);
+    transition: fill 0.6s var(--ease);
 }
 
 .on .spindle
@@ -90,13 +128,13 @@
     stroke: transparent;
     stroke-width: 2;
     stroke-dasharray: 3 4;
-    transition: stroke 0.5s var(--ease);
+    transition: stroke 0.6s var(--ease);
 }
 
 .loadCell
 {
     fill: rgb(255 255 255 / 22%);
-    transition: fill 0.5s var(--ease);
+    transition: fill 0.6s var(--ease);
 }
 
 .on .encoder
@@ -139,13 +177,13 @@
     fill: url(#haraRail);
     stroke: var(--line-strong);
     stroke-width: 1;
-    transition: stroke 0.5s var(--ease);
+    transition: stroke 0.6s var(--ease);
 }
 
 .groove
 {
     fill: var(--mist);
-    transition: fill 0.5s var(--ease);
+    transition: fill 0.6s var(--ease);
 }
 
 .on .rail
@@ -164,11 +202,6 @@
     animation-delay: calc(var(--i) * -0.45s);
 }
 
-.railShadow
-{
-    fill: var(--white);
-}
-
 .cuffShadow
 {
     fill: rgb(22 22 26 / 16%);
@@ -184,21 +217,23 @@
     fill: rgb(255 255 255 / 12%);
 }
 
+.halo
+{
+    fill: var(--blue);
+    opacity: 0.3;
+    transition: fill 0.6s var(--ease);
+}
+
 .led
 {
     fill: var(--blue);
-    filter: drop-shadow(0 0 3px var(--blue));
+    transition: fill 0.6s var(--ease);
 }
 
-.on .cuffBody
-{
-    fill: url(#haraCuffOn);
-}
-
-.on .led
+.on .led,
+.on .halo
 {
     fill: var(--white);
-    filter: drop-shadow(0 0 3px var(--white));
 }
 
 .stopRing

@@ -254,24 +254,21 @@
     }
 }
 
-@media (hover: hover) and (pointer: fine)
+:global(.mouse) .start:hover
 {
-    .start:hover
-    {
-        transform: translateY(0.05em);
-        box-shadow: 0 0.02em 0 var(--ink);
-        background: var(--ink);
-        color: var(--white);
-    }
+    transform: translateY(0.05em);
+    box-shadow: 0 0.02em 0 var(--ink);
+    background: var(--ink);
+    color: var(--white);
+}
 
-    .card:hover
-    {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-lift);
-    }
+:global(.mouse) .card:hover
+{
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lift);
+}
 
-    .card:hover .art
-    {
-        transform: scale(1.04);
-    }
+:global(.mouse) .card:hover .art
+{
+    transform: scale(1.04);
 }
