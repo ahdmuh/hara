@@ -94,7 +94,7 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
     return (
         <Dialog open={open} title="Link a New Patient" onClose={close}>
             <p className={styles.note}>
-                {`Create a link code for each new patient. They enter it once when signing up in HARA, which links their account to you. A code stays valid until it is used, revoked, or ${VALID_DAYS} days pass.`}
+                {`Patients enter this code when signing up in HARA to link their account to you. Each code works once and expires after ${VALID_DAYS} days.`}
             </p>
             <AnimatePresence mode="wait" initial={false}>
                 {created
