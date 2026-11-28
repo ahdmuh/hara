@@ -1,8 +1,9 @@
+import { getAuthUserId } from "@convex-dev/auth/server";
 import { filterName, isEmail, nameError, normalizeEmail, normalizeLinkCode } from "@hara/accounts";
 import { ConvexError, v } from "convex/values";
 import { components, internal } from "./_generated/api";
 import type { Id } from "./_generated/dataModel";
-import { action, internalMutation, query, type MutationCtx } from "./_generated/server";
+import { action, internalMutation, internalQuery, query, type MutationCtx } from "./_generated/server";
 import { userWithRole } from "./Access";
 
 const MINIMUM_PASSWORD = 8;
@@ -182,18 +183,22 @@ export const link = internalMutation({
     },
 });
 
+export const currentUser = internalQuery({
+    args: {},
+    returns: v.union(v.id("users"), v.null()),
+    handler: async ctx => getAuthUserId(ctx),
+});
+
 export const linkClinician = action({
     args: { code: v.string() },
     returns: v.null(),
     handler: async (ctx, { code }): Promise<null> =>
     {
-        const identity = await ctx.auth.getUserIdentity();
-        const authID = identity?.subject.split("|")[0];
-        if (!authID)
+        const userID: Id<"users"> | null = await ctx.runQuery(internal.Patients.currentUser, {});
+        if (!userID)
         {
             throw new ConvexError("FORBIDDEN");
         }
-        const userID = authID as Id<"users">;
         const allowed = await ctx.runMutation(internal.Patients.consume, { key: `link:${userID}`, maximum: LINK_ATTEMPTS_PER_HOUR, windowMilliseconds: HOUR });
         if (!allowed)
         {
