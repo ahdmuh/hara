@@ -78,15 +78,19 @@
     outline: none;
 }
 
+.card
+{
+    border-radius: var(--radius);
+    background: var(--white);
+    box-shadow: var(--shadow-soft);
+}
+
 .list
 {
     display: grid;
     margin: 0;
     padding: 8px 20px;
     list-style: none;
-    border-radius: var(--radius);
-    background: var(--white);
-    box-shadow: var(--shadow-soft);
 }
 
 .row

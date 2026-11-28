@@ -7,7 +7,8 @@ import { navigate } from "../Router";
 import Avatar from "../ui/Avatar";
 import { ChevronDown, ChevronLeft, ChevronRight, Close, Key, Search } from "../ui/Icons";
 import Button from "../ui/Button";
-import { LIST_LAYOUT, LIST_ROW, SPRING } from "../ui/Motion";
+import AutoHeight from "../ui/AutoHeight";
+import { EASE, LIST_LAYOUT, LIST_ROW, SPRING } from "../ui/Motion";
 import { daysSince, relative } from "./Format";
 import { GAMES, MILESTONE_TITLES, type Game } from "./Games";
 import { MilestoneBadge } from "@hara/badges";
@@ -191,10 +192,10 @@ export default function PatientList({ onLink }: { onLink: () => void })
                             </button>
                         ))}
                     </div>
-                    {pager("top")}
+                    {visible.length > 0 && pager("top")}
                 </div>
             )}
-            <div className={styles.card}>
+            <AutoHeight className={styles.card}>
                 {rows.length > 0 && (
                     <table className={styles.table}>
                         <colgroup>
@@ -226,7 +227,6 @@ export default function PatientList({ onLink }: { onLink: () => void })
                                         custom={index}
                                         initial="hidden"
                                         animate="shown"
-                                        exit="gone"
                                         transition={LIST_LAYOUT}
                                         onClick={() => navigate(`/patients/${row.patient.id}`)}
                                         onKeyDown={(event) =>
@@ -275,6 +275,11 @@ export default function PatientList({ onLink }: { onLink: () => void })
                                         </td>
                                     </motion.tr>
                                 ))}
+                                {slice.length === 0 && (
+                                    <motion.tr key="none" initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { duration: 0.24, ease: EASE } }}>
+                                        <td colSpan={GAMES.length + 4} className={styles.noMatch}>No patients match your search.</td>
+                                    </motion.tr>
+                                )}
                             </AnimatePresence>
                         </tbody>
                     </table>
@@ -286,14 +291,9 @@ export default function PatientList({ onLink }: { onLink: () => void })
                         <Button icon={<Key />} onClick={onLink}>Link Patient</Button>
                     </motion.div>
                 )}
-                {rows.length > 0 && slice.length === 0 && (
-                    <motion.div className={styles.empty} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                        <p>No patients match your search.</p>
-                    </motion.div>
-                )}
                 {data === undefined && <div className={styles.loading} aria-label="Loading Patients" />}
-            </div>
-            {rows.length > 0 && pager("bottom")}
+            </AutoHeight>
+            {visible.length > 0 && pager("bottom")}
         </div>
     );
 }

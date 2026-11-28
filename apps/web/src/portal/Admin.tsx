@@ -9,6 +9,7 @@ import Button from "../ui/Button";
 import Dialog from "../ui/Dialog";
 import Field from "../ui/Field";
 import { Mail, Search, Send, User, UserPlus } from "../ui/Icons";
+import AutoHeight from "../ui/AutoHeight";
 import { EASE, LIST_LAYOUT, LIST_ROW } from "../ui/Motion";
 import { useToast } from "../ui/Toast";
 import styles from "./Admin.module.css";
@@ -152,52 +153,59 @@ function Clinicians({ inviting, setInviting }: { inviting: boolean; setInviting:
                     <Button icon={<UserPlus />} onClick={() => setInviting(true)}>Add Clinician</Button>
                 </div>
             </div>
-            {visible.length > 0 && (
-                <ul className={styles.list}>
-                    <AnimatePresence mode="popLayout">
-                        {visible.map((clinician, index) => (
-                            <motion.li
-                                key={clinician.id}
-                                layout="position"
-                                className={styles.row}
-                                variants={LIST_ROW}
-                                custom={index}
-                                initial="hidden"
-                                animate="shown"
-                                exit="gone"
-                                transition={LIST_LAYOUT}
-                            >
-                                <span className={styles.person}>
-                                    <Avatar name={clinician.name} size={40} />
-                                    <span>
-                                        <strong>{clinician.name}</strong>
-                                        <small>{clinician.email}</small>
-                                    </span>
-                                </span>
-                                <span className={`${styles.status} ${styles[clinician.status]}`}>
-                                    <i aria-hidden="true" />
-                                    {clinician.status === "active" ? "Active" : "Invited"}
-                                </span>
-                                <span className={styles.meta}>
-                                    <small>Added</small>
-                                    {fullDate(clinician.addedAt)}
-                                </span>
-                                <span className={styles.meta}>
-                                    <small>Last Active</small>
-                                    {clinician.lastActiveAt === undefined ? "Not Yet" : relative(clinician.lastActiveAt)}
-                                </span>
-                                <Button
-                                    variant="ghost"
-                                    size="small"
-                                    icon={clinician.status === "active" ? <Mail /> : <Send />}
-                                    onClick={() => setPending({ kind: clinician.status === "active" ? "reset" : "resend", clinician })}
+            {clinicians.length > 0 && (
+                <AutoHeight className={styles.card}>
+                    <ul className={styles.list}>
+                        <AnimatePresence mode="popLayout">
+                            {visible.map((clinician, index) => (
+                                <motion.li
+                                    key={clinician.id}
+                                    layout="position"
+                                    className={styles.row}
+                                    variants={LIST_ROW}
+                                    custom={index}
+                                    initial="hidden"
+                                    animate="shown"
+                                    exit="gone"
+                                    transition={LIST_LAYOUT}
                                 >
-                                    {clinician.status === "active" ? "Send Password Reset" : "Resend Invitation"}
-                                </Button>
-                            </motion.li>
-                        ))}
-                    </AnimatePresence>
-                </ul>
+                                    <span className={styles.person}>
+                                        <Avatar name={clinician.name} size={40} />
+                                        <span>
+                                            <strong>{clinician.name}</strong>
+                                            <small>{clinician.email}</small>
+                                        </span>
+                                    </span>
+                                    <span className={`${styles.status} ${styles[clinician.status]}`}>
+                                        <i aria-hidden="true" />
+                                        {clinician.status === "active" ? "Active" : "Invited"}
+                                    </span>
+                                    <span className={styles.meta}>
+                                        <small>Added</small>
+                                        {fullDate(clinician.addedAt)}
+                                    </span>
+                                    <span className={styles.meta}>
+                                        <small>Last Active</small>
+                                        {clinician.lastActiveAt === undefined ? "Not Yet" : relative(clinician.lastActiveAt)}
+                                    </span>
+                                    <Button
+                                        variant="ghost"
+                                        size="small"
+                                        icon={clinician.status === "active" ? <Mail /> : <Send />}
+                                        onClick={() => setPending({ kind: clinician.status === "active" ? "reset" : "resend", clinician })}
+                                    >
+                                        {clinician.status === "active" ? "Send Password Reset" : "Resend Invitation"}
+                                    </Button>
+                                </motion.li>
+                            ))}
+                            {visible.length === 0 && (
+                                <motion.li key="none" className={styles.none} initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { duration: 0.24, ease: EASE } }}>
+                                    No clinicians match your search.
+                                </motion.li>
+                            )}
+                        </AnimatePresence>
+                    </ul>
+                </AutoHeight>
             )}
             {data !== undefined && clinicians.length === 0 && (
                 <motion.div className={styles.empty} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={EMPTY_TRANSITION}>
@@ -206,7 +214,6 @@ function Clinicians({ inviting, setInviting }: { inviting: boolean; setInviting:
                     <Button icon={<UserPlus />} onClick={() => setInviting(true)}>Add Clinician</Button>
                 </motion.div>
             )}
-            {clinicians.length > 0 && visible.length === 0 && <p className={styles.none}>No clinicians match your search.</p>}
             <Dialog open={inviting} title="Add Clinician" onClose={closeInvite}>
                 <form className={styles.form} onSubmit={invite} noValidate>
                     <p className={styles.note}>They receive an email with a temporary password and set their own when they first sign in.</p>
