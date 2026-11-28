@@ -542,3 +542,11 @@ th.numeric .sort
 {
     transform: translateY(-1px);
 }
+
+.noMatch
+{
+    padding: 56px 20px;
+    text-align: center;
+    font-weight: 500;
+    color: var(--steel);
+}
