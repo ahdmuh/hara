@@ -284,13 +284,7 @@
 
 .numeric
 {
-    text-align: right;
     font-variant-numeric: tabular-nums;
-}
-
-th.numeric .sort
-{
-    flex-direction: row-reverse;
 }
 
 .patient
@@ -333,7 +327,7 @@ th.numeric .sort
 
 .value
 {
-    min-width: 56px;
+    min-width: 72px;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
 }

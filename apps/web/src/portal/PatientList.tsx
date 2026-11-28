@@ -5,8 +5,7 @@ import { useDeferredValue, useMemo, useState } from "react";
 import { api } from "../../../../convex/_generated/api";
 import { navigate } from "../Router";
 import Avatar from "../ui/Avatar";
-import { ChevronDown, ChevronLeft, ChevronRight, Close, Key, Search } from "../ui/Icons";
-import Button from "../ui/Button";
+import { ChevronDown, ChevronLeft, ChevronRight, Close, Search } from "../ui/Icons";
 import AutoHeight from "../ui/AutoHeight";
 import { EASE, LIST_LAYOUT, LIST_ROW, SPRING } from "../ui/Motion";
 import { daysSince, relative } from "./Format";
@@ -64,7 +63,7 @@ function compare(first: IRow, second: IRow, key: SortKey): number
     }
 }
 
-export default function PatientList({ onLink }: { onLink: () => void })
+export default function PatientList()
 {
     const data = useQuery(api.Clinician.patients);
     const rows = useMemo(() => (data ?? []).map(toRow), [data]);
@@ -251,11 +250,11 @@ export default function PatientList({ onLink }: { onLink: () => void })
                                         {GAMES.map(game => (
                                             <td key={game.id} data-label={game.name}>
                                                 <span className={styles.metric}>
-                                                    <Sparkline values={row.patient.trends[game.id]} width={72} height={24} />
                                                     <span className={styles.value}>
                                                         {row.current[game.id].toFixed(game.digits)}
                                                         <small>{game.unit}</small>
                                                     </span>
+                                                    <Sparkline values={row.patient.trends[game.id]} width={72} height={24} />
                                                 </span>
                                             </td>
                                         ))}
@@ -287,8 +286,7 @@ export default function PatientList({ onLink }: { onLink: () => void })
                 {data !== undefined && rows.length === 0 && (
                     <motion.div className={styles.empty} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                         <strong>No Patients Yet</strong>
-                        <p>Create a link code for a patient. Once they sign up with it, they appear here.</p>
-                        <Button icon={<Key />} onClick={onLink}>Link Patient</Button>
+                        <p>Use Link Patient to create a code. Once a patient signs up with it, they appear here.</p>
                     </motion.div>
                 )}
                 {data === undefined && <div className={styles.loading} aria-label="Loading Patients" />}

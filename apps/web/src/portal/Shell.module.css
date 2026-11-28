@@ -32,5 +32,14 @@
 {
     width: min(1320px, 100%);
     margin: 0 auto;
-    padding: clamp(24px, 4vw, 48px) clamp(4px, 2vw, 24px) 48px;
+    padding: clamp(24px, 4vw, 48px) clamp(4px, 2vw, 24px) 128px;
+}
+
+.action
+{
+    position: fixed;
+    right: max(24px, env(safe-area-inset-right));
+    bottom: max(24px, env(safe-area-inset-bottom));
+    z-index: 20;
+    filter: drop-shadow(0 12px 24px rgb(10 132 255 / 28%));
 }
