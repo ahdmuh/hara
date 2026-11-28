@@ -1,11 +1,11 @@
 import { AnimatePresence, motion, useAnimate } from "motion/react";
 import { useEffect, useSyncExternalStore } from "react";
-import { InfoBox, WarningDiamond } from "./Icons";
+import { Check, InfoBox, WarningDiamond } from "./Icons";
 import { sounds } from "../Sounds";
 import { SPRING } from "./Motion";
 import styles from "./Toast.module.css";
 
-type Tone = "error" | "info";
+type Tone = "error" | "info" | "success";
 
 interface IToast
 {
@@ -63,7 +63,7 @@ export function notify(message: string, tone: Tone = "error"): void
 function Toast({ toast }: { toast: IToast })
 {
     const [scope, animate] = useAnimate<HTMLSpanElement>();
-    const Icon = toast.tone === "error" ? WarningDiamond : InfoBox;
+    const Icon = toast.tone === "error" ? WarningDiamond : toast.tone === "success" ? Check : InfoBox;
 
     useEffect(() =>
     {

@@ -15,7 +15,7 @@ export function inviteMessage(pin: ILinkPin, clinician: string, expires: string)
     return [
         "Hi,",
         "",
-        `To link your HARA account to ${clinician}, open HARA, choose Create an Account, and enter this link code when asked:`,
+        `To link your HARA account to ${clinician}, open the console, choose Create an Account, and enter this link code when asked:`,
         "",
         formatPin(pin.code),
         "",
