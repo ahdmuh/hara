@@ -209,7 +209,8 @@ export default function PatientDetail({ id }: { id: string })
             <div className={styles.columns}>
                 <motion.section className={styles.panel} variants={RISE}>
                     <h2>Session History</h2>
-                    <table className={styles.history}>
+                    {patient.sessions.length === 0 && <p className={styles.none}>No Sessions Yet</p>}
+                    <table className={styles.history} hidden={patient.sessions.length === 0}>
                         <thead>
                             <tr>
                                 <th>Date</th>
@@ -251,6 +252,7 @@ export default function PatientDetail({ id }: { id: string })
                 <div className={styles.stack}>
                     <motion.section className={styles.panel} variants={RISE}>
                         <h2>Milestones</h2>
+                        {patient.milestones.length === 0 && <p className={styles.none}>No Milestones Yet</p>}
                         <ol className={styles.milestones}>
                             {patient.milestones.map(milestone => (
                                 <li key={`${milestone.kind}-${milestone.achievedAt}`}>
@@ -265,6 +267,7 @@ export default function PatientDetail({ id }: { id: string })
                     </motion.section>
                     <motion.section className={styles.panel} variants={RISE}>
                         <h2>Calibration History</h2>
+                        {patient.calibrations.length === 0 && <p className={styles.none}>No Calibrations Yet</p>}
                         <ol className={styles.calibrations}>
                             {patient.calibrations.map(calibration => (
                                 <li key={calibration.takenAt}>

@@ -529,3 +529,15 @@
 {
     background: var(--mist);
 }
+
+.none
+{
+    display: grid;
+    place-items: center;
+    min-height: 96px;
+    margin: 0;
+    border-radius: var(--radius);
+    background: var(--paper);
+    color: var(--steel);
+    font-weight: 600;
+}

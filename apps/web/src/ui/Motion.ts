@@ -22,4 +22,12 @@ export const PAGE: Variants = {
     gone: { opacity: 0, transition: { duration: 0.2, ease: EASE } },
 };
 
+export const LIST_ROW: Variants = {
+    hidden: { opacity: 0, y: 6 },
+    shown: (index: number) => ({ opacity: 1, y: 0, transition: { duration: 0.24, ease: EASE, delay: Math.min(index, 8) * 0.025 } }),
+    gone: { opacity: 0, transition: { duration: 0.12, ease: EASE } },
+};
+
+export const LIST_LAYOUT: Transition = { layout: { duration: 0.28, ease: EASE } };
+
 export const PRESS = { scale: 0.97 };

@@ -37,8 +37,12 @@ export function navigate(path: string, options: { replace?: boolean } = {}): voi
     {
         window.history.pushState(null, "", path);
     }
-    window.scrollTo({ top: 0, behavior: "instant" });
     window.dispatchEvent(new Event(NAVIGATE_EVENT));
+}
+
+export function scrollToTop(): void
+{
+    window.scrollTo({ top: 0, behavior: "instant" });
 }
 
 export function matchPath(pattern: string, path: string): Record<string, string> | null

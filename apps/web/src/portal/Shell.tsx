@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, type ReactNode } from "react";
-import { Link, navigate } from "../Router";
+import { Link, navigate, scrollToTop } from "../Router";
 import { EASE } from "../ui/Motion";
 import Wordmark from "../ui/Wordmark";
 import { homeFor, useAccount, type IAccount, type Role } from "./Auth";
@@ -55,7 +55,7 @@ export default function Shell({ role, home, page, menu, children }: IShellProps)
                 </Link>
                 <UserMenu account={account}>{menu}</UserMenu>
             </motion.header>
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" onExitComplete={scrollToTop}>
                 <motion.main
                     key={page}
                     className={styles.main}
