@@ -89,7 +89,7 @@ describe("link pins", () =>
     {
         const owner = await user("clinician");
         const intruder = await user("clinician");
-        const pin = await as(owner).mutation(api.Clinician.createPin, { label: "Jordan" });
+        const pin = await as(owner).mutation(api.Clinician.createPin, {});
 
         await expect(as(intruder).mutation(api.Clinician.revokePin, { code: pin.code })).rejects.toThrow();
         expect(await as(intruder).query(api.Clinician.pins, {})).toEqual([]);

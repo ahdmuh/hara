@@ -93,7 +93,7 @@ export default defineSchema({
     linkPins: defineTable({
         clinicianID: v.id("users"),
         code: v.string(),
-        label: v.string(),
+        label: v.optional(v.string()),
         expiresAt: v.number(),
         status: v.union(v.literal("pending"), v.literal("used"), v.literal("revoked")),
         usedBy: v.optional(v.id("patients")),
