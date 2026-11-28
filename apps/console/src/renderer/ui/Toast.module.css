@@ -58,3 +58,9 @@
     background: var(--blue);
     box-shadow: 0 0.4rem 1rem -0.4rem var(--blue-glow);
 }
+
+.success .icon
+{
+    background: #30a46c;
+    box-shadow: 0 0.4rem 1rem -0.4rem rgb(48 164 108 / 60%);
+}

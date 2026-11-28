@@ -272,6 +272,10 @@ export default function App()
                             setAccount(result);
                             setPatient(result.name);
                             setLinked(details.code !== "");
+                            if (details.code !== "")
+                            {
+                                notify("Linked to Your Clinician", "success");
+                            }
                             setView({ name: "calibration" });
                             return null;
                         }}
@@ -347,6 +351,7 @@ export default function App()
                             if (!message)
                             {
                                 setLinked(true);
+                                notify("Linked to Your Clinician", "success");
                                 setView({ name: "settings" });
                             }
                             return message;
