@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "../ui/Button";
 import { ChevronDown, Logout, User } from "../ui/Icons";
 import { EASE, SPRING } from "../ui/Motion";
@@ -9,10 +9,9 @@ import styles from "./UserMenu.module.css";
 interface IUserMenuProps
 {
     account: IAccount;
-    children?: (close: () => void) => ReactNode;
 }
 
-export default function UserMenu({ account, children }: IUserMenuProps)
+export default function UserMenu({ account }: IUserMenuProps)
 {
     const [open, setOpen] = useState(false);
     const signOut = useSignOut();
@@ -47,8 +46,6 @@ export default function UserMenu({ account, children }: IUserMenuProps)
         };
     }, [open]);
 
-    const close = () => setOpen(false);
-
     return (
         <div ref={root} className={styles.menu}>
             <button
@@ -81,7 +78,6 @@ export default function UserMenu({ account, children }: IUserMenuProps)
                             </span>
                         </div>
                         <div className={styles.actions}>
-                            {children?.(close)}
                             <Button
                                 variant="light"
                                 className={styles.signOut}

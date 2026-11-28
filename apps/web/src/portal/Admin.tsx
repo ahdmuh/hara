@@ -150,7 +150,6 @@ function Clinicians({ inviting, setInviting }: { inviting: boolean; setInviting:
                         <Search />
                         <input type="search" placeholder="Search clinicians" value={query} onChange={event => setQuery(event.target.value)} aria-label="Search Clinicians" />
                     </label>
-                    <Button icon={<UserPlus />} onClick={() => setInviting(true)}>Add Clinician</Button>
                 </div>
             </div>
             {clinicians.length > 0 && (
@@ -210,8 +209,7 @@ function Clinicians({ inviting, setInviting }: { inviting: boolean; setInviting:
             {data !== undefined && clinicians.length === 0 && (
                 <motion.div className={styles.empty} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={EMPTY_TRANSITION}>
                     <strong>No Clinicians Yet</strong>
-                    <p>Everyone you invite appears here, with their status and when they were last active.</p>
-                    <Button icon={<UserPlus />} onClick={() => setInviting(true)}>Add Clinician</Button>
+                    <p>Use Add Clinician to send an invitation. Everyone you invite appears here with their status.</p>
                 </motion.div>
             )}
             <Dialog open={inviting} title="Add Clinician" onClose={closeInvite}>
@@ -275,19 +273,7 @@ export default function Admin()
             role="maintainer"
             home="/admin"
             page="/admin"
-            menu={close => (
-                <Button
-                    icon={<UserPlus />}
-                    role="menuitem"
-                    onClick={() =>
-                    {
-                        close();
-                        setInviting(true);
-                    }}
-                >
-                    Add Clinician
-                </Button>
-            )}
+            action={{ label: "Add Clinician", icon: <UserPlus />, onClick: () => setInviting(true) }}
         >
             {() => <Clinicians inviting={inviting} setInviting={setInviting} />}
         </Shell>
