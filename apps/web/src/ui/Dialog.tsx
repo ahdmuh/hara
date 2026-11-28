@@ -15,6 +15,12 @@ interface IDialogProps
 export default function Dialog({ open, title, onClose, children }: IDialogProps)
 {
     const panel = useRef<HTMLDivElement>(null);
+    const close = useRef(onClose);
+
+    useEffect(() =>
+    {
+        close.current = onClose;
+    }, [onClose]);
 
     useEffect(() =>
     {
@@ -28,7 +34,7 @@ export default function Dialog({ open, title, onClose, children }: IDialogProps)
         {
             if (event.key === "Escape")
             {
-                onClose();
+                close.current();
             }
         }
         window.addEventListener("keydown", handle);
@@ -39,7 +45,7 @@ export default function Dialog({ open, title, onClose, children }: IDialogProps)
             document.body.style.overflow = "";
             previous?.focus();
         };
-    }, [open, onClose]);
+    }, [open]);
 
     return (
         <AnimatePresence>
