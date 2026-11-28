@@ -4,12 +4,11 @@ import { useState, type FormEvent } from "react";
 import { api } from "../../../../convex/_generated/api";
 import Button from "../ui/Button";
 import Dialog from "../ui/Dialog";
-import Field from "../ui/Field";
-import { Check, Close, Copy, Key, Mail, User } from "../ui/Icons";
+import { Check, Close, Copy, Key, Mail } from "../ui/Icons";
 import { EASE } from "../ui/Motion";
 import { useToast } from "../ui/Toast";
 import { useAccount } from "./Auth";
-import { fullDate } from "./Format";
+import { fullDate, relative } from "./Format";
 import { formatPin, inviteMessage, VALID_DAYS, type ILinkPin } from "./Links";
 import styles from "./PinDialog.module.css";
 
@@ -23,14 +22,12 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
     const createPin = useMutation(api.Clinician.createPin);
     const revokePin = useMutation(api.Clinician.revokePin);
     const [busy, setBusy] = useState(false);
-    const [label, setLabel] = useState("");
     const [created, setCreated] = useState<ILinkPin | null>(null);
     const [confirming, setConfirming] = useState<string | null>(null);
 
     function close(): void
     {
         setCreated(null);
-        setLabel("");
         setConfirming(null);
         onClose();
     }
@@ -45,8 +42,7 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
         setBusy(true);
         try
         {
-            setCreated(await createPin({ label }));
-            setLabel("");
+            setCreated(await createPin({}));
         }
         catch
         {
@@ -98,7 +94,7 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
     return (
         <Dialog open={open} title="Link a New Patient" onClose={close}>
             <p className={styles.note}>
-                {`Create a link code for each new patient. They enter it once when signing up in the HARA app, which links their account to you. A code stays valid until it is used, revoked, or ${VALID_DAYS} days pass.`}
+                {`Create a link code for each new patient. They enter it once when signing up in HARA, which links their account to you. A code stays valid until it is used, revoked, or ${VALID_DAYS} days pass.`}
             </p>
             <AnimatePresence mode="wait" initial={false}>
                 {created
@@ -123,7 +119,7 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
                                     </AnimatePresence>
                                 </div>
                                 <p className={styles.valid}>
-                                    {`${created.label || "Unnamed Patient"} · Valid until ${fullDate(created.expiresAt)}`}
+                                    {`Valid until ${fullDate(created.expiresAt)}`}
                                 </p>
                                 <div className={styles.actions}>
                                     <Button variant="ghost" icon={<Copy />} onClick={() => void copy(created.code, "Code Copied")}>Copy Code</Button>
@@ -141,14 +137,6 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
                                 animate={{ opacity: 1, y: 0, transition: { duration: 0.35, ease: EASE } }}
                                 exit={{ opacity: 0, y: -6, transition: { duration: 0.18 } }}
                             >
-                                <Field
-                                    label="Patient Name (Optional)"
-                                    icon={<User />}
-                                    autoComplete="off"
-                                    value={label}
-                                    onChange={event => setLabel(event.target.value)}
-                                    maxLength={60}
-                                />
                                 <Button type="submit" icon={<Key />} busy={busy}>Create Code</Button>
                             </motion.form>
                         )}
@@ -172,7 +160,7 @@ export default function PinDialog({ open, onClose }: { open: boolean; onClose: (
                                             <span className={styles.row}>
                                                 <span className={styles.code}>{formatPin(pin.code)}</span>
                                                 <span className={styles.meta}>
-                                                    <strong>{pin.label || "Unnamed Patient"}</strong>
+                                                    <strong>{`Created ${relative(pin.createdAt)}`}</strong>
                                                     <small>{`Until ${fullDate(pin.expiresAt)}`}</small>
                                                 </span>
                                                 <button type="button" className={styles.icon} aria-label={`Copy code ${pin.code}`} onClick={() => void copy(pin.code, "Code Copied")}>

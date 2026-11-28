@@ -27,7 +27,7 @@ async function setup(code: string, expiresIn = 30 * DAY)
         const clinicianID = await context.db.insert("users", { name: "Clinician", email: "clinician@clinic.example", role: "clinician", passwordChangeRequired: false });
         const userID = await context.db.insert("users", { name: "Avery Morgan", role: "patient", passwordChangeRequired: false });
         const patientID = await context.db.insert("patients", { userID, birthday: "1960-01-01" });
-        await context.db.insert("linkPins", { clinicianID, code, label: "", expiresAt: Date.now() + expiresIn, status: "pending" });
+        await context.db.insert("linkPins", { clinicianID, code, expiresAt: Date.now() + expiresIn, status: "pending" });
         return { clinicianID, userID, patientID };
     });
 }

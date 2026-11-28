@@ -145,16 +145,15 @@ export const pins = query({
         return pending
             .filter(pin => pin.expiresAt > now)
             .sort((first, second) => second._creationTime - first._creationTime)
-            .map(pin => ({ code: pin.code, label: pin.label, createdAt: pin._creationTime, expiresAt: pin.expiresAt }));
+            .map(pin => ({ code: pin.code, createdAt: pin._creationTime, expiresAt: pin.expiresAt }));
     },
 });
 
 export const createPin = mutation({
-    args: { label: v.string() },
-    handler: async (ctx, args) =>
+    args: {},
+    handler: async (ctx) =>
     {
         const clinician = await requireRole(ctx, "clinician");
-        const label = args.label.trim().replace(/\s+/g, " ").slice(0, 60);
         const open = await ctx.db.query("linkPins").withIndex("by_clinicianID_status", query => query.eq("clinicianID", clinician._id).eq("status", "pending")).collect();
         if (open.length >= 50)
         {
@@ -167,8 +166,8 @@ export const createPin = mutation({
             if (!taken)
             {
                 const expiresAt = Date.now() + PIN_DAYS * DAY;
-                await ctx.db.insert("linkPins", { clinicianID: clinician._id, code, label, expiresAt, status: "pending" });
-                return { code, label, expiresAt };
+                await ctx.db.insert("linkPins", { clinicianID: clinician._id, code, expiresAt, status: "pending" });
+                return { code, expiresAt };
             }
         }
         throw new ConvexError("PIN_UNAVAILABLE");
