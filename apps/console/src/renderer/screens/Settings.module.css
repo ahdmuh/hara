@@ -95,7 +95,6 @@
 .danger
 {
     color: #d64545;
-    box-shadow: var(--shadow-soft), 0 0 0 1px rgb(214 69 69 / 35%) inset;
 }
 
 .danger .icon,
