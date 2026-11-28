@@ -1,7 +1,7 @@
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { lazy, Suspense, useEffect } from "react";
 import Landing from "./landing/Landing";
-import { navigate, usePath } from "./Router";
+import { navigate, scrollToTop, usePath } from "./Router";
 import { correctPath } from "./Routes";
 import { portalHref } from "./Site";
 import { PAGE } from "./ui/Motion";
@@ -52,7 +52,7 @@ export default function App()
     return (
         <MotionConfig reducedMotion="user">
             <ToastProvider>
-                <AnimatePresence mode="wait">
+                <AnimatePresence mode="wait" onExitComplete={scrollToTop}>
                     {!portalRoot && (
                         <motion.div key={screen} variants={PAGE} initial="hidden" animate="shown" exit="gone">
                             {screen === "landing"

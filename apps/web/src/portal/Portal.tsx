@@ -1,4 +1,6 @@
+import { useQuery } from "convex/react";
 import { useState } from "react";
+import { api } from "../../../../convex/_generated/api";
 import { matchPath, usePath } from "../Router";
 import Button from "../ui/Button";
 import { Key } from "../ui/Icons";
@@ -12,6 +14,7 @@ export default function Portal()
     const path = usePath();
     const [pinOpen, setPinOpen] = useState(false);
     const detail = matchPath("/patients/:id", path);
+    useQuery(api.Clinician.patients);
 
     return (
         <>

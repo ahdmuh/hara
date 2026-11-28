@@ -9,7 +9,7 @@ import Button from "../ui/Button";
 import Dialog from "../ui/Dialog";
 import Field from "../ui/Field";
 import { Mail, Search, Send, User, UserPlus } from "../ui/Icons";
-import { EASE } from "../ui/Motion";
+import { EASE, LIST_LAYOUT, LIST_ROW } from "../ui/Motion";
 import { useToast } from "../ui/Toast";
 import styles from "./Admin.module.css";
 import { fullDate, relative } from "./Format";
@@ -154,16 +154,18 @@ function Clinicians({ inviting, setInviting }: { inviting: boolean; setInviting:
             </div>
             {visible.length > 0 && (
                 <ul className={styles.list}>
-                    <AnimatePresence initial={false}>
-                        {visible.map(clinician => (
+                    <AnimatePresence mode="popLayout">
+                        {visible.map((clinician, index) => (
                             <motion.li
                                 key={clinician.id}
-                                layout
+                                layout="position"
                                 className={styles.row}
-                                initial={{ opacity: 0, y: -8 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.35, ease: EASE }}
+                                variants={LIST_ROW}
+                                custom={index}
+                                initial="hidden"
+                                animate="shown"
+                                exit="gone"
+                                transition={LIST_LAYOUT}
                             >
                                 <span className={styles.person}>
                                     <Avatar name={clinician.name} size={40} />
